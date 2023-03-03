@@ -1,13 +1,20 @@
 export const EN_US = {
   'login.Welcome': 'Welcome Back!',
   'login.WelcomeSubtitle':
-    'Link! connect to everybody around the world.',
+    'Olu! connect to everybody around the world.',
   'login.ForgetPassword': 'Forgot Password?',
   'login.Login': 'Login',
   'login.SignUp': 'Sign Up',
   'login.Google': 'Google',
   'login.SignUpMessage':
     "Don't you have an account?",
+  'register.Welcome': 'Welcome!',
+  'register.WelcomeSubtitle':
+    'Don\'t have an account in Olu? Create one super fast!',
+  'register.SignInMessage':
+    'Already have an account?',
+  'register.SignIn': 'Sign In',
+  'register.Register': 'Create Account',
   'user.Logout': 'Logout',
   'dashboard.Dashboard': 'Dashboard',
   'dashboard.CreateRoom': 'Create new room',
@@ -17,5 +24,6 @@ export const EN_US = {
   'common.IsLoading': 'Loading...',
   'chat.Group': 'Group',
   'chat.Personal': 'Personal',
+  'chat.Messages': 'Messages',
 };
 

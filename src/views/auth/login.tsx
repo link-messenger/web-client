@@ -1,36 +1,33 @@
 import { pb } from 'api';
-import {
-  NormalInput,
-  PasswordInput,
-  Button,
-} from 'components';
-import {
-  ErrorMessage,
-  Field,
-  Form,
-  Formik,
-} from 'formik';
+import { NormalInput, PasswordInput, Button } from 'components';
+import { ErrorMessage, Field, Form, Formik, FormikProvider } from 'formik';
 import { EN_US } from 'languages';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-import {
-  LOGIN_INITIALS,
-  LOGIN_VALIDATION,
-} from 'constants';
+import { LOGIN_INITIALS, LOGIN_VALIDATION } from 'constants';
 import { useLogin } from 'hooks';
-import { GoogleAuth, LoginHeader, Seprator } from 'components/partials';
+import { GoogleAuth, AuthHeader, Seprator } from 'components/partials';
 
 const Login = () => {
-  const { mutate: login } = useLogin();
-  const onHandleLogin = async (
-    data: typeof LOGIN_INITIALS,
-  ) => {
-    login(data);
-  };
+	const navigate = useNavigate();
+	const { mutate: login } = useLogin();
+	const isValid = pb.authStore.isValid;
+	if (isValid)
+		navigate('/chat', {
+			state: {
+				from: '/login',
+			},
+		});
+	const onHandleLogin = async (data: typeof LOGIN_INITIALS) => {
+		login(data);
+	};
 
-  return (
+	return (
 		<section className="space-y-7">
-			<LoginHeader />
+			<AuthHeader
+				content={EN_US['login.WelcomeSubtitle']}
+				title={EN_US['login.Welcome']}
+			/>
 			<Formik
 				initialValues={LOGIN_INITIALS}
 				validationSchema={LOGIN_VALIDATION}
@@ -39,7 +36,7 @@ const Login = () => {
 				validateOnBlur={false}
 			>
 				{({ errors }) => (
-					<Form className="w-full md:w-[400px] space-y-4">
+					<Form className="w-full md:w-[500px] space-y-4">
 						<Field
 							as={NormalInput}
 							icon={<i className="uil uil-envelopes"></i>}

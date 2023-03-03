@@ -5,10 +5,12 @@ export const LOGIN_INITIALS = {
 
 export const REGISTER_INITIALS = {
   email: '',
+  username: '',
+  name: '',
   password: '',
   confirmPassword: '',
 };
 
-export const CREATE_ROOM_INITIALS = {
-  name: '',
-};
+export const MESSAGE_INITIALS = {
+  content: '',
+}

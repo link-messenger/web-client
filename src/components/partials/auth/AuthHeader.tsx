@@ -1,15 +1,16 @@
 import { EN_US } from 'languages';
 import React from 'react'
 
-export const LoginHeader = () => {
+export const AuthHeader = ({title, content}: {title: string, content: string}) => {
   return (
 		<header className="space-y-3">
 			<h1 className="text-4xl text-slate-800 font-medium">
-				{EN_US['login.Welcome']}
+				{title}
 			</h1>
 			<p className="text-slate-400 text-base">
-				{EN_US['login.WelcomeSubtitle']}
+				{content}
 			</p>
 		</header>
 	);
 }
+

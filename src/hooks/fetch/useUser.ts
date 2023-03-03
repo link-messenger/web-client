@@ -1,6 +1,6 @@
 import { pb } from 'api';
 import { useMutation, useQuery } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+import { string } from 'yup';
 
 export const useGetUserProfile = ({
 	onError,
@@ -19,22 +19,13 @@ export const useGetUserProfile = ({
 	);
 };
 
-export const useCreateUserRoom = () => {
-	return useMutation(
-		['CREATE-USER-ROOM'],
-		async ({
-			prefrences,
-		}: {
-			prefrences: {
-				video: boolean;
-				audio: boolean;
-				screen: boolean;
-			};
-		}) => {
-			return pb.collection('user_room').create({
-				user: pb.authStore.model?.id,
-				prefrences,
-			});
-		}
-	);
-};
+
+export const useGetUserById = ({
+	id
+}: { id: string }) => {
+	return useQuery(['GET-USER', id], async () => {
+		return await pb.collection('users').getOne(id);
+	}, {
+		cacheTime: 2000000
+	})
+}

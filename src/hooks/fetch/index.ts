@@ -1,3 +1,3 @@
 export * from './useAuth';
-export * from './useRoom';
+export * from './useChat';
 export * from './useUser';
