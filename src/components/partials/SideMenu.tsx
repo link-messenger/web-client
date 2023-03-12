@@ -4,6 +4,7 @@ import {
 	CREATE_GROUP_INITIALS,
 	CREATE_GROUP_MODAL,
 	CREATE_GROUP_VALIDATION,
+	USER_PROFILE_MODAL,
 } from 'constants';
 import { Field, Form, Formik } from 'formik';
 import { useModal } from 'hooks';
@@ -13,6 +14,7 @@ import { PropsWithChildren } from 'react';
 import { useMenuStore } from 'store';
 import { ListAvatar } from './Avatar';
 import { CreateGroupModal } from './Group';
+import { EditUserProfileModal } from './Profile';
 
 export const SideMenu = ({ user }: { user: IProfile }) => {
 	const open = useMenuStore((state) => state.open);
@@ -45,10 +47,16 @@ export const SideMenu = ({ user }: { user: IProfile }) => {
 					<section className="flex flex-col gap-0 flex-1">
 						<h3 className="font-medium">{user.name}</h3>
 						<span className="text-sm text-gray-400 underline">
-							{user.username}
+							#{user.username}
 						</span>
 					</section>
-					<span className="underline text-sm text-gray-400 self-start mt-2.5 cursor-pointer">
+					<span
+						onClick={() => {
+							toggle();
+							openModal(USER_PROFILE_MODAL);
+						}}
+						className="underline text-sm text-gray-400 self-start mt-2.5 cursor-pointer"
+					>
 						{EN_US['settings.EditProfile']}
 					</span>
 				</header>
@@ -67,6 +75,7 @@ export const SideMenu = ({ user }: { user: IProfile }) => {
 				</ul>
 
 				<CreateGroupModal closeModal={closeModal} currentId={currentId} />
+				<EditUserProfileModal closeModal={closeModal} currentId={currentId} />
 			</nav>
 		</Modal>
 	);

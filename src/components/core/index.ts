@@ -4,3 +4,4 @@ export * from './Bubble';
 export * from './Tag';
 export * from './Card';
 export * from './CheckBox';
+export * from './Modal';

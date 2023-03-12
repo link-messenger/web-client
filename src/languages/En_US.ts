@@ -38,8 +38,14 @@ export const EN_US = {
 	'settings.Create': 'Create',
 	'settings.GroupDesc': 'Group Description... (optional)',
 	'settings.GroupName': 'Group Name',
-  'settings.GroupStatus': 'Group Status',
-  'settings.NotePublicGroup': 'Note: Public groups are visible to everyone and appear in searchs.',
+	'settings.GroupStatus': 'Group Status',
+	'settings.NotePublicGroup':
+		'Note: Public groups are visible to everyone and appear in searchs.',
 	'settings.NotePrivateGroup':
 		'Note: Private groups are only visible to members and can be joined by group links only.',
+	'settings.ProfileInfo': 'Your Information',
+	'settings.Email': 'Email',
+	'settings.Id': 'Id',
+	'settings.CreateAccDate': 'Create Account Date',
+	'settings.AccLastUpdate': 'Last Profile Update',
 };
