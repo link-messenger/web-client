@@ -4,7 +4,7 @@ import { Avatar, ListAvatar, MessageBox } from '../partials';
 import { MESSAGE_INITIALS, SEND_MESSAGE_VALIDATION } from 'constants';
 import { EN_US } from 'languages';
 import { useChatStore } from 'store';
-import { useChatScroll } from 'hooks/useScroll';
+import { useChatScroll } from 'hooks';
 import { useEffect, useState } from 'react';
 import { MessageTypes } from 'store';
 import { IProfile, IUser } from 'interfaces';

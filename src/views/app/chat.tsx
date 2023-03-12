@@ -5,10 +5,11 @@ import {
 	useGetUserProfile,
 } from 'hooks';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuthStore, useChatStore } from 'store';
 
 const Chat = () => {
+	const token = useAuthStore(state => state.token);
 	const navigate = useNavigate();
 	const initSocket = useChatStore((state) => state.initSocket);
 	const clearAll = useAuthStore((state) => state.clearAll);
@@ -42,9 +43,12 @@ const Chat = () => {
 	}, [userData?.id]);
 
 	if (isChatLoading || isGroupLoading) return <div>Loading...</div>;
-	if (!markedGroups || !markedConversations) return <div>Something went wrong</div>;
+	if (!token || !markedGroups || !markedConversations)
+		return <Navigate to="/login" />;
+	
 	// TODO: change so that it sorts by last message
 	const combined = [...markedGroups, ...markedConversations];
+
 	return (
 		<main className="flex flex-row w-screen h-screen overflow-hidden">
 			<ChatList uid={userData?.id} combined={combined} />

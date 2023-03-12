@@ -23,6 +23,7 @@ export const EN_US = {
   'common.StartMeet': 'Start meeting',
   'common.IsLoading': 'Loading...',
   'chat.Group': 'Group',
+  'chat.Groups': 'Groups',
   'chat.Chats': 'Chats',
   'chat.Personal': 'Personal',
   'chat.Messages': 'Messages',
@@ -32,6 +33,9 @@ export const EN_US = {
   'chat.AllMessages': 'All Messages',
   'chat.Members': 'Members',
   'chat.Member': 'Member',
-
+  'chat.Users': 'Users ',
+  'chat.NoUserFound': 'No user was found',
+  'chat.NoGroupFound': 'No Group was found',
+  'chat.Searching': 'Searching...',
 };
 

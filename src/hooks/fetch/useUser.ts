@@ -22,7 +22,7 @@ export const useGetUserProfile = ({
 		cacheTime: 2000000,
 		refetchInterval: false,
 		refetchOnMount: true,
-		retry: false,
+		retry: true,
 	});
 };
 
