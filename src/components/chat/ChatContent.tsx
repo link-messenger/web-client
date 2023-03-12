@@ -1,10 +1,14 @@
 import { Field, Form, Formik, FormikHelpers } from 'formik';
-import { SquareButton } from '../core';
-import { Avatar, ListAvatar, MessageBox } from '../partials';
-import { MESSAGE_INITIALS, SEND_MESSAGE_VALIDATION } from 'constants';
+import { Card, Modal, SquareButton } from '../core';
+import { Avatar, GroupProfileModal, ListAvatar, MessageBox } from '../partials';
+import {
+	CHAT_INFO_MODAL,
+	MESSAGE_INITIALS,
+	SEND_MESSAGE_VALIDATION,
+} from 'constants';
 import { EN_US } from 'languages';
 import { useChatStore } from 'store';
-import { useChatScroll } from 'hooks';
+import { useChatScroll, useModal } from 'hooks';
 import { useEffect, useState } from 'react';
 import { MessageTypes } from 'store';
 import { IProfile, IUser } from 'interfaces';
@@ -12,11 +16,14 @@ import { IProfile, IUser } from 'interfaces';
 type MsgType = typeof MESSAGE_INITIALS;
 
 export const ChatContent = ({ user }: { user: IProfile }) => {
+	const { currentId, openModal, closeModal } = useModal();
 	const currentChat = useChatStore((state) => state.currentChat);
 	const setCurrentChat = useChatStore((state) => state.setCurrentChat);
 	const chats = useChatStore((state) => state.currentMessages);
 	const loadChat = useChatStore((state) => state.loadChat);
-	const messageConfirmListener = useChatStore((state) => state.messageConfirmListener);
+	const messageConfirmListener = useChatStore(
+		(state) => state.messageConfirmListener
+	);
 	const setMessageListener = useChatStore((state) => state.setMessageListener);
 	const sendMessage = useChatStore((state) => state.sendMessage);
 	const ref = useChatScroll(chats);
@@ -33,7 +40,7 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 		return () => {
 			clearListener && clearListener();
 			clearConfirmListener && clearConfirmListener();
-		}
+		};
 	}, [currentChat]);
 	const [mType, setMType] = useState<MessageTypes>('MESSAGE');
 
@@ -65,6 +72,7 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 		});
 		resetForm();
 	};
+
 	return (
 		<section className="flex flex-col flex-grow h-full overflow-hidden">
 			<header className="border-b border-b-gray-100 flex items-center justify-between p-3">
@@ -73,7 +81,10 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 						<i className="uil uil-angle-double-left text-3xl text-gray-600"></i>
 					</button>
 					<ListAvatar username={currentChat.name} />
-					<section className="flex flex-col">
+					<section
+						className="flex flex-col cursor-pointer"
+						onClick={() => openModal(CHAT_INFO_MODAL)}
+					>
 						<h2 className="text-gray-700 font-medium text-xl">
 							{currentChat.name}
 						</h2>
@@ -132,6 +143,8 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 					</SquareButton>
 				</Form>
 			</Formik>
+
+			<GroupProfileModal currentId={currentId} closeModal={closeModal} />
 		</section>
 	);
 };

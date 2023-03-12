@@ -1,22 +1,21 @@
 import { Button, Card, NormalInput, Toggle } from 'components/core';
 import { Modal } from 'components/core/Modal';
 import {
+	CHAT_INFO_MODAL,
 	CREATE_GROUP_INITIALS,
 	CREATE_GROUP_MODAL,
 	CREATE_GROUP_VALIDATION,
 } from 'constants';
 import { Field, Form, Formik } from 'formik';
-import { useCreateGroup } from 'hooks';
+import { useCreateGroup, useGetUserGroupDetail } from 'hooks';
+import { ModalCardProps } from 'interfaces';
 import { EN_US } from 'languages';
 import { useChatStore } from 'store';
+import { formatDateTime } from 'utils/time';
+import { ListAvatar } from './Avatar';
+import { InfoItem } from './Profile';
 
-export const CreateGroupModal = ({
-	closeModal,
-	currentId,
-}: {
-	currentId: string;
-	closeModal: (id: string) => void;
-}) => {
+export const CreateGroupModal = ({ closeModal, currentId }: ModalCardProps) => {
 	const setCurrentChat = useChatStore((state) => state.setCurrentChat);
 	const { mutateAsync } = useCreateGroup();
 	return (
@@ -94,6 +93,80 @@ export const CreateGroupModal = ({
 						</Form>
 					)}
 				</Formik>
+			</Card>
+		</Modal>
+	);
+};
+
+export const GroupProfileModal = ({
+	currentId,
+	closeModal,
+}: ModalCardProps) => {
+	const currentChat = useChatStore((state) => state.currentChat);
+	const { data: groupDetail } = useGetUserGroupDetail(currentChat?.id || '');
+	if (!groupDetail) return <>wow</>;
+	const memberNumber = `${groupDetail.members.length} ${
+		groupDetail.members.length > 1
+			? EN_US['chat.Members']
+			: EN_US['chat.Member']
+	}`;
+	const created = formatDateTime(groupDetail.createdAt);
+	const updated = formatDateTime(groupDetail.updatedAt);
+	return (
+		<Modal
+			className="justify-center items-center"
+			isOpen={currentId === CHAT_INFO_MODAL}
+			onClick={() => closeModal(CHAT_INFO_MODAL)}
+		>
+			<Card
+				onClick={(e) => e.stopPropagation()}
+				className="w-full m-2 md:w-[600px]"
+			>
+				<header className="p-3 border-b border-gray-100 flex gap-3 items-center">
+					<ListAvatar username={groupDetail.name} size="w-14" />
+					<section className="flex flex-col">
+						<span className="font-bold text-gray-700">{groupDetail.name}</span>
+						<span className="text-sm text-gray-400">{memberNumber}</span>
+					</section>
+				</header>
+
+				<section className="p-3  border-b flex flex-col gap-1.5 text-sm border-gray-100">
+					<h4 className="font-medium text-gray-700 mb-2">
+						{EN_US['profile.GroupInfo']}
+					</h4>
+					<section className="space-y-1">
+						<p className="text-gray-800">{EN_US['profile.GroupDesc']}:</p>
+						<p className="text-gray-500">{groupDetail.description}</p>
+					</section>
+
+					<InfoItem
+						name={EN_US['profile.Link']}
+						value={groupDetail.link}
+						vstyle="underline"
+					/>
+					<InfoItem name={EN_US['profile.Status']} value={groupDetail.status} />
+					<InfoItem name={EN_US['profile.CreatedAt']} value={created} />
+					<InfoItem name={EN_US['profile.LastUpdatedAt']} value={updated} />
+				</section>
+
+				<section className="p-3 mb-3 flex flex-col text-sm">
+					<section className="text-gray-700 flex items-center gap-2 mb-2">
+						<i className="uil uil-users-alt text-xl"></i>
+						<h4 className="font-medium">{memberNumber}</h4>
+					</section>
+					{groupDetail.members.map(({ user, role, _id }) => (
+						<section key={_id} className="flex gap-3 ">
+							<ListAvatar username={user.username}  />
+							<section className='flex-grow text-sm text-gray-400 flex flex-col justify-center'>
+							<p className='font-bold text-base text-gray-800'>{user.name}</p>
+							<p>{user.username}</p>
+							</section>
+							<span className='text-xs mt-0.5 text-gray-500 '>
+								{role}
+							</span>
+						</section>
+					))}
+				</section>
 			</Card>
 		</Modal>
 	);

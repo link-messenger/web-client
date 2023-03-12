@@ -1,6 +1,7 @@
 import { Card, Modal } from 'components/core';
 import { CREATE_GROUP_MODAL, USER_PROFILE_MODAL } from 'constants';
 import { useGetUserProfile } from 'hooks';
+import { ModalCardProps } from 'interfaces';
 import { EN_US } from 'languages';
 import { formatDateTime } from 'utils/time';
 import { ListAvatar } from './Avatar';
@@ -8,10 +9,7 @@ import { ListAvatar } from './Avatar';
 export const EditUserProfileModal = ({
 	closeModal,
 	currentId,
-}: {
-	currentId: string;
-	closeModal: (id: string) => void;
-}) => {
+}: ModalCardProps) => {
 	const { data: user } = useGetUserProfile({});
 	const createdAt = formatDateTime(user.createdAt);
 	const updatedAt = formatDateTime(user.updatedAt);
@@ -36,10 +34,10 @@ export const EditUserProfileModal = ({
 					<h3 className="text-gray-800 font-medium text-lg mb-3">
 						{EN_US['settings.ProfileInfo']}
 					</h3>
-					<ProfileItem name={EN_US['settings.Id']} value={user.id} />
-					<ProfileItem name={EN_US['settings.Email']} value={user.email} />
-					<ProfileItem name={EN_US['settings.CreateAccDate']} value={createdAt} />
-					<ProfileItem name={EN_US['settings.AccLastUpdate']} value={updatedAt} />
+					<InfoItem name={EN_US['settings.Id']} value={user.id} />
+					<InfoItem name={EN_US['settings.Email']} value={user.email} />
+					<InfoItem name={EN_US['settings.CreateAccDate']} value={createdAt} />
+					<InfoItem name={EN_US['settings.AccLastUpdate']} value={updatedAt} />
 			
 				</section>
 			</Card>
@@ -47,11 +45,11 @@ export const EditUserProfileModal = ({
 	);
 };
 
-
-export const ProfileItem = ({ name, value }: { name: string, value: string }) => {
+//TODO: MOVE TO CORE
+export const InfoItem = ({ name, value, vstyle }: { vstyle?: string,name: string, value: string }) => {
 	return (
 		<p className=" flex justify-between items-center">
-			<span className="text-gray-800">{name}:</span> <span className='text-gray-500'>{value}</span>
+			<span className="text-gray-800">{name}:</span> <span className={'text-gray-500 ' + (vstyle ?? '')}>{value}</span>
 		</p>
 	);
 }

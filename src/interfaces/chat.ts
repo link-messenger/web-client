@@ -31,3 +31,7 @@ export interface IConversation {
   _id: string;
   users: IUser[];
 }
+
+export interface IGroupDetail extends Omit<IGroup, 'members'> {
+  members: {user: IUser, role: string, _id:string}[];
+}
