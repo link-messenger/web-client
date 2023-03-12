@@ -11,7 +11,7 @@ export const Modal = ({ onClick,children, className, isOpen = false }: ModalProp
 			<div
 				onClick={onClick}
 				className={
-					'absolute top-0 left-0 z-50 w-screen h-screen bg-black bg-opacity-50 ' +
+					'absolute top-0 left-0 z-30 w-screen h-screen bg-black bg-opacity-50 ' +
 					(className ?? '') +
 					(isOpen ? ' flex' : ' w-0 hidden')
 				}

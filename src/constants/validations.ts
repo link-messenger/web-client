@@ -24,6 +24,6 @@ export const SEND_MESSAGE_VALIDATION = yup.object({
 
 export const CREATE_GROUP_VALIDATION = yup.object({
   name: yup.string().required(),
-  description: yup.string().required(),
-  status: yup.mixed().oneOf(['PRIVATE', 'PUBLIC']),
+  description: yup.string().optional(),
+  isPublic: yup.boolean().required(),
 });

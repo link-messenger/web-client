@@ -1,13 +1,18 @@
-import { Card } from 'components/core';
+import { Button, Card, NormalInput, Toggle } from 'components/core';
 import { Modal } from 'components/core/Modal';
-import { CREATE_GROUP_INITIALS, CREATE_GROUP_MODAL } from 'constants';
-import { Form, Formik } from 'formik';
+import {
+	CREATE_GROUP_INITIALS,
+	CREATE_GROUP_MODAL,
+	CREATE_GROUP_VALIDATION,
+} from 'constants';
+import { Field, Form, Formik } from 'formik';
 import { useModal } from 'hooks';
 import { IProfile } from 'interfaces';
 import { EN_US } from 'languages';
 import { PropsWithChildren } from 'react';
 import { useMenuStore } from 'store';
 import { ListAvatar } from './Avatar';
+import { CreateGroupModal } from './Group';
 
 export const SideMenu = ({ user }: { user: IProfile }) => {
 	const open = useMenuStore((state) => state.open);
@@ -61,22 +66,7 @@ export const SideMenu = ({ user }: { user: IProfile }) => {
 					))}
 				</ul>
 
-				<Modal
-					className="justify-center items-center"
-					onClick={() => closeModal(CREATE_GROUP_MODAL)}
-					isOpen={currentId === CREATE_GROUP_MODAL}
-				>
-					<Card onClick={(e) => e.stopPropagation()} className="m-2 w-full sm:w-max">
-						<Formik
-							initialValues={CREATE_GROUP_INITIALS}
-							onSubmit={() => {}}
-						>
-							<Form>
-
-							</Form>
-						</Formik>
-					</Card>
-				</Modal>
+				<CreateGroupModal closeModal={closeModal} currentId={currentId} />
 			</nav>
 		</Modal>
 	);

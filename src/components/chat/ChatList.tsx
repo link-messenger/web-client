@@ -21,10 +21,7 @@ export const ChatList = ({
 	const [search, setSearch] = useState('');
 	const debouncedSearch = useDebounce(search, 1000);
 	const {
-		data: searchedResult,
-		isRefetching,
-		isLoading,
-		isFetching,
+		data: searchedResult
 	} = useSearchChat(debouncedSearch);
 	if (!combined || !combined.length)
 		return <section className="">{EN_US['chat.ChatEmpty']}</section>;
@@ -70,7 +67,7 @@ export const ChatList = ({
 			{!searchIsActive && (
 				<>
 					<section className="text-gray-400 font-medium flex items-center gap-1.5">
-						<i className="uil uil-comment-alt-message text-xl font-bold"></i>
+						<i className="uil uil-comment-lines text-xl font-bold"></i>
 						{EN_US['chat.AllMessages']}
 					</section>
 					<ChatListItem onClick={onChatClick} chats={combined} uid={uid} />
@@ -80,7 +77,7 @@ export const ChatList = ({
 			{searchIsActive && (
 				<>
 					<section className="text-gray-400 font-medium flex items-center gap-1.5">
-						<i className="uil uil-comment-alt-message text-xl font-bold"></i>
+						<i className="uil uil-comment-share text-xl font-bold"></i>
 						{EN_US['chat.Groups']}
 					</section>
 					{searchedResult?.groups?.length ? (
@@ -97,7 +94,7 @@ export const ChatList = ({
 					)}
 
 					<section className="text-gray-400 font-medium flex items-center gap-1.5">
-						<i className="uil uil-comment-alt-message text-xl font-bold"></i>
+						<i className="uil uil-comments text-xl font-bold"></i>
 						{EN_US['chat.Chats']}
 					</section>
 

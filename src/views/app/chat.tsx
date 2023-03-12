@@ -12,6 +12,7 @@ import { useAuthStore, useChatStore } from 'store';
 const Chat = () => {
 	const token = useAuthStore(state => state.token);
 	const navigate = useNavigate();
+	const currentChat = useChatStore((state) => state.currentChat);
 	const initSocket = useChatStore((state) => state.initSocket);
 	const clearAll = useAuthStore((state) => state.clearAll);
 	const { data: userData, isLoading } = useGetUserProfile({
@@ -25,7 +26,7 @@ const Chat = () => {
 		},
 	});
 
-	const { data: groups, isLoading: isGroupLoading } = useGetUserGroup();
+	const { data: groups, isLoading: isGroupLoading,refetch } = useGetUserGroup();
 	const { data: chats, isLoading: isChatLoading } = useGetUserConversation();
 
 	const markedGroups = groups?.map((item) => ({ ...item, type: 'group' }));
@@ -33,6 +34,10 @@ const Chat = () => {
 		...item,
 		type: 'user',
 	}));
+
+	useEffect(() => {
+		refetch();
+	}, [currentChat])
 
 	useEffect(() => {
 		if (isLoading) return;

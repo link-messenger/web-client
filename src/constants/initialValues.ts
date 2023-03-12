@@ -18,5 +18,5 @@ export const MESSAGE_INITIALS = {
 export const CREATE_GROUP_INITIALS = {
   name: '',
   description: '',
-  status: 'PRIVATE',
+  isPublic: false,
 }

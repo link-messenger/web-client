@@ -1,7 +1,7 @@
 import { InputHTMLAttributes, useState } from 'react';
 
 interface INoramlInput extends InputHTMLAttributes<HTMLInputElement> {
-	icon: React.ReactNode;
+	icon?: React.ReactNode;
 }
 export const NormalInput = ({
 	icon,
@@ -11,12 +11,12 @@ export const NormalInput = ({
 }: INoramlInput) => {
 	return (
 		<section className="flex items-center bg-slate-100 p-1.5 w-full rounded-xl">
-			<label
+			{icon && <label
 				htmlFor={id}
 				className="bg-white rounded-lg w-12 aspect-square text-lg grid place-items-center text-sky-600"
 			>
 				{icon}
-			</label>
+			</label>}
 			<input
 				id={id}
 				className={

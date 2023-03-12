@@ -13,21 +13,21 @@ run `npm build` or `yarn build` to build the project.
 
 ## TODO
 
-1. user profile
-2. add group
+1. [X] user profile
+2. [X] add group
 3. group info
 4. join group
 5. leave group
 6. crud group for group admin
 7. push notification + pwa
-8.  grant role to people
-9.  infinit scroll pagination
+8. grant role to people
+9. infinit scroll pagination
 10. if scrolling not go to end for new messages
 11. go to end 
 12. animtion
 13. avatar
 14. edit user info + app settings
-15. getting last messages with group info
+15. getting last messages with group list
 16. sorting combined by last messages
 17. tags for unseen messages
 18. emojis
@@ -39,8 +39,8 @@ run `npm build` or `yarn build` to build the project.
 24. landing page
 25. dockerizing and up on server
 26. further improvement and more caching
-27. bugfix -- user delete group then clear current group and remove from list -- and hope :)
+27. bugfix -- user delete group then clear current group and remove from list - error handling and showing -- and hope :)
 28. going for v1 ----**** (add seprate by dating tags - showing online members - (reply - edit - delete message) - bg for chat and customizing it - location features - api for bots - in app calls with webrtc - Intl)
- 
+
 
 > BoilerPlate made by Mjn
