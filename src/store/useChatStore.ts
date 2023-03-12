@@ -44,7 +44,7 @@ interface IChatState {
 	loadChat: (id: string, type: Categories, page?: number) => void;
 	sendMessage: (msg: ISendable) => void;
 	setMessageListener: () => (() => void) | undefined;
-	messageConfirmListener: () => void;
+	messageConfirmListener: () => (() => void) | undefined;
 	clearChat: () => void;
 }
 
@@ -125,5 +125,8 @@ export const useChatStore = create<IChatState>((set, get) => ({
 				addMessage(msg);
 			}
 		});
+		return () => {
+			socket.off('message-sent');
+		}
 	},
 }));

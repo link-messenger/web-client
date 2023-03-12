@@ -114,7 +114,7 @@ export const ConversationItem = ({
 	const time = formatTime(user.updatedAt);
 	return (
 		<button
-			onClick={() => onClick(user.username, [user._id])}
+			onClick={() => onClick(user.name, [user._id])}
 			className="text-gray-700 border-b flex text-left items-center gap-3 border-b-gray-100 py-2"
 		>
 			<ListAvatar username={user.username} />

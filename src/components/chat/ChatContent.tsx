@@ -12,15 +12,12 @@ import { IProfile, IUser } from 'interfaces';
 type MsgType = typeof MESSAGE_INITIALS;
 
 export const ChatContent = ({ user }: { user: IProfile }) => {
-	// TODO: change load to react query
 	const currentChat = useChatStore((state) => state.currentChat);
 	const setCurrentChat = useChatStore((state) => state.setCurrentChat);
 	const chats = useChatStore((state) => state.currentMessages);
 	const loadChat = useChatStore((state) => state.loadChat);
-	const clearChat = useChatStore((state) => state.clearChat);
-	const messageListener = useChatStore((state) => state.messageConfirmListener);
+	const messageConfirmListener = useChatStore((state) => state.messageConfirmListener);
 	const setMessageListener = useChatStore((state) => state.setMessageListener);
-
 	const sendMessage = useChatStore((state) => state.sendMessage);
 	const ref = useChatScroll(chats);
 
@@ -32,9 +29,10 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 		} else {
 			loadChat(currentChat.id, currentChat.type);
 		}
-		messageListener();
+		const clearConfirmListener = messageConfirmListener();
 		return () => {
 			clearListener && clearListener();
+			clearConfirmListener && clearConfirmListener();
 		}
 	}, [currentChat]);
 	const [mType, setMType] = useState<MessageTypes>('MESSAGE');
