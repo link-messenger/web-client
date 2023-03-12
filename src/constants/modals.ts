@@ -1,0 +1,1 @@
+export const CREATE_GROUP_MODAL = 'CREATE_GROUP_MODAL';

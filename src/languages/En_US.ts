@@ -37,5 +37,6 @@ export const EN_US = {
   'chat.NoUserFound': 'No user was found',
   'chat.NoGroupFound': 'No Group was found',
   'chat.Searching': 'Searching...',
+  'settings.EditProfile': 'Edit Profile',
 };
 

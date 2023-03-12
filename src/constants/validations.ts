@@ -18,11 +18,12 @@ export const REGISTER_VALIDATION = yup.object({
     ),
 });
 
-
-export const CREATE_ROOM_VALIDATION = yup.object({
-  name: yup.string().required()
-})
-
 export const SEND_MESSAGE_VALIDATION = yup.object({
   content: yup.string().required()
 })
+
+export const CREATE_GROUP_VALIDATION = yup.object({
+  name: yup.string().required(),
+  description: yup.string().required(),
+  status: yup.mixed().oneOf(['PRIVATE', 'PUBLIC']),
+});

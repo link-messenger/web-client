@@ -14,3 +14,9 @@ export const REGISTER_INITIALS = {
 export const MESSAGE_INITIALS = {
   content: '',
 }
+
+export const CREATE_GROUP_INITIALS = {
+  name: '',
+  description: '',
+  status: 'PRIVATE',
+}

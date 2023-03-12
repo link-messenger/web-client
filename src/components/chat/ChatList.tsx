@@ -2,7 +2,7 @@ import { useDebounce, useSearchChat } from 'hooks';
 import { SearchInput } from '../core';
 import { IConversation, IGroup, IUser } from 'interfaces';
 import { EN_US } from 'languages';
-import { useChatStore } from 'store';
+import { useChatStore, useMenuStore } from 'store';
 import { ListAvatar } from 'components/partials';
 import { shortenString, usernameShorter } from 'utils/str';
 import { formatTime } from 'utils/time';
@@ -17,6 +17,7 @@ export const ChatList = ({
 	uid: string;
 }) => {
 	// const { mutate} =
+	const toggleMenu = useMenuStore((state) => state.toggle);
 	const [search, setSearch] = useState('');
 	const debouncedSearch = useDebounce(search, 1000);
 	const {
@@ -38,7 +39,6 @@ export const ChatList = ({
 			members: members,
 		});
 	const searchIsActive = search.length > 2;
-	const isSearchLoading = isRefetching || isLoading || isFetching;
 	return (
 		<section
 			className={
@@ -46,11 +46,17 @@ export const ChatList = ({
 				' lg:w-96 p-4 flex flex-col gap-4 lg:border-r lg:border-r-slate-100'
 			}
 		>
-			<header>
+			<header className="flex items-center justify-between">
 				<h1 className="text-2xl flex gap-3 items-center md:text-3xl font-medium text-gray-800">
 					<i className="uil uil-comment text-blue-600 bg-sky-50 aspect-square w-9 md:w-11 grid place-items-center rounded-full"></i>
 					<span>{EN_US['chat.Chats']}</span>
 				</h1>
+				<button
+					onClick={toggleMenu}
+					className="text-2xl md:text-3xl text-gray-500"
+				>
+					<i className="uil uil-ellipsis-h"></i>
+				</button>
 			</header>
 
 			<SearchInput
@@ -71,49 +77,44 @@ export const ChatList = ({
 				</>
 			)}
 
-			{searchIsActive &&
-				(!isSearchLoading ? (
-					<>
-						<section className="text-gray-400 font-medium flex items-center gap-1.5">
-							<i className="uil uil-comment-alt-message text-xl font-bold"></i>
-							{EN_US['chat.Groups']}
-						</section>
-						{searchedResult?.groups?.length ? (
-							<ChatListItem
-								isSearch={true}
-								onClick={onChatClick}
-								chats={searchedResult.groups}
-								uid={uid}
-							/>
-						) : (
-							<p className="text-center text-gray-400 font-medium">
-								{EN_US['chat.NoGroupFound']}
-							</p>
-						)}
-
-						<section className="text-gray-400 font-medium flex items-center gap-1.5">
-							<i className="uil uil-comment-alt-message text-xl font-bold"></i>
-							{EN_US['chat.Chats']}
-						</section>
-
-						{searchedResult?.users?.length ? (
-							<ChatListItem
-								isSearch={true}
-								onClick={onChatClick}
-								chats={searchedResult.users}
-								uid={uid}
-							/>
-						) : (
-							<p className="text-center text-gray-400 font-medium">
-								{EN_US['chat.NoUserFound']}
-							</p>
-						)}
-					</>
-				) : (
-					<section className="flex-1 text-center grid place-items-center text-xl text-gray-400 font-medium">
-						{EN_US['chat.Searching']}
+			{searchIsActive && (
+				<>
+					<section className="text-gray-400 font-medium flex items-center gap-1.5">
+						<i className="uil uil-comment-alt-message text-xl font-bold"></i>
+						{EN_US['chat.Groups']}
 					</section>
-				))}
+					{searchedResult?.groups?.length ? (
+						<ChatListItem
+							isSearch={true}
+							onClick={onChatClick}
+							chats={searchedResult.groups}
+							uid={uid}
+						/>
+					) : (
+						<p className="text-center text-gray-400 font-medium">
+							{EN_US['chat.NoGroupFound']}
+						</p>
+					)}
+
+					<section className="text-gray-400 font-medium flex items-center gap-1.5">
+						<i className="uil uil-comment-alt-message text-xl font-bold"></i>
+						{EN_US['chat.Chats']}
+					</section>
+
+					{searchedResult?.users?.length ? (
+						<ChatListItem
+							isSearch={true}
+							onClick={onChatClick}
+							chats={searchedResult.users}
+							uid={uid}
+						/>
+					) : (
+						<p className="text-center text-gray-400 font-medium">
+							{EN_US['chat.NoUserFound']}
+						</p>
+					)}
+				</>
+			)}
 		</section>
 	);
 };
@@ -137,7 +138,13 @@ export const ChatListItem = ({
 			}
 		>
 			{chats.map((item) => (
-				<ChatItem key={item._id} onClick={onClick} isSearch={isSearch} item={item} uid={uid} />
+				<ChatItem
+					key={item._id}
+					onClick={onClick}
+					isSearch={isSearch}
+					item={item}
+					uid={uid}
+				/>
 			))}
 		</section>
 	);
@@ -210,7 +217,9 @@ export const ConversationItem = ({
 	data: any;
 	uid: string;
 }) => {
-	const user = isSearch ? data : data.users.filter((u:any) => u._id !== uid)[0];
+	const user = isSearch
+		? data
+		: data.users.filter((u: any) => u._id !== uid)[0];
 	const time = formatTime(user.updatedAt);
 	return (
 		<button

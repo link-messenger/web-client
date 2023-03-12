@@ -13,35 +13,34 @@ run `npm build` or `yarn build` to build the project.
 
 ## TODO
 
-1. Modal
-2. user profile
-3. add group
-4. group info
-5. join group
-6. leave group
-7. crud group for group admin
-8. push notification + pwa
-9.  grant role to people
-10. infinit scroll pagination
-11. if scrolling not go to end for new messages
-12. go to end 
-13. animtion
-14. avatar
-15. edit user info + app settings
-16. getting last messages with group info
-17. sorting combined by last messages
-18. tags for unseen messages
-19. emojis
-20. sound effects
-21. android app
-22. voice message
-23. image message
-24. file message
-25. landing page
-26. dockerizing and up on server
-27. further improvement and more caching
-28. bugfix -- user delete group then clear current group and remove from list -- and hope :)
-29. going for v1 ----**** (add seprate by dating tags - showing online members - (reply - edit - delete message) - bg for chat and customizing it - location features - api for bots - in app calls with webrtc)
+1. user profile
+2. add group
+3. group info
+4. join group
+5. leave group
+6. crud group for group admin
+7. push notification + pwa
+8.  grant role to people
+9.  infinit scroll pagination
+10. if scrolling not go to end for new messages
+11. go to end 
+12. animtion
+13. avatar
+14. edit user info + app settings
+15. getting last messages with group info
+16. sorting combined by last messages
+17. tags for unseen messages
+18. emojis
+19. sound effects
+20. android app
+21. voice message
+22. image message
+23. file message
+24. landing page
+25. dockerizing and up on server
+26. further improvement and more caching
+27. bugfix -- user delete group then clear current group and remove from list -- and hope :)
+28. going for v1 ----**** (add seprate by dating tags - showing online members - (reply - edit - delete message) - bg for chat and customizing it - location features - api for bots - in app calls with webrtc - Intl)
  
 
 > BoilerPlate made by Mjn

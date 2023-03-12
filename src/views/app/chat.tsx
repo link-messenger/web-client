@@ -1,4 +1,5 @@
 import { ChatContent, ChatList } from 'components/chat';
+import { SideMenu } from 'components/partials';
 import {
 	useGetUserConversation,
 	useGetUserGroup,
@@ -53,6 +54,7 @@ const Chat = () => {
 		<main className="flex flex-row w-screen h-screen overflow-hidden">
 			<ChatList uid={userData?.id} combined={combined} />
 			<ChatContent user={userData} />
+			<SideMenu user={userData} />
 		</main>
 	);
 };
