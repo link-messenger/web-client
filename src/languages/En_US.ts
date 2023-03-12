@@ -23,7 +23,15 @@ export const EN_US = {
   'common.StartMeet': 'Start meeting',
   'common.IsLoading': 'Loading...',
   'chat.Group': 'Group',
+  'chat.Chats': 'Chats',
   'chat.Personal': 'Personal',
   'chat.Messages': 'Messages',
+  'chat.ChatEmpty': 'There is no messages yet...',
+  'chat.ItemNotExist': 'Item does not exist',
+  'chat.SelectChat': 'Select a chat to start messaging',
+  'chat.AllMessages': 'All Messages',
+  'chat.Members': 'Members',
+  'chat.Member': 'Member',
+
 };
 

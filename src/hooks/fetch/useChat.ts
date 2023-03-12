@@ -1,21 +1,11 @@
-import { pb } from "api"
-import { MESSAGE_INITIALS } from "constants"
-import { useMutation } from "react-query"
-import { useNavigate } from "react-router-dom"
-import { useGetUserProfile } from "./useUser"
+import { getUserConversation, getUserGroup } from "api"
+import { IConversation, IGroup } from "interfaces"
+import { useMutation, useQuery } from "react-query"
 
-export const useSendChat = () => {
-  const navigate = useNavigate();
-  const { data: userData } = useGetUserProfile({
-    onError: () => {
-      navigate('/login')
-    }
-  });
-  return useMutation(['SEND-CHAT'], (data: typeof MESSAGE_INITIALS) => {
-    if (!userData?.id) throw new Error('User Cannot be loaded!');
-    return pb.collection('messages').create({
-      ...data,
-      user: userData.id
-    });
-  })
+export const useGetUserGroup = () => {
+  return useQuery<IGroup[]>(['USER-GROUPS'], getUserGroup)
+}
+
+export const useGetUserConversation = () => {
+  return useQuery<IConversation[]>(['USER-CONVERSATION'], getUserConversation)
 }

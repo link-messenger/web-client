@@ -6,10 +6,13 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { useRegister } from 'hooks';
 import { EN_US } from 'languages';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
+import { useAuthStore } from 'store';
 
 const Register = () => {
 	const { mutate: register } = useRegister();
+	const isValid = useAuthStore((state) => state.token);
+	if (!!isValid) return <Navigate to="/chat" state={{ from: '/register' }} />;
 	const onHandleRegister = (data: typeof REGISTER_INITIALS) => {
 		register(data);
 	};

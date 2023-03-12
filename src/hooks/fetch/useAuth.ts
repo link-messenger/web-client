@@ -1,57 +1,45 @@
-import { pb } from 'api';
-import { LOGIN_INITIALS, REGISTER_INITIALS } from 'constants';
+import { login, register, setApiHeader } from 'api';
 import { useMutation } from 'react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuthStore } from 'store';
 
 export const useLogin = () => {
 	const navigate = useNavigate();
 	const { state } = useLocation();
-	return useMutation(
-		['LOGIN'],
-		(data: typeof LOGIN_INITIALS) =>
-			pb.collection('users').authWithPassword(data.email, data.password),
-		{
-			onSuccess: () => {
-				const from = state?.from;
-				if (navigate.length !== 0 && !state.from) {
-					if (from === '/login') navigate('/chat');
-					else navigate(from);
-				} else {
-					navigate(from, { state: { from: '/login'}});
-				}
-			},
-		}
-	);
+	const setToken = useAuthStore((state) => state.setToken);
+	return useMutation(['LOGIN'], login, {
+		onSuccess: ({ token }) => {
+			setToken(token);
+			const from = state?.from;
+			if (navigate.length !== 0 && !!from) {
+				if (from === '/login') navigate('/chat');
+				else navigate(from);
+			} else {
+				navigate('/chat');
+			}
+		},
+	});
 };
 
 export const useRegister = () => {
 	const navigate = useNavigate();
-	return useMutation(
-		['REGISTER'],
-		(data: typeof REGISTER_INITIALS) => {
-			const rData = {
-				username: data.username,
-				password: data.password,
-				name: data.name,
-				email: data.email,
-				emailVisibility: true,
-				passwordConfirm: data.confirmPassword,
-			};
-			return pb.collection('users').create(rData);
+	const { state } = useLocation();
+	const setAuth = useAuthStore((state) => state.setAuth);
+	return useMutation(['REGISTER'], register, {
+		onSuccess: ({ user, token }) => {
+			setAuth(token, user);
+			const from = state?.from;
+			if (navigate.length !== 0 && !!from) {
+				if (from === '/register') navigate('/chat');
+				navigate(from);
+			} else {
+				navigate('/chat', {
+					replace: true,
+					state: {
+						from: '/register',
+					},
+				});
+			}
 		},
-		{
-			onSuccess: () => {
-				if (navigate.length !== 0) {
-					navigate(-1);
-				} else {
-					navigate('/chat', {
-						replace: true,
-						state: {
-							from: '/register'
-						}
-					});
-				}
-			},
-		}
-	);
+	});
 };

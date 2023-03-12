@@ -15,3 +15,10 @@ export const usernameShorter = (
   username
     .charAt(username.length - 1)
     .toUpperCase();
+
+export const shortenString = (str: string, limit=20) => {
+  if (str.length > limit) {
+    return str.substring(0, limit) + '...';
+  }
+  return str;
+}

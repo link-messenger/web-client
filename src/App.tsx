@@ -6,22 +6,26 @@ import {
 } from 'react-router-dom';
 import Login from 'views/auth/login';
 import Register from 'views/auth/register';
-import { pb } from 'api';
+import { setApiHeader } from 'api';
 
 import Chat from 'views/app/chat';
 import { AuthLayout } from 'components/layouts';
+import { useAuthStore } from 'store';
+import { useEffect } from 'react';
 
 const App = () => {
+	const token = useAuthStore((state) => state.token);
+	setApiHeader('Authorization', `Bearer ${token}`);
 	return (
 		<Router>
 			<Routes>
 				<Route
 					path="/"
 					element={
-						pb.authStore.isValid ? (
-							<Navigate to="/chat" state={{from:'/root'}} />
+						token ? (
+							<Navigate to="/chat" state={{ from: '/root' }} />
 						) : (
-								<Navigate to="/login" state={{ from:'/root'}} />
+							<Navigate to="/login" state={{ from: '/root' }} />
 						)
 					}
 				/>

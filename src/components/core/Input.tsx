@@ -64,3 +64,28 @@ export const PaleInput = ({
 		/>
 	);
 };
+
+export const SearchInput = ({
+	id,
+	type,
+	...others
+}: InputHTMLAttributes<HTMLInputElement>) => {
+	return (
+		<section className="flex items-center bg-slate-100 p-1.5 w-full rounded-xl">
+			<label
+				htmlFor={id}
+				className="rounded-lg w-12 aspect-square text-2xl text-gray-400 grid place-items-center"
+			>
+				<button className='outline-none'>
+					<i className="uil uil-search"></i>
+				</button>
+			</label>
+			<input
+				id={id}
+				type="search"
+				className="outline-none ml-1 bg-transparent focus:bg-transparent autofill:bg-transparent block text-slate-700  w-full"
+				{...others}
+			/>
+		</section>
+	);
+};

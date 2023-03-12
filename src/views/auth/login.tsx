@@ -2,22 +2,18 @@ import { pb } from 'api';
 import { NormalInput, PasswordInput, Button } from 'components';
 import { ErrorMessage, Field, Form, Formik, FormikProvider } from 'formik';
 import { EN_US } from 'languages';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 import { LOGIN_INITIALS, LOGIN_VALIDATION } from 'constants';
 import { useLogin } from 'hooks';
 import { GoogleAuth, AuthHeader, Seprator } from 'components/partials';
+import { useAuthStore } from 'store';
 
 const Login = () => {
-	const navigate = useNavigate();
 	const { mutate: login } = useLogin();
-	const isValid = pb.authStore.isValid;
-	if (isValid)
-		navigate('/chat', {
-			state: {
-				from: '/login',
-			},
-		});
+	const isValid = useAuthStore((state) => state.token);
+	if (!!isValid) return <Navigate to="/chat" state={{ from: '/login' }} />;
+
 	const onHandleLogin = async (data: typeof LOGIN_INITIALS) => {
 		login(data);
 	};
@@ -69,7 +65,7 @@ const Login = () => {
 			<GoogleAuth />
 			<section className="text-sm flex justify-center items-baseline space-x-2">
 				<p className="text-slate-500">{EN_US['login.SignUpMessage']}</p>
-				<Link to="/register" className="text-sky-700 font-medium">
+				<Link to="/register" state={{from: '/login'}} className="text-sky-700 font-medium">
 					{EN_US['login.SignUp']}
 				</Link>
 			</section>

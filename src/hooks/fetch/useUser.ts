@@ -1,31 +1,33 @@
-import { pb } from 'api';
+import { profile, getUserById } from 'api';
 import { useMutation, useQuery } from 'react-query';
-import { string } from 'yup';
+import { useAuthStore } from 'store';
 
 export const useGetUserProfile = ({
 	onError,
 }: {
 	onError?: (err: unknown) => void;
 }) => {
-	return useQuery(
-		['GET-USER-PROFILE'],
-		async () => {
-			return await pb.collection('users').authRefresh();
+	const setUser = useAuthStore((state) => state.setUser);
+	return useQuery(['GET-USER-PROFILE'], profile, {
+		onSuccess: ({ createdAt, id, email, name, username }) => {
+			setUser({
+				createdAt,
+				email,
+				id,
+				name,
+				username,
+			});
 		},
-		{
-			onError: onError,
-			select: (data) => data.record,
-		}
-	);
+		onError,
+		cacheTime: 2000000,
+		refetchInterval: false,
+		refetchOnMount: true,
+		retry: false,
+	});
 };
 
-
-export const useGetUserById = ({
-	id
-}: { id: string }) => {
-	return useQuery(['GET-USER', id], async () => {
-		return await pb.collection('users').getOne(id);
-	}, {
-		cacheTime: 2000000
-	})
-}
+export const useGetUserById = ({ id }: { id: string }) => {
+	return useQuery(['GET-USER', id], () => getUserById(id), {
+		cacheTime: 2000000,
+	});
+};
