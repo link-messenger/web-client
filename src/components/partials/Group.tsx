@@ -123,7 +123,7 @@ export const GroupProfileModal = ({
 				onClick={(e) => e.stopPropagation()}
 				className="w-full m-2 md:w-[600px]"
 			>
-				<header className="p-3 border-b border-gray-100 flex gap-3 items-center">
+				<header className="p-3 border-b border-gray-100 flex gap-2 items-center">
 					<ListAvatar username={groupDetail.name} size="w-14" />
 					<section className="flex flex-col">
 						<span className="font-bold text-gray-700">{groupDetail.name}</span>
@@ -131,13 +131,15 @@ export const GroupProfileModal = ({
 					</section>
 				</header>
 
-				<section className="p-3  border-b flex flex-col gap-1.5 text-sm border-gray-100">
-					<h4 className="font-medium text-gray-700 mb-2">
-						{EN_US['profile.GroupInfo']}
-					</h4>
+				<section className="p-3 pt-0 border-b flex flex-col text-sm border-gray-100">
+					<section className="py-3 font-medium text-gray-700 flex items-center gap-2 h-10">
+						<i className="uil uil-comment-info text-xl"></i>
+						<h5 className="font-medium">{EN_US['profile.Info']}</h5>
+					</section>
+
 					<section className="space-y-1">
 						<p className="text-gray-800">{EN_US['profile.GroupDesc']}:</p>
-						<p className="text-gray-500 bg-slate-50 rounded-xl px-2 py-1">
+						<p className="text-gray-600 bg-slate-50 border border-slate-100 rounded-lg px-2 py-1">
 							{groupDetail.description}
 						</p>
 					</section>
@@ -147,7 +149,11 @@ export const GroupProfileModal = ({
 						value={groupDetail.link}
 						vstyle="underline"
 					/>
-					<InfoItem name={EN_US['profile.Status']} value={groupDetail.status} />
+					<InfoItem
+						name={EN_US['profile.Status']}
+						vstyle="capitalize"
+						value={groupDetail.status.toLowerCase()}
+					/>
 					<InfoItem name={EN_US['profile.CreatedAt']} value={created} />
 					<InfoItem name={EN_US['profile.LastUpdatedAt']} value={updated} />
 				</section>

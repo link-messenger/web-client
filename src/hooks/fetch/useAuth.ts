@@ -1,5 +1,5 @@
 import { login, register, setApiHeader } from 'api';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from 'store';
 

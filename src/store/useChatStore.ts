@@ -41,15 +41,14 @@ interface IChatState {
 	initSocket: (uid: string) => Function;
 	addMessage: (msg: IMessage) => void;
 	addRecievedMessage: (msg: IMessage) => void;
-	loadChat: (id: string, type: Categories, page?: number) => void;
+	loadChat: (page?: number) => void;
 	sendMessage: (msg: ISendable) => void;
 	setMessageListener: () => (() => void) | undefined;
 	messageConfirmListener: () => (() => void) | undefined;
 	clearChat: () => void;
 }
 
-
-// TODO: working perfectly fine! may need furthur preformance improvement + push notification and global listener
+// TODO: working perfectly fine! push notification
 
 export const useChatStore = create<IChatState>((set, get) => ({
 	socket: null,
@@ -74,8 +73,10 @@ export const useChatStore = create<IChatState>((set, get) => ({
 	addMessage: (msg) => {
 		set({ currentMessages: [...get().currentMessages, msg] });
 	},
-	loadChat: async (id: string, type: Categories, page?: number) => {
-		const chats = await getLastMessages(id, type, page);
+	loadChat: async ( page?: number) => {
+		const current = get().currentChat;
+		if (!current) return;
+		const chats = await getLastMessages(current?.id, current?.type, page);
 		set({ currentMessages: chats.reverse() });
 	},
 	sendMessage: (msg) => {
@@ -91,8 +92,8 @@ export const useChatStore = create<IChatState>((set, get) => ({
 		if (!socket) return;
 		const addMessage = get().addMessage;
 		const addRecievedMessage = get().addRecievedMessage;
-		const currentChat = get().currentChat;
 		socket.on('recieve-message', (msg: IMessage) => {
+			const currentChat = get().currentChat;
 			if (
 				currentChat &&
 				((currentChat.type === 'user' &&
@@ -130,3 +131,4 @@ export const useChatStore = create<IChatState>((set, get) => ({
 		}
 	},
 }));
+

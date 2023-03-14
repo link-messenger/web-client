@@ -1,5 +1,5 @@
 import { getSearchChat } from "api"
-import { useQuery } from "react-query"
+import { useQuery } from '@tanstack/react-query';
 
 export const useSearchChat = (name: string) => {
   return useQuery(['SEARCHED-CHAT', name], () => getSearchChat(name), {

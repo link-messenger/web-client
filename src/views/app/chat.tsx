@@ -7,59 +7,39 @@ import {
 } from 'hooks';
 import { useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { useAuthStore, useChatStore } from 'store';
+import { useAuthStore, useChatListStore, useChatStore } from 'store';
+import { combine } from 'zustand/middleware';
 
 const Chat = () => {
-	const token = useAuthStore(state => state.token);
-	const navigate = useNavigate();
-	const currentChat = useChatStore((state) => state.currentChat);
 	const initSocket = useChatStore((state) => state.initSocket);
-	const clearAll = useAuthStore((state) => state.clearAll);
-	const { data: userData, isLoading } = useGetUserProfile({
-		onError: () => {
-			clearAll();
-			navigate('/login', {
-				state: {
-					from: '/chat',
-				},
-			});
-		},
-	});
+	const setMessageListener = useChatStore((state) => state.setMessageListener);
+	const setChats = useChatListStore(state => state.setChats);
 
-	const { data: groups, isLoading: isGroupLoading,refetch } = useGetUserGroup();
-	const { data: chats, isLoading: isChatLoading } = useGetUserConversation();
+	const { data: userData, isLoading } = useGetUserProfile();
 
-	const markedGroups = groups?.map((item) => ({ ...item, type: 'group' }));
-	const markedConversations = chats?.map((item) => ({
-		...item,
-		type: 'user',
-	}));
-
-	useEffect(() => {
-		refetch();
-	}, [currentChat])
+	const { data: groups, isLoading: isGroupLoading } = useGetUserGroup();
+	const { data: convs, isLoading: isConvLoading } = useGetUserConversation();
 
 	useEffect(() => {
 		if (isLoading) return;
 		const disconnect = initSocket(userData.id);
+		const clearListener = setMessageListener();
 		return () => {
 			// remove all subscriptions in the collection
 			disconnect();
+			clearListener && clearListener();
 		};
 	}, [userData?.id]);
 
-	if (isChatLoading || isGroupLoading) return <div>Loading...</div>;
-	if (!token || !markedGroups || !markedConversations) {
-		clearAll();
-		return <Navigate to="/login" />;
-	}
-	
-	// TODO: change so that it sorts by last message
-	const combined = [...markedGroups, ...markedConversations];
+	useEffect(() => {
+		if (!groups || !convs) return;
+		setChats(groups, convs);
+	}, [isConvLoading, isGroupLoading]);
+	console.log()
 
 	return (
 		<main className="flex flex-row w-screen h-screen overflow-hidden">
-			<ChatList uid={userData?.id} combined={combined} />
+			<ChatList uid={userData?.id} />
 			<ChatContent user={userData} />
 			<SideMenu user={userData} />
 		</main>

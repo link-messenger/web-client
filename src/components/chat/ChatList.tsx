@@ -2,29 +2,20 @@ import { useDebounce, useSearchChat } from 'hooks';
 import { SearchInput } from '../core';
 import { IConversation, IGroup, IUser } from 'interfaces';
 import { EN_US } from 'languages';
-import { useChatStore, useMenuStore } from 'store';
+import { useChatListStore, useChatStore, useMenuStore } from 'store';
 import { ListAvatar } from 'components/partials';
 import { shortenString, usernameShorter } from 'utils/str';
 import { formatTime } from 'utils/time';
 import { useFormik } from 'formik';
 import { useState } from 'react';
 
-export const ChatList = ({
-	combined,
-	uid,
-}: {
-	combined?: any[];
-	uid: string;
-}) => {
-	// const { mutate} =
+export const ChatList = ({ uid }: { uid: string }) => {
+	const chatList = useChatListStore((state) => state.chats);
 	const toggleMenu = useMenuStore((state) => state.toggle);
 	const [search, setSearch] = useState('');
 	const debouncedSearch = useDebounce(search, 1000);
-	const {
-		data: searchedResult
-	} = useSearchChat(debouncedSearch);
-	if (!combined || !combined.length)
-		return <section className="">{EN_US['chat.ChatEmpty']}</section>;
+	const { data: searchedResult } = useSearchChat(debouncedSearch);
+		
 	const currentChat = useChatStore((state) => state.currentChat);
 	const setCurrentChat = useChatStore((state) => state.setCurrentChat);
 
@@ -70,49 +61,58 @@ export const ChatList = ({
 						<i className="uil uil-comment-lines text-xl font-bold"></i>
 						{EN_US['chat.AllMessages']}
 					</section>
-					<ChatListItem onClick={onChatClick} chats={combined} uid={uid} />
+					<ChatListItem onClick={onChatClick} chats={chatList} uid={uid} />
 				</>
 			)}
 
 			{searchIsActive && (
-				<>
-					<section className="text-gray-400 font-medium flex items-center gap-1.5">
-						<i className="uil uil-comment-share text-xl font-bold"></i>
-						{EN_US['chat.Groups']}
-					</section>
-					{searchedResult?.groups?.length ? (
-						<ChatListItem
-							isSearch={true}
-							onClick={onChatClick}
-							chats={searchedResult.groups}
-							uid={uid}
-						/>
-					) : (
-						<p className="text-center text-gray-400 font-medium">
-							{EN_US['chat.NoGroupFound']}
-						</p>
-					)}
-
-					<section className="text-gray-400 font-medium flex items-center gap-1.5">
-						<i className="uil uil-comments text-xl font-bold"></i>
-						{EN_US['chat.Chats']}
-					</section>
-
-					{searchedResult?.users?.length ? (
-						<ChatListItem
-							isSearch={true}
-							onClick={onChatClick}
-							chats={searchedResult.users}
-							uid={uid}
-						/>
-					) : (
-						<p className="text-center text-gray-400 font-medium">
-							{EN_US['chat.NoUserFound']}
-						</p>
-					)}
-				</>
+				<SearchList searchedResult={searchedResult} uid={uid}  />
 			)}
 		</section>
+	);
+};
+
+const SearchList = ({ searchedResult, uid }: any) => {
+	const onChatClick = (data: any) => {
+		console.log(data);
+	}
+	return (
+		<>
+			<section className="text-gray-400 font-medium flex items-center gap-1.5">
+				<i className="uil uil-comment-share text-xl font-bold"></i>
+				{EN_US['chat.Groups']}
+			</section>
+			{searchedResult?.groups?.length ? (
+				<ChatListItem
+					isSearch={true}
+					onClick={onChatClick}
+					chats={searchedResult.groups}
+					uid={uid}
+				/>
+			) : (
+				<p className="text-center text-gray-400 font-medium">
+					{EN_US['chat.NoGroupFound']}
+				</p>
+			)}
+
+			<section className="text-gray-400 font-medium flex items-center gap-1.5">
+				<i className="uil uil-comments text-xl font-bold"></i>
+				{EN_US['chat.Chats']}
+			</section>
+
+			{searchedResult?.users?.length ? (
+				<ChatListItem
+					isSearch={true}
+					onClick={onChatClick}
+					chats={searchedResult.users}
+					uid={uid}
+				/>
+			) : (
+				<p className="text-center text-gray-400 font-medium">
+					{EN_US['chat.NoUserFound']}
+				</p>
+			)}
+		</>
 	);
 };
 
@@ -122,11 +122,14 @@ export const ChatListItem = ({
 	onClick,
 	isSearch = false,
 }: {
-	chats: any[];
+	chats: any[] | null;
 	uid: string;
 	onClick: Function;
 	isSearch?: boolean;
-}) => {
+	}) => {
+	if (!chats || !chats.length) {
+		return <section className="grid place-items-center h-full font-bold text-lg text-gray-400">{EN_US['chat.ChatEmpty']}</section>;
+	}
 	return (
 		<section
 			className={

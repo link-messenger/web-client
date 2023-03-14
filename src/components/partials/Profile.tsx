@@ -10,9 +10,11 @@ export const EditUserProfileModal = ({
 	closeModal,
 	currentId,
 }: ModalCardProps) => {
-	const { data: user } = useGetUserProfile({});
+	const { data: user } = useGetUserProfile();
+	if (!user) return <>loading...</>
 	const createdAt = formatDateTime(user.createdAt);
 	const updatedAt = formatDateTime(user.updatedAt);
+
 	return (
 		<Modal
 			className="justify-center items-center"

@@ -11,7 +11,7 @@ import { useChatStore } from 'store';
 import { useChatScroll, useModal } from 'hooks';
 import { useEffect, useState } from 'react';
 import { MessageTypes } from 'store';
-import { IProfile, IUser } from 'interfaces';
+import { IProfile } from 'interfaces';
 
 type MsgType = typeof MESSAGE_INITIALS;
 
@@ -24,21 +24,14 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 	const messageConfirmListener = useChatStore(
 		(state) => state.messageConfirmListener
 	);
-	const setMessageListener = useChatStore((state) => state.setMessageListener);
 	const sendMessage = useChatStore((state) => state.sendMessage);
 	const ref = useChatScroll(chats);
 
 	useEffect(() => {
-		const clearListener = setMessageListener();
 		if (!currentChat) return;
-		if (currentChat.type === 'user') {
-			loadChat(currentChat.members[0], currentChat.type);
-		} else {
-			loadChat(currentChat.id, currentChat.type);
-		}
+		loadChat();
 		const clearConfirmListener = messageConfirmListener();
 		return () => {
-			clearListener && clearListener();
 			clearConfirmListener && clearConfirmListener();
 		};
 	}, [currentChat]);
@@ -144,7 +137,7 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 				</Form>
 			</Formik>
 
-			<GroupProfileModal currentId={currentId} closeModal={closeModal} />
+			{memberNumber && <GroupProfileModal currentId={currentId} closeModal={closeModal} />}
 		</section>
 	);
 };

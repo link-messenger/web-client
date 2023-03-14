@@ -6,12 +6,12 @@ export const getLastMessages = async (
 	id: string,
 	type: Categories,
 	page?: number
-) =>
-	get(`message/${type}/${id}`, {
+) => {
+	return get(`message/${type}/${id}`, {
 		params: {
 			page,
 		},
-	}).then((res) => res.data);
+	}).then((res) => res.data);}
 
 export const getUserGroup = () => get('/group').then((res) => res.data);
 

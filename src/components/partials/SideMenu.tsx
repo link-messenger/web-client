@@ -17,6 +17,7 @@ import { CreateGroupModal } from './Group';
 import { EditUserProfileModal } from './Profile';
 
 export const SideMenu = ({ user }: { user: IProfile }) => {
+
 	const open = useMenuStore((state) => state.open);
 	const toggle = useMenuStore((state) => state.toggle);
 	const { currentId, openModal, closeModal } = useModal();
@@ -43,11 +44,11 @@ export const SideMenu = ({ user }: { user: IProfile }) => {
 				className="w-4/5 md:w-96 h-full bg-white border-r border-r-gray-400 min-w-xs shadow-xl"
 			>
 				<header className="text-lg p-3 flex gap-3 items-center border-b border-b-gray-100">
-					<ListAvatar size="w-14" username={user.username} />
+					<ListAvatar size="w-14" username={user?.username} />
 					<section className="flex flex-col gap-0 flex-1">
-						<h3 className="font-medium">{user.name}</h3>
+						<h3 className="font-medium">{user?.name}</h3>
 						<span className="text-sm text-gray-400 underline">
-							#{user.username}
+							#{user?.username}
 						</span>
 					</section>
 					<span

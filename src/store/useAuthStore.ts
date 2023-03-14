@@ -35,3 +35,5 @@ export const useAuthStore = create<IAuthState>()(
 		}
 	)
 );
+
+export const clearAuthStorage = useAuthStore.getState().clearAll;

@@ -1,13 +1,12 @@
 import { profile, getUserById } from 'api';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from 'store';
 
-export const useGetUserProfile = ({
-	onError,
-}: {
-	onError?: (err: unknown) => void;
-}) => {
+export const useGetUserProfile = () => {
 	const setUser = useAuthStore((state) => state.setUser);
+	const clearAll = useAuthStore((state) => state.clearAll);
+	const navigate = useNavigate();
 	return useQuery(['GET-USER-PROFILE'], profile, {
 		onSuccess: ({ createdAt, id, email, name, username }) => {
 			setUser({
@@ -18,11 +17,7 @@ export const useGetUserProfile = ({
 				username,
 			});
 		},
-		onError,
 		cacheTime: 2000000,
-		refetchInterval: false,
-		refetchOnMount: true,
-		retry: true,
 	});
 };
 
