@@ -42,5 +42,6 @@ run `npm build` or `yarn build` to build the project.
 1. [X] add group
 2. [X] user profile
 3. [X] group info
+4. [X] group info bugfix
 
 > BoilerPlate made by Mjn

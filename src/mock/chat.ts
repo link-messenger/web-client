@@ -1,3 +1,5 @@
+import { IGroupDetail } from 'interfaces';
+
 export const CHAT_MOCK = [
 	{
 		sender: 'Amy',
@@ -27,3 +29,196 @@ export const CHAT_MOCK = [
 			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque,cumque et obcaecati beatae laborum doloribus ad reprehenderit repellendus id! Consectetur fugit praesentium totam debitis iusto culpa,deleniti iure illo. Tenetur.',
 	},
 ];
+
+export const GROUP_DETAIL_MOCK: IGroupDetail = {
+	_id: 'sdlksdkmsdclomksdc',
+	createdAt: '2022-01-03',
+	updatedAt: '2022-01-03',
+	description:
+		'Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque,cumque et obcaecati beatae laborum doloribus ad reprehenderit repellendus id! Consectetur fugit praesentium totam debitis iusto culpa,deleniti iure illo. Tenetur.',
+	link: 'sldjikm',
+	members: [
+		{
+			_id: 'lskdmmsldcsmdc',
+			role: 'ADMIN',
+			user: {
+				_id: 'lksdmmsdmc',
+				createdAt: '2022-01-03',
+				updatedAt: '2022-01-03',
+				email: 'mjnsd@gmail.com',
+				name: 'wow tes',
+				username: 'wrts',
+			},
+		},
+		{
+			_id: 'lskdmmsldcsmdc',
+			role: 'ADMIN',
+			user: {
+				_id: 'lksdmmsdmc',
+				createdAt: '2022-01-03',
+				updatedAt: '2022-01-03',
+				email: 'mjnsd@gmail.com',
+				name: 'wow tes',
+				username: 'wrts',
+			},
+		},
+		{
+			_id: 'lskdmmsldcsmdc',
+			role: 'ADMIN',
+			user: {
+				_id: 'lksdmmsdmc',
+				createdAt: '2022-01-03',
+				updatedAt: '2022-01-03',
+				email: 'mjnsd@gmail.com',
+				name: 'wow tes',
+				username: 'wrts',
+			},
+		},
+		{
+			_id: 'lskdmmsldcsmdc',
+			role: 'ADMIN',
+			user: {
+				_id: 'lksdmmsdmc',
+				createdAt: '2022-01-03',
+				updatedAt: '2022-01-03',
+				email: 'mjnsd@gmail.com',
+				name: 'wow tes',
+				username: 'wrts',
+			},
+		},
+		{
+			_id: 'lskdmmsldcsmdc',
+			role: 'ADMIN',
+			user: {
+				_id: 'lksdmmsdmc',
+				createdAt: '2022-01-03',
+				updatedAt: '2022-01-03',
+				email: 'mjnsd@gmail.com',
+				name: 'wow tes',
+				username: 'wrts',
+			},
+		},
+		{
+			_id: 'lskdmmsldcsmdc',
+			role: 'ADMIN',
+			user: {
+				_id: 'lksdmmsdmc',
+				createdAt: '2022-01-03',
+				updatedAt: '2022-01-03',
+				email: 'mjnsd@gmail.com',
+				name: 'wow tes',
+				username: 'wrts',
+			},
+		},
+		{
+			_id: 'lskdmmsldcsmdc',
+			role: 'ADMIN',
+			user: {
+				_id: 'lksdmmsdmc',
+				createdAt: '2022-01-03',
+				updatedAt: '2022-01-03',
+				email: 'mjnsd@gmail.com',
+				name: 'wow tes',
+				username: 'wrts',
+			},
+		},
+		{
+			_id: 'lskdmmsldcsmdc',
+			role: 'ADMIN',
+			user: {
+				_id: 'lksdmmsdmc',
+				createdAt: '2022-01-03',
+				updatedAt: '2022-01-03',
+				email: 'mjnsd@gmail.com',
+				name: 'wow tes',
+				username: 'wrts',
+			},
+		},
+		{
+			_id: 'lskdmmsldcsmdc',
+			role: 'ADMIN',
+			user: {
+				_id: 'lksdmmsdmc',
+				createdAt: '2022-01-03',
+				updatedAt: '2022-01-03',
+				email: 'mjnsd@gmail.com',
+				name: 'wow tes',
+				username: 'wrts',
+			},
+		},
+		{
+			_id: 'lskdmmsldcsmdc',
+			role: 'ADMIN',
+			user: {
+				_id: 'lksdmmsdmc',
+				createdAt: '2022-01-03',
+				updatedAt: '2022-01-03',
+				email: 'mjnsd@gmail.com',
+				name: 'wow tes',
+				username: 'wrts',
+			},
+		},
+		{
+			_id: 'lskdmmsldcsmdc',
+			role: 'ADMIN',
+			user: {
+				_id: 'lksdmmsdmc',
+				createdAt: '2022-01-03',
+				updatedAt: '2022-01-03',
+				email: 'mjnsd@gmail.com',
+				name: 'wow tes',
+				username: 'wrts',
+			},
+		},
+		{
+			_id: 'lskdmmsldcsmdc',
+			role: 'ADMIN',
+			user: {
+				_id: 'lksdmmsdmc',
+				createdAt: '2022-01-03',
+				updatedAt: '2022-01-03',
+				email: 'mjnsd@gmail.com',
+				name: 'wow tes',
+				username: 'wrts',
+			},
+		},
+		{
+			_id: 'lskdmmsldcsmdc',
+			role: 'ADMIN',
+			user: {
+				_id: 'lksdmmsdmc',
+				createdAt: '2022-01-03',
+				updatedAt: '2022-01-03',
+				email: 'mjnsd@gmail.com',
+				name: 'wow tes',
+				username: 'wrts',
+			},
+		},
+		{
+			_id: 'lskdmmsldcsmdc',
+			role: 'ADMIN',
+			user: {
+				_id: 'lksdmmsdmc',
+				createdAt: '2022-01-03',
+				updatedAt: '2022-01-03',
+				email: 'mjnsd@gmail.com',
+				name: 'wow tes',
+				username: 'wrts',
+			},
+		},
+		{
+			_id: 'lskdmmsldcsmdc',
+			role: 'ADMIN',
+			user: {
+				_id: 'lksdmmsdmc',
+				createdAt: '2022-01-03',
+				updatedAt: '2022-01-03',
+				email: 'mjnsd@gmail.com',
+				name: 'wow tes',
+				username: 'wrts',
+			},
+		},
+	],
+	name: 'Fluffy',
+	status: 'PUBLIC'
+};

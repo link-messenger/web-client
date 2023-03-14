@@ -49,8 +49,10 @@ const Chat = () => {
 	}, [userData?.id]);
 
 	if (isChatLoading || isGroupLoading) return <div>Loading...</div>;
-	if (!token || !markedGroups || !markedConversations)
+	if (!token || !markedGroups || !markedConversations) {
+		clearAll();
 		return <Navigate to="/login" />;
+	}
 	
 	// TODO: change so that it sorts by last message
 	const combined = [...markedGroups, ...markedConversations];

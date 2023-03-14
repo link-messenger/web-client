@@ -10,6 +10,7 @@ import { Field, Form, Formik } from 'formik';
 import { useCreateGroup, useGetUserGroupDetail } from 'hooks';
 import { ModalCardProps } from 'interfaces';
 import { EN_US } from 'languages';
+import { GROUP_DETAIL_MOCK } from 'mock/chat';
 import { useChatStore } from 'store';
 import { formatDateTime } from 'utils/time';
 import { ListAvatar } from './Avatar';
@@ -136,7 +137,9 @@ export const GroupProfileModal = ({
 					</h4>
 					<section className="space-y-1">
 						<p className="text-gray-800">{EN_US['profile.GroupDesc']}:</p>
-						<p className="text-gray-500">{groupDetail.description}</p>
+						<p className="text-gray-500 bg-slate-50 rounded-xl px-2 py-1">
+							{groupDetail.description}
+						</p>
 					</section>
 
 					<InfoItem
@@ -149,23 +152,25 @@ export const GroupProfileModal = ({
 					<InfoItem name={EN_US['profile.LastUpdatedAt']} value={updated} />
 				</section>
 
-				<section className="p-3 mb-3 flex flex-col text-sm">
-					<section className="text-gray-700 flex items-center gap-2 mb-2">
+				<section className="scrollbar-hide px-3 py-0 mb-3 relative flex flex-col max-h-64 overflow-y-auto text-sm">
+					<section className="text-gray-700 sticky top-0 w-full bg-white py-3 flex items-center gap-2 h-10">
 						<i className="uil uil-users-alt text-xl"></i>
 						<h4 className="font-medium">{memberNumber}</h4>
 					</section>
-					{groupDetail.members.map(({ user, role, _id }) => (
-						<section key={_id} className="flex gap-3 ">
-							<ListAvatar username={user.username}  />
-							<section className='flex-grow text-sm text-gray-400 flex flex-col justify-center'>
-							<p className='font-bold text-base text-gray-800'>{user.name}</p>
-							<p>{user.username}</p>
+					<section className="flex-grow flex flex-col gap-2">
+						{groupDetail.members.map(({ user, role, _id }) => (
+							<section key={_id} className="flex gap-3 ">
+								<ListAvatar username={user.username} />
+								<section className="flex-grow text-sm text-gray-400 flex flex-col justify-center">
+									<p className="font-bold text-base text-gray-800">
+										{user.name}
+									</p>
+									<p>{user.username}</p>
+								</section>
+								<span className="text-xs mt-0.5 text-gray-500 ">{role}</span>
 							</section>
-							<span className='text-xs mt-0.5 text-gray-500 '>
-								{role}
-							</span>
-						</section>
-					))}
+						))}
+					</section>
 				</section>
 			</Card>
 		</Modal>
