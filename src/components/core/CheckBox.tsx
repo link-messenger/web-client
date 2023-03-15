@@ -64,3 +64,44 @@ export const Toggle = ({
 		</label>
 	);
 };
+
+interface ToggleWithoutFormikProps extends Omit<ToggleProps, 'value'> {
+	onTogglePress?: any;
+	value: boolean;
+}
+
+export const ToggleWithoutFormik = ({
+	id,
+	name,
+	value,
+	size = 'md',
+	onTogglePress,
+	...others
+}: ToggleWithoutFormikProps) => {
+	return (
+		<label
+			onClick={onTogglePress}
+			htmlFor={id}
+			className={
+				SIZE_MAP[size] +
+				' relative rounded-full cursor-pointer ' +
+				(value ? 'bg-sky-400' : 'bg-slate-100')
+			}
+		>
+			<input
+				type="checkbox"
+				name={name}
+				defaultChecked={value}
+				{...others}
+				className="hidden"
+			/>
+			<span
+				className={
+					CIRCLE_SIZE_MAP[size] +
+					' bg-white top-1/2 -translate-y-1/2 aspect-square absolute z-50 rounded-full ' +
+					(value ? CIRCLE_RIGHT_SIZE_MAP[size] : CIRCLE_LEFT_SIZE_MAP[size])
+				}
+			></span>
+		</label>
+	);
+};

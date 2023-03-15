@@ -162,6 +162,7 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 
 			{groupDetail && (
 				<GroupProfileModal
+					refetch={refetch}
 					user={user}
 					openModal={openModal}
 					groupDetail={groupDetail}

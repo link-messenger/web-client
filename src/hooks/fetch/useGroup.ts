@@ -4,6 +4,7 @@ import {
 	deleteUserGroup,
 	getUserGroup,
 	getUserGroupDetail,
+	grantUserGroupRole,
 	postCreateGroup,
 	putUserGroupEdit,
 } from 'api';
@@ -52,3 +53,8 @@ export const useDeleteGroup = (id: string) => {
 		},
 	});
 };
+
+
+export const useGrantRoleGroup = (id: string) => {
+	return useMutation(['GRANT-ROLE-GROUP', id], grantUserGroupRole);
+}

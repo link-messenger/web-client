@@ -1,4 +1,12 @@
-import { Button, Card, NormalInput, PaleInput, Toggle } from 'components/core';
+import { grantUserGroupRole } from 'api';
+import {
+	Button,
+	Card,
+	NormalInput,
+	PaleInput,
+	Toggle,
+	ToggleWithoutFormik,
+} from 'components/core';
 import { Modal } from 'components/core/Modal';
 import {
 	CHAT_INFO_MODAL,
@@ -7,6 +15,7 @@ import {
 	CREATE_GROUP_VALIDATION,
 	EDIT_GROUP_MODAL,
 	EDIT_GROUP_VALIDATION,
+	ROLES,
 } from 'constants';
 import { Field, Form, Formik } from 'formik';
 import { useCreateGroup, useDeleteGroup, useEditGroup } from 'hooks';
@@ -98,12 +107,14 @@ interface GroupProfileModalProps extends ModalCardProps {
 	groupDetail: IGroupDetail;
 	user: IProfile;
 	openModal: (id: string) => void;
+	refetch: () => void;
 }
 
 export const GroupProfileModal = ({
 	currentId,
 	user,
 	closeModal,
+	refetch,
 	openModal,
 	groupDetail,
 }: GroupProfileModalProps) => {
@@ -114,6 +125,7 @@ export const GroupProfileModal = ({
 	const leave = useChatListStore((state) => state.leaveGroup);
 
 	const me = groupDetail.members.find((member) => member.user._id === user.id);
+	const isAdmin = me?.role === ROLES.admin;
 	const onLeaveGroup = () => {
 		closeModal(CHAT_INFO_MODAL);
 		leave(groupDetail._id);
@@ -153,12 +165,14 @@ export const GroupProfileModal = ({
 						<h5 className="font-medium">{EN_US['profile.Info']}</h5>
 					</section>
 
-					<section className="space-y-1">
-						<p className="text-gray-800">{EN_US['profile.GroupDesc']}:</p>
-						<p className="text-gray-600 bg-slate-50 border border-slate-100 rounded-lg px-2 py-1">
-							{groupDetail.description}
-						</p>
-					</section>
+					{groupDetail.description && (
+						<section className="space-y-1">
+							<p className="text-gray-800">{EN_US['profile.GroupDesc']}:</p>
+							<p className="text-gray-600 bg-slate-50 border border-slate-100 rounded-lg px-2 py-1">
+								{groupDetail.description}
+							</p>
+						</section>
+					)}
 
 					<InfoItem
 						name={EN_US['profile.Link']}
@@ -187,7 +201,27 @@ export const GroupProfileModal = ({
 									</p>
 									<p>{user.username}</p>
 								</section>
-								<span className="text-xs mt-0.5 text-gray-500 ">{role}</span>
+								<section className="flex flex-col justify-center items-center gap-0.5">
+									<span className="text-xs mt-0.5 text-gray-500 ">{role}</span>
+									{isAdmin && (
+										<ToggleWithoutFormik
+											onClick={() => {
+												const roleToChange =
+													role === ROLES.admin ? ROLES.user : ROLES.admin;
+												grantUserGroupRole({
+													id: groupDetail._id,
+													role: roleToChange,
+													uid: user._id,
+												}).then(() => {
+													refetch();
+												});
+											}}
+											value={role === ROLES.admin}
+											name={_id + role}
+											size="sm"
+										/>
+									)}
+								</section>
 							</section>
 						))}
 					</section>
@@ -202,10 +236,6 @@ export const GroupProfileModal = ({
 	);
 };
 
-interface GroupProfileEditModalProps
-	extends Omit<GroupProfileModalProps, 'openModal'> {
-	refetch: () => void;
-}
 
 export const GroupProfileEditModal = ({
 	currentId,
@@ -213,7 +243,7 @@ export const GroupProfileEditModal = ({
 	closeModal,
 	refetch,
 	groupDetail,
-}: GroupProfileEditModalProps) => {
+}: Omit<GroupProfileModalProps, 'openModal'>) => {
 	const memberNumber =
 		groupDetail?.members?.length > 1
 			? `${groupDetail.members.length} ${EN_US['chat.Members']}`
@@ -221,8 +251,8 @@ export const GroupProfileEditModal = ({
 
 	const { mutateAsync: editGroup } = useEditGroup(groupDetail._id);
 	const { mutateAsync: deleteGroup } = useDeleteGroup(groupDetail._id);
-	const setCurrentChatId = useChatStore(state => state.setCurrentChat);
-	const removeGroup = useChatListStore(state => state.removeGroup);
+	const setCurrentChatId = useChatStore((state) => state.setCurrentChat);
+	const removeGroup = useChatListStore((state) => state.removeGroup);
 	return (
 		<Modal
 			className="justify-center items-center"
@@ -287,6 +317,7 @@ export const GroupProfileEditModal = ({
 									<i className="uil uil-users-alt text-xl"></i>
 									<h4 className="font-medium">{memberNumber}</h4>
 								</section>
+
 								<section className="flex-grow flex flex-col gap-2">
 									{groupDetail.members.map(({ user, role, _id }) => (
 										<section key={_id} className="flex gap-3 ">
@@ -297,10 +328,10 @@ export const GroupProfileEditModal = ({
 												</p>
 												<p>{user.username}</p>
 											</section>
+
 											<span className="text-xs mt-0.5 text-gray-500 ">
 												{role}
 											</span>
-											<span></span>
 										</section>
 									))}
 								</section>
