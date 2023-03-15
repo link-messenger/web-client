@@ -1,6 +1,9 @@
 import { getLastMessages, Categories } from 'api';
+import { IGroup } from 'interfaces';
 import { io, Socket } from 'socket.io-client';
 import { create } from 'zustand';
+import { useAuthStore } from './useAuthStore';
+import { getCurrentChat } from './useChatListStore';
 
 interface IMessage {
 	content: string;
@@ -25,7 +28,7 @@ interface ISendable {
 	to: string;
 	model: Categories;
 }
-interface IChatType {
+export interface IChatType {
 	name: string;
 	type: Categories;
 	id: string;
@@ -34,10 +37,9 @@ interface IChatType {
 
 interface IChatState {
 	socket: null | Socket;
-	currentChat: IChatType | null;
+	currentChat: string;
 	currentMessages: IMessage[];
 	recieved: IMessage[];
-	setCurrentChat: (chat: IChatType | null) => void;
 	initSocket: (uid: string) => Function;
 	addMessage: (msg: IMessage) => void;
 	addRecievedMessage: (msg: IMessage) => void;
@@ -46,13 +48,16 @@ interface IChatState {
 	setMessageListener: () => (() => void) | undefined;
 	messageConfirmListener: () => (() => void) | undefined;
 	clearChat: () => void;
+	getSocket: () => Socket | null;
+	setCurrentChat: (id: string) => void;
+	getCurrentChatId: () => string;
 }
 
 // TODO: working perfectly fine! push notification
 
 export const useChatStore = create<IChatState>((set, get) => ({
 	socket: null,
-	currentChat: null,
+	currentChat: '',
 	currentMessages: [],
 	recieved: [],
 	initSocket: (uid: string) => {
@@ -67,16 +72,21 @@ export const useChatStore = create<IChatState>((set, get) => ({
 		});
 		return socket.disconnect;
 	},
+	getCurrentChatId: () => get().currentChat,
 	clearChat: () => {
-		set({ currentChat: null, currentMessages: [] });
+		set({ currentChat: '', currentMessages: [] });
 	},
 	addMessage: (msg) => {
 		set({ currentMessages: [...get().currentMessages, msg] });
 	},
-	loadChat: async ( page?: number) => {
-		const current = get().currentChat;
-		if (!current) return;
-		const chats = await getLastMessages(current?.id, current?.type, page);
+	loadChat: async (page?: number) => {
+		const currentChat = getCurrentChat();
+		if (!currentChat) return;
+		const chats = await getLastMessages(
+			currentChat._id as string,
+			currentChat.type as Categories,
+			page
+		);
 		set({ currentMessages: chats.reverse() });
 	},
 	sendMessage: (msg) => {
@@ -87,18 +97,19 @@ export const useChatStore = create<IChatState>((set, get) => ({
 	addRecievedMessage: (msg) => {
 		set({ recieved: [...get().recieved, msg] });
 	},
+	setCurrentChat: (id) => set({ currentChat: id }),
 	setMessageListener: () => {
 		const socket = get().socket;
 		if (!socket) return;
 		const addMessage = get().addMessage;
 		const addRecievedMessage = get().addRecievedMessage;
 		socket.on('recieve-message', (msg: IMessage) => {
-			const currentChat = get().currentChat;
+			const currentChat = getCurrentChat() as any;
 			if (
 				currentChat &&
 				((currentChat.type === 'user' &&
-					currentChat.members[0] === msg.sender._id) ||
-					currentChat.id === msg.to)
+					currentChat.users.find((u: any) => u._id === msg.sender._id)) ||
+					currentChat._id === msg.to)
 			) {
 				addMessage(msg);
 			} else {
@@ -107,28 +118,22 @@ export const useChatStore = create<IChatState>((set, get) => ({
 		});
 		return () => {
 			socket.off('recieve-message');
-		}
-		
+		};
 	},
-	setCurrentChat: (currentChat) => set({ currentChat }),
 	messageConfirmListener: () => {
 		const socket = get().socket;
 		if (!socket) return;
 		const addMessage = get().addMessage;
-		const chat = get().currentChat;
 		socket.on('message-sent', (msg: IMessage) => {
-			// double check if the message is for the current group
-			if (
-				chat &&
-				((chat.type === 'user' && chat.members[0] === msg.to) ||
-					chat.id === msg.to)
-			) {
-				addMessage(msg);
-			}
+			addMessage(msg);
 		});
 		return () => {
 			socket.off('message-sent');
-		}
+		};
 	},
+	getSocket: () => get().socket,
 }));
 
+export const getSocket = useChatStore.getState().getSocket;
+export const setCurrentChatId = useChatStore.getState().setCurrentChat;
+export const getCurrentChatId = useChatStore.getState().getCurrentChatId;

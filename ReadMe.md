@@ -42,7 +42,8 @@ run `npm build` or `yarn build` to build the project.
 3. [X] group info
 4. [X] group info bugfix
 5. [X] event optimization
-6. [X] join group
-7. [X] leave group
+6. [X] chat active
+7. [X] join group
+8. [X] leave group
 
 > BoilerPlate made by Mjn

@@ -15,26 +15,21 @@ export const ChatList = ({ uid }: { uid: string }) => {
 	const [search, setSearch] = useState('');
 	const debouncedSearch = useDebounce(search, 1000);
 	const { data: searchedResult } = useSearchChat(debouncedSearch);
-		
-	const currentChat = useChatStore((state) => state.currentChat);
+
+	const currentChatId = useChatStore((state) => state.currentChat);
 	const setCurrentChat = useChatStore((state) => state.setCurrentChat);
 
-	const onChatClick = (item: any, members: string[]) =>
-		setCurrentChat({
-			id: item._id,
-			type: item.type,
-			name: item.name,
-			members: members,
-		});
+	const onChatClick = (id: string) =>
+		setCurrentChat(id);
 	const searchIsActive = search.length > 2;
 	return (
 		<section
 			className={
-				(currentChat ? 'w-0  max-lg:hidden' : 'w-full') +
-				' lg:w-96 p-4 flex flex-col gap-4 lg:border-r lg:border-r-slate-100'
+				(currentChatId ? 'w-0  max-lg:hidden' : 'w-full') +
+				' lg:w-96 flex flex-col lg:border-r lg:border-r-slate-100'
 			}
 		>
-			<header className="flex items-center justify-between">
+			<header className="p-4 pb-0 flex items-center justify-between">
 				<h1 className="text-2xl flex gap-3 items-center md:text-3xl font-medium text-gray-800">
 					<i className="uil uil-comment text-blue-600 bg-sky-50 aspect-square w-9 md:w-11 grid place-items-center rounded-full"></i>
 					<span>{EN_US['chat.Chats']}</span>
@@ -47,41 +42,52 @@ export const ChatList = ({ uid }: { uid: string }) => {
 				</button>
 			</header>
 
-			<SearchInput
-				name="search"
-				id="search"
-				onChange={(e) => setSearch(e.target.value)}
-				value={search}
-				placeholder="Search..."
-			/>
+			<section className="p-4">
+				<SearchInput
+					name="search"
+					id="search"
+					onChange={(e) => setSearch(e.target.value)}
+					value={search}
+					placeholder="Search..."
+				/>
+			</section>
 
 			{!searchIsActive && (
 				<>
-					<section className="text-gray-400 font-medium flex items-center gap-1.5">
-						<i className="uil uil-comment-lines text-xl font-bold"></i>
-						{EN_US['chat.AllMessages']}
-					</section>
+					<ItemHeader
+						icon="uil uil-comment-lines"
+						message={EN_US['chat.AllMessages']}
+					/>
 					<ChatListItem onClick={onChatClick} chats={chatList} uid={uid} />
 				</>
 			)}
 
 			{searchIsActive && (
-				<SearchList searchedResult={searchedResult} uid={uid}  />
+				<SearchList searchedResult={searchedResult} uid={uid} />
 			)}
 		</section>
 	);
 };
 
+const ItemHeader = ({ icon, message }: { icon: string; message: string }) => {
+	return (
+		<section className="px-4 py-2 text-gray-400 font-medium flex items-center gap-1.5">
+			<i className={icon + ' text-xl font-bold'}></i>
+			{message}
+		</section>
+	);
+};
+
 const SearchList = ({ searchedResult, uid }: any) => {
-	const onChatClick = (data: any) => {
-		console.log(data);
-	}
+	const joinGroup = useChatListStore((state) => state.joinGroup);
+	const onChatClick = (id: string) => {
+		if (id) {
+			joinGroup(id);
+		}
+	};
 	return (
 		<>
-			<section className="text-gray-400 font-medium flex items-center gap-1.5">
-				<i className="uil uil-comment-share text-xl font-bold"></i>
-				{EN_US['chat.Groups']}
-			</section>
+			<ItemHeader icon="uil uil-comment-share" message={EN_US['chat.Groups']} />
 			{searchedResult?.groups?.length ? (
 				<ChatListItem
 					isSearch={true}
@@ -95,11 +101,7 @@ const SearchList = ({ searchedResult, uid }: any) => {
 				</p>
 			)}
 
-			<section className="text-gray-400 font-medium flex items-center gap-1.5">
-				<i className="uil uil-comments text-xl font-bold"></i>
-				{EN_US['chat.Chats']}
-			</section>
-
+			<ItemHeader icon="uil uil-comments" message={EN_US['chat.Chats']} />
 			{searchedResult?.users?.length ? (
 				<ChatListItem
 					isSearch={true}
@@ -126,14 +128,18 @@ export const ChatListItem = ({
 	uid: string;
 	onClick: Function;
 	isSearch?: boolean;
-	}) => {
+}) => {
 	if (!chats || !chats.length) {
-		return <section className="grid place-items-center h-full font-bold text-lg text-gray-400">{EN_US['chat.ChatEmpty']}</section>;
+		return (
+			<section className="grid place-items-center h-full font-bold text-lg text-gray-400">
+				{EN_US['chat.ChatEmpty']}
+			</section>
+		);
 	}
 	return (
 		<section
 			className={
-				'flex flex-col overflow-scroll scrollbar-hide gap-2' +
+				'flex flex-col overflow-scroll scrollbar-hide' +
 				(isSearch ? '' : ' flex-grow')
 			}
 		>
@@ -187,10 +193,15 @@ export const GroupItem = ({
 	data: IGroup;
 }) => {
 	const time = formatTime(data.updatedAt);
+	const current = useChatStore((state) => state.currentChat);
+	const isActive = current === data._id && !isSearch;
 	return (
 		<button
-			onClick={() => onClick(data, data.members)}
-			className="text-gray-700 border-b flex text-left items-center gap-3 border-b-gray-100 py-2"
+			onClick={() => onClick(data._id)}
+			className={
+				'p-4 border-b flex text-left items-center gap-3 border-b-gray-100 ' +
+				(isActive ? 'text-sky-700 bg-sky-100' : 'text-gray-700 bg-white')
+			}
 		>
 			<ListAvatar username={data.name} />
 			<section className="flex-1">
@@ -221,10 +232,15 @@ export const ConversationItem = ({
 		? data
 		: data.users.filter((u: any) => u._id !== uid)[0];
 	const time = formatTime(user.updatedAt);
+	const current = useChatStore((state) => state.currentChat);
+	const isActive =!isSearch && current === data._id ;
 	return (
 		<button
-			onClick={() => onClick({ ...user, type: 'user' }, [user._id])}
-			className="text-gray-700 border-b flex text-left items-center gap-3 border-b-gray-100 py-2"
+			onClick={() => onClick(data._id)}
+			className={
+				'p-4 text-gray-700 border-b flex text-left items-center gap-3 border-b-gray-100 ' +
+				(isActive ? 'text-sky-700 bg-sky-100' : 'text-gray-700 bg-white')
+			}
 		>
 			<ListAvatar username={user.username} />
 			<section className="flex-1">

@@ -53,5 +53,6 @@ export const EN_US = {
 	'profile.Link': 'Group Link (share to join)',
 	'profile.LastUpdatedAt': 'Last Profile Update',
 	'profile.CreatedAt': 'Created At',
-	'profile.Status': 'Group Status (private/public)',
+	'profile.Status': 'Group Status',
+	'profile.Leave': 'Leave Group',
 };
