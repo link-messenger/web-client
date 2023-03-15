@@ -17,8 +17,8 @@ import { Categories } from 'api';
 type MsgType = typeof MESSAGE_INITIALS;
 
 export const ChatContent = ({ user }: { user: IProfile }) => {
+	const [mType, setMType] = useState<MessageTypes>('MESSAGE');
 	const { currentId, openModal, closeModal } = useModal();
-	const [members, setMembers] = useState('');
 	const currentChatId = useChatStore((state) => state.currentChat);
 	const currentChat = useChatListStore((state) => state.currentChat);
 	const setCurrentChat = useChatStore((state) => state.setCurrentChat);
@@ -39,20 +39,6 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 			clearConfirmListener && clearConfirmListener();
 		};
 	}, [currentChatId]);
-	useEffect(() => {
-		if (!currentChat) return;
-		const memberNumber =
-			currentChat.type === 'group' &&
-			currentChat.members &&
-			`${currentChat.members.length} ${
-				currentChat.members.length > 1
-					? EN_US['chat.Members']
-					: EN_US['chat.Member']
-			}`;
-		if (!memberNumber) return;
-		setMembers(memberNumber);
-	}, [currentChat?.members?.length]);
-	const [mType, setMType] = useState<MessageTypes>('MESSAGE');
 
 	const { data: groupDetail, isLoading } = useGetUserGroupDetail(
 		currentChatId,
@@ -66,7 +52,15 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 			</section>
 		);
 	
-
+	const memberNumber =
+		currentChat.type === 'group' &&
+		currentChat.members &&
+		`${currentChat.members.length} ${
+			currentChat.members.length > 1
+				? EN_US['chat.Members']
+				: EN_US['chat.Member']
+		}`;	
+	
 	const to =
 		currentChat.type === 'user'
 			? currentChat.users?.find((u) => u._id !== user.id)?._id
@@ -105,9 +99,9 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 						<h2 className="text-gray-700 font-medium text-xl">
 							{profile?.name}
 						</h2>
-						{members && (
+						{memberNumber && (
 							<span className="text-xs text-gray-400 font-medium">
-								{members}
+								{memberNumber}
 							</span>
 						)}
 					</section>
@@ -120,7 +114,7 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 
 			<div
 				ref={ref}
-				className="bg-gray-50 p-4 scrollbar-hide flex-grow flex flex-col gap-3 overflow-auto w-full"
+				className="bg-gray-50 p-4 scrollbar-hide flex-grow flex flex-col-reverse gap-3 overflow-auto w-full"
 			>
 				{chats.map(({ content, createdAt, sender, _id }) => (
 					<MessageBox

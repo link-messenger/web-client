@@ -81,7 +81,7 @@ export const useChatStore = create<IChatState>((set, get) => ({
 		set({ currentChat: '', currentMessages: [] });
 	},
 	addMessage: (msg) => {
-		set({ currentMessages: [...get().currentMessages, msg] });
+		set({ currentMessages: [msg, ...get().currentMessages] });
 	},
 	loadChat: async (currentChat, page?: number) => {
 		if (!currentChat) return;
@@ -90,7 +90,7 @@ export const useChatStore = create<IChatState>((set, get) => ({
 			currentChat.type as Categories,
 			page
 		);
-		set({ currentMessages: chats.reverse() });
+		set({ currentMessages: chats });
 	},
 	sendMessage: (msg) => {
 		const socket = get().socket;
@@ -98,7 +98,7 @@ export const useChatStore = create<IChatState>((set, get) => ({
 		socket.emit('send-message', msg);
 	},
 	addRecievedMessage: (msg) => {
-		set({ recieved: [...get().recieved, msg] });
+		set({ recieved: [msg, ...get().recieved] });
 	},
 	setCurrentChat: (id) => {
 		const current = iterateToGetCurrentChat(id);
