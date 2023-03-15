@@ -55,4 +55,7 @@ export const EN_US = {
 	'profile.CreatedAt': 'Created At',
 	'profile.Status': 'Group Status',
 	'profile.Leave': 'Leave Group',
+	'profile.Edit': 'Done',
+	'profile.Cancel': 'Cancel',
+	'profile.DeleteGroup': 'Delete Group',
 };

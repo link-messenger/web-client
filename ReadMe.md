@@ -13,27 +13,25 @@ run `npm build` or `yarn build` to build the project.
 
 ## TODO
 
-1. crud group for group admin
-2. push notification + pwa
-3. grant admin to people
-4. infinit scroll pagination
-5.  if scrolling not go to end for new messages
-6.  go to end 
-7.  animtion
-8.  avatar
-9.  getting last messages with group list
-10. sorting combined by last messages
-11. tags for unseen messages
-12. emojis
-13. sound effects
-14. voice message
-15. image message
-16. file message
-17. landing page
-18. dockerizing and up on server
+1. push notification + pwa
+2. infinit scroll pagination
+3.  if scrolling not go to end for new messages
+4.  go to end 
+5.  animtion
+6.  avatar
+7.  getting last messages with group list
+8.  sorting combined by last messages
+9.  tags for unseen messages
+10. emojis
+11. sound effects
+12. voice message
+13. image message
+14. file message
+15. landing page
+16. dockerizing and up on server
 ------------------ v0.1 ---------------------
-1.  bugfix -- user delete group then clear current group and remove from list - error handling and showing -- and hope :)
-2.  going for v1 ----**** (add seprate by dating tags - showing online members - (reply - edit - delete message) - bg for chat and customizing it - location features - api for bots - in app calls with webrtc - Intl8 - edit user info + app settings)
+1.  **android-app** / bugfix -- user delete group then clear current group and remove from list - error handling and showing -- and hope :)
+2.  going for v1 ----(add seprate by dating tags - showing online members - (reply - edit - delete message) - bg for chat and customizing it - location features - api for bots - in app calls with webrtc - Intl8 - edit user info + app settings)
 3.  Android App
 ## Done
 
@@ -45,5 +43,7 @@ run `npm build` or `yarn build` to build the project.
 6. [X] chat active
 7. [X] join group
 8. [X] leave group
+9. [X] crud group admin
+10. [X] grant admin to people by **admin**
 
 > BoilerPlate made by Mjn

@@ -16,11 +16,11 @@ const Chat = () => {
 	const setLeaveListener = useChatListStore((state) => state.setLeaveListener);
 	const setLeaveConfirmListener = useChatListStore((state) => state.setLeaveConfirmListener);
 	const setChats = useChatListStore(state => state.setChats);
-
+	const reloadChat = useChatListStore(state => state.reloadChat);
 	const { data: userData, isLoading } = useGetUserProfile();
 
-	const { data: groups, isLoading: isGroupLoading } = useGetUserGroup();
-	const { data: convs, isLoading: isConvLoading } = useGetUserConversation();
+	const { data: groups, isLoading: isGroupLoading, refetch:refetchGroup } = useGetUserGroup();
+	const { data: convs, isLoading: isConvLoading,refetch:refetchChat } = useGetUserConversation();
 
 	useEffect(() => {
 		if (isLoading) return;
@@ -44,7 +44,10 @@ const Chat = () => {
 	useEffect(() => {
 		if (!groups || !convs) return;
 		setChats(groups, convs);
-	}, [isConvLoading, isGroupLoading]);
+		if (reloadChat) {
+			refetchGroup();
+		}
+	}, [isConvLoading, isGroupLoading, reloadChat]);
 
 	return (
 		<main className="flex flex-row w-screen h-screen overflow-hidden">

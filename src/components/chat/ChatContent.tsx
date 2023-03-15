@@ -1,6 +1,12 @@
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { Card, Modal, SquareButton } from '../core';
-import { Avatar, GroupProfileModal, ListAvatar, MessageBox } from '../partials';
+import {
+	Avatar,
+	GroupProfileEditModal,
+	GroupProfileModal,
+	ListAvatar,
+	MessageBox,
+} from '../partials';
 import {
 	CHAT_INFO_MODAL,
 	MESSAGE_INITIALS,
@@ -28,6 +34,10 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 		(state) => state.messageConfirmListener
 	);
 
+	const { data: groupDetail, refetch } = useGetUserGroupDetail(
+		currentChatId,
+		currentChat?.type as Categories
+	);
 	const sendMessage = useChatStore((state) => state.sendMessage);
 	const ref = useChatScroll(chats);
 
@@ -40,18 +50,13 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 		};
 	}, [currentChatId]);
 
-	const { data: groupDetail, isLoading } = useGetUserGroupDetail(
-		currentChatId,
-		currentChat?.type as Categories
-	);
-
 	if (!currentChatId || !currentChat)
 		return (
 			<section className="w-0 hidden flex-grow lg:grid place-items-center text-slate-400 text-xl">
 				{EN_US['chat.SelectChat']}
 			</section>
 		);
-	
+
 	const memberNumber =
 		currentChat.type === 'group' &&
 		currentChat.members &&
@@ -59,8 +64,8 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 			currentChat.members.length > 1
 				? EN_US['chat.Members']
 				: EN_US['chat.Member']
-		}`;	
-	
+		}`;
+
 	const to =
 		currentChat.type === 'user'
 			? currentChat.users?.find((u) => u._id !== user.id)?._id
@@ -69,7 +74,6 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 		{ content }: MsgType,
 		{ resetForm }: FormikHelpers<MsgType>
 	) => {
-		
 		sendMessage({
 			content,
 			to: to as string,
@@ -82,8 +86,9 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 	const profile =
 		currentChat.type === 'user'
 			? currentChat.users?.find((u) => u._id !== user.id)
-			: currentChat;
+			: groupDetail;
 
+	
 	return (
 		<section className="flex flex-col flex-grow h-full overflow-hidden will-change-contents">
 			<header className="border-b border-b-gray-100 flex items-center justify-between p-3">
@@ -157,6 +162,18 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 
 			{groupDetail && (
 				<GroupProfileModal
+					user={user}
+					openModal={openModal}
+					groupDetail={groupDetail}
+					currentId={currentId}
+					closeModal={closeModal}
+				/>
+			)}
+
+			{groupDetail && (
+				<GroupProfileEditModal
+					user={user}
+					refetch={refetch}
 					groupDetail={groupDetail}
 					currentId={currentId}
 					closeModal={closeModal}

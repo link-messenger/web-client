@@ -10,6 +10,8 @@ interface ChatsType extends Partial<IGroup>, Partial<IConversation> {
 interface IChatListState {
 	chats: ChatsType[] | null;
 	currentChat: ChatsType | null;
+	reloadChat: boolean;
+	setReloadChat: (reload: boolean) => void;
 	setChats: (grp: IGroup[], conv: IConversation[]) => void;
 	clearChats: () => void;
 	addGroup: (grp: IGroup) => void;
@@ -23,13 +25,15 @@ interface IChatListState {
 	setLeaveConfirmListener: () => (() => void) | undefined;
 	setLeaveListener: () => (() => void) | undefined;
 	getCurrentChat: () => ChatsType | null;
-	setCurrentChat: (chat: ChatsType) => void;
-	iterateToGetChat: (cid:string) => ChatsType | null;
+	setCurrentChat: (chat: ChatsType | null) => void;
+	iterateToGetChat: (cid: string) => ChatsType | null;
 }
 
 export const useChatListStore = create<IChatListState>((set, get) => ({
 	chats: null,
 	currentChat: null,
+	reloadChat: false,
+	setReloadChat: (reload) => set({ reloadChat: reload }),
 	setChats: (grp, conv) => {
 		const markedGroups = grp.map((item) => ({ ...item, type: 'group' }));
 		const markedConversations = conv.map((item) => ({
@@ -55,12 +59,12 @@ export const useChatListStore = create<IChatListState>((set, get) => ({
 		}
 		setCurrentChatId(grp._id);
 	},
-	iterateToGetChat: (cid:string) => {
+	iterateToGetChat: (cid: string) => {
 		const current = get().chats?.find((c) => c._id === cid);
 		return current ? current : null;
 	},
 	getCurrentChat: () => get().currentChat,
-	setCurrentChat: (chat: ChatsType) => {
+	setCurrentChat: (chat) => {
 		set({ currentChat: chat });
 	},
 	removeGroup: (gip) => {
@@ -172,4 +176,6 @@ export const useChatListStore = create<IChatListState>((set, get) => ({
 
 export const getCurrentChat = useChatListStore.getState().getCurrentChat;
 export const setCurrentChat = useChatListStore.getState().setCurrentChat;
-export const iterateToGetCurrentChat = useChatListStore.getState().iterateToGetChat;
+export const iterateToGetCurrentChat =
+	useChatListStore.getState().iterateToGetChat;
+export const removeGroup = useChatListStore.getState().removeGroup;

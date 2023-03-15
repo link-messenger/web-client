@@ -6,6 +6,7 @@ import { useAuthStore } from './useAuthStore';
 import {
 	getCurrentChat,
 	iterateToGetCurrentChat,
+	removeGroup,
 	setCurrentChat,
 } from './useChatListStore';
 
@@ -89,7 +90,13 @@ export const useChatStore = create<IChatState>((set, get) => ({
 			currentChat._id as string,
 			currentChat.type as Categories,
 			page
-		);
+		).catch((err) => {
+			console.log(err);
+			if (err.response.status === 404) {
+				
+				removeGroup(currentChat._id);
+			}
+		});
 		set({ currentMessages: chats });
 	},
 	sendMessage: (msg) => {
@@ -101,11 +108,16 @@ export const useChatStore = create<IChatState>((set, get) => ({
 		set({ recieved: [msg, ...get().recieved] });
 	},
 	setCurrentChat: (id) => {
+		if (!id) {
+			setCurrentChat(null);
+			set({ currentChat: '' });
+			return;
+		}
 		const current = iterateToGetCurrentChat(id);
 		if (current) {
 			setCurrentChat(current);
+			set({ currentChat: id });
 		}
-		set({ currentChat: id });
 	},
 	setMessageListener: () => {
 		const socket = get().socket;

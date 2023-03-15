@@ -1,9 +1,17 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Categories, getUserGroup, getUserGroupDetail, postCreateGroup } from 'api';
+import {
+	Categories,
+	deleteUserGroup,
+	getUserGroup,
+	getUserGroupDetail,
+	postCreateGroup,
+	putUserGroupEdit,
+} from 'api';
+import { AxiosError } from 'axios';
 import { IGroup, IGroupDetail } from 'interfaces';
+import { useChatListStore, useChatStore } from 'store';
 
 export const useCreateGroup = () => {
-	
 	return useMutation(['CREATE-GROUP'], postCreateGroup);
 };
 
@@ -12,11 +20,35 @@ export const useGetUserGroup = () => {
 };
 
 export const useGetUserGroupDetail = (id: string, type?: Categories) => {
-	return useQuery<IGroupDetail>(
+	const removeGroup = useChatListStore(state => state.removeGroup);
+	const setCurrentChat = useChatStore(state => state.setCurrentChat);
+	return useQuery<IGroupDetail, AxiosError>(
 		['USER-GROUP-Detail', id],
 		() => getUserGroupDetail(id),
 		{
-			enabled: !!id && type==='group',
+			enabled: !!id && type === 'group',
+			onError: (err) => {
+				if (err.response?.status === 404) {
+					removeGroup(id);
+					setCurrentChat('');
+				}
+			},
 		}
 	);
+};
+
+export const useEditGroup = (id: string) => {
+	return useMutation(['USER-GROUP-EDIT', id], putUserGroupEdit(id));
+};
+
+export const useDeleteGroup = (id: string) => {
+	const setReloadChat = useChatListStore(state => state.setReloadChat);
+	return useMutation(['DELETE-GROUP', id], () => deleteUserGroup(id), {
+		onMutate: () => {
+			setReloadChat(true);
+		},
+		onSuccess: () => {
+			setReloadChat(false);
+		},
+	});
 };

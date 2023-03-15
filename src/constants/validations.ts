@@ -27,3 +27,9 @@ export const CREATE_GROUP_VALIDATION = yup.object({
   description: yup.string().optional(),
   isPublic: yup.boolean().required(),
 });
+
+export const EDIT_GROUP_VALIDATION = yup.object({
+  name: yup.string().required(),
+  description: yup.string().optional(),
+  isPublic: yup.boolean().required(),
+});
