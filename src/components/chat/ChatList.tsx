@@ -63,7 +63,7 @@ export const ChatList = ({ uid }: { uid: string }) => {
 			)}
 
 			{searchIsActive && (
-				<SearchList searchedResult={searchedResult} uid={uid} />
+				<SearchList setSearch={setSearch} searchedResult={searchedResult} uid={uid} />
 			)}
 		</section>
 	);
@@ -78,10 +78,11 @@ const ItemHeader = ({ icon, message }: { icon: string; message: string }) => {
 	);
 };
 
-const SearchList = ({ searchedResult, uid }: any) => {
+const SearchList = ({setSearch ,searchedResult, uid }: any) => {
 	const joinGroup = useChatListStore((state) => state.joinGroup);
 	const onChatClick = (id: string) => {
 		if (id) {
+			setSearch('');
 			joinGroup(id);
 		}
 	};

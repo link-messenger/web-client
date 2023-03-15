@@ -1,7 +1,7 @@
 import { Categories } from 'api';
-import { IConversation, IGroup } from 'interfaces';
+import { IConversation, IGroup, IUser } from 'interfaces';
 import { create } from 'zustand';
-import {  getCurrentChatId, getSocket, setCurrentChatId } from './useChatStore';
+import { getCurrentChatId, getSocket, setCurrentChatId } from './useChatStore';
 
 interface ChatsType extends Partial<IGroup>, Partial<IConversation> {
 	type: string;
@@ -9,6 +9,7 @@ interface ChatsType extends Partial<IGroup>, Partial<IConversation> {
 
 interface IChatListState {
 	chats: ChatsType[] | null;
+	currentChat: ChatsType | null;
 	setChats: (grp: IGroup[], conv: IConversation[]) => void;
 	clearChats: () => void;
 	addGroup: (grp: IGroup) => void;
@@ -22,10 +23,13 @@ interface IChatListState {
 	setLeaveConfirmListener: () => (() => void) | undefined;
 	setLeaveListener: () => (() => void) | undefined;
 	getCurrentChat: () => ChatsType | null;
+	setCurrentChat: (chat: ChatsType) => void;
+	iterateToGetChat: (cid:string) => ChatsType | null;
 }
 
 export const useChatListStore = create<IChatListState>((set, get) => ({
 	chats: null,
+	currentChat: null,
 	setChats: (grp, conv) => {
 		const markedGroups = grp.map((item) => ({ ...item, type: 'group' }));
 		const markedConversations = conv.map((item) => ({
@@ -51,18 +55,24 @@ export const useChatListStore = create<IChatListState>((set, get) => ({
 		}
 		setCurrentChatId(grp._id);
 	},
-	getCurrentChat: () => {
-		const current = getCurrentChatId();
-		const chats = get().chats;
-		const res = chats?.find((c) => c._id === current);
-		return !!res ? res : null;
+	iterateToGetChat: (cid:string) => {
+		const current = get().chats?.find((c) => c._id === cid);
+		return current ? current : null;
 	},
-
-	removeGroup: (gip) => {},
+	getCurrentChat: () => get().currentChat,
+	setCurrentChat: (chat: ChatsType) => {
+		set({ currentChat: chat });
+	},
+	removeGroup: (gip) => {
+		const chats = get().chats;
+		if (!chats) return;
+		const currentChats = chats.filter((grp) => grp._id !== gip);
+		set({ chats: currentChats });
+	},
 	joinGroup: (gid) => {
 		const socket = getSocket();
 		if (!socket) return;
-		console.log('j-c',gid);
+		console.log('j-c', gid);
 		socket.emit('join-group', gid);
 	},
 	leaveGroup: (gid) => {
@@ -77,18 +87,23 @@ export const useChatListStore = create<IChatListState>((set, get) => ({
 		socket.on('user-joined', ({ group, user }) => {
 			const chats = get().chats;
 			if (!chats) return;
+			const cid = getCurrentChatId();
 			const currentChats = chats.map((data) => {
 				if (data._id === group._id) {
-					const members = data?.members as string[];
+					const members = [
+						// @ts-ignore
+						...data.members,
+						{ user: user._id, role: 'USER', _id: user._id + user.name },
+					];
 					return {
 						...data,
-						members: [...members, user._id],
+						members,
 					};
 				}
 				return data;
 			});
-
-			set({ chats: currentChats });
+			const chat = currentChats.find(({ _id }) => _id === cid);
+			set({ currentChat: chat, chats: currentChats });
 		});
 
 		return () => {
@@ -111,23 +126,31 @@ export const useChatListStore = create<IChatListState>((set, get) => ({
 	setLeaveListener: () => {
 		const socket = getSocket();
 		if (!socket) return;
-		socket.on('user-left', ({ group, user }) => {
-			const chats = get().chats;
-			if (!chats) return;
-			const currentChats = chats.map((data) => {
-				if (data._id === group._id) {
-					return {
-						...data,
-						members: [
-							// @ts-ignore
-							...data.members.filter((usr) => usr !== user._id),
-						],
-					};
-				}
-				return data;
-			});
-			set({ chats: currentChats });
-		});
+		socket.on(
+			'user-left',
+			({ group, user }: { group: IGroup; user: IUser }) => {
+				const chats = get().chats;
+				const cid = getCurrentChatId();
+				if (!chats) return;
+				const currentChats = chats.map((data) => {
+					if (data._id === group._id) {
+						return {
+							...data,
+							members: [
+								// @ts-ignore
+								...data.members.filter(({ user: u }) => u !== user._id),
+							],
+						};
+					}
+					return data;
+				});
+				const currentChat = currentChats.find(({ _id }) => _id === cid);
+				set({
+					currentChat: currentChat,
+					chats: currentChats,
+				});
+			}
+		);
 
 		return () => {
 			socket.off('user-left');
@@ -136,11 +159,9 @@ export const useChatListStore = create<IChatListState>((set, get) => ({
 	setLeaveConfirmListener: () => {
 		const socket = getSocket();
 		if (!socket) return;
-		socket.on('left', (group) => {
-			const chats = get().chats;
-			if (!chats) return;
-			const currentChats = chats.filter((grp) => grp._id !== group._id);
-			set({ chats: currentChats });
+		socket.on('left', (group: IGroup) => {
+			get().removeGroup(group._id);
+			setCurrentChatId('');
 		});
 
 		return () => {
@@ -149,5 +170,6 @@ export const useChatListStore = create<IChatListState>((set, get) => ({
 	},
 }));
 
-
 export const getCurrentChat = useChatListStore.getState().getCurrentChat;
+export const setCurrentChat = useChatListStore.getState().setCurrentChat;
+export const iterateToGetCurrentChat = useChatListStore.getState().iterateToGetChat;

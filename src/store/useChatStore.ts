@@ -1,9 +1,13 @@
 import { getLastMessages, Categories } from 'api';
-import { IGroup } from 'interfaces';
+import { IUser } from 'interfaces';
 import { io, Socket } from 'socket.io-client';
 import { create } from 'zustand';
 import { useAuthStore } from './useAuthStore';
-import { getCurrentChat } from './useChatListStore';
+import {
+	getCurrentChat,
+	iterateToGetCurrentChat,
+	setCurrentChat,
+} from './useChatListStore';
 
 interface IMessage {
 	content: string;
@@ -15,7 +19,7 @@ interface IMessage {
 		email: string;
 	};
 	_id: string;
-	onModal: Categories;
+	onModel: Categories;
 	to: string;
 	createdAt: string;
 }
@@ -43,7 +47,7 @@ interface IChatState {
 	initSocket: (uid: string) => Function;
 	addMessage: (msg: IMessage) => void;
 	addRecievedMessage: (msg: IMessage) => void;
-	loadChat: (page?: number) => void;
+	loadChat: (current: any, page?: number) => void;
 	sendMessage: (msg: ISendable) => void;
 	setMessageListener: () => (() => void) | undefined;
 	messageConfirmListener: () => (() => void) | undefined;
@@ -79,8 +83,7 @@ export const useChatStore = create<IChatState>((set, get) => ({
 	addMessage: (msg) => {
 		set({ currentMessages: [...get().currentMessages, msg] });
 	},
-	loadChat: async (page?: number) => {
-		const currentChat = getCurrentChat();
+	loadChat: async (currentChat, page?: number) => {
 		if (!currentChat) return;
 		const chats = await getLastMessages(
 			currentChat._id as string,
@@ -97,7 +100,13 @@ export const useChatStore = create<IChatState>((set, get) => ({
 	addRecievedMessage: (msg) => {
 		set({ recieved: [...get().recieved, msg] });
 	},
-	setCurrentChat: (id) => set({ currentChat: id }),
+	setCurrentChat: (id) => {
+		const current = iterateToGetCurrentChat(id);
+		if (current) {
+			setCurrentChat(current);
+		}
+		set({ currentChat: id });
+	},
 	setMessageListener: () => {
 		const socket = get().socket;
 		if (!socket) return;
@@ -107,8 +116,9 @@ export const useChatStore = create<IChatState>((set, get) => ({
 			const currentChat = getCurrentChat() as any;
 			if (
 				currentChat &&
+				msg.onModel === currentChat.type &&
 				((currentChat.type === 'user' &&
-					currentChat.users.find((u: any) => u._id === msg.sender._id)) ||
+					!!currentChat.users.find((u: IUser) => u._id === msg.sender._id)) ||
 					currentChat._id === msg.to)
 			) {
 				addMessage(msg);

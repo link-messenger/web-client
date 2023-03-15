@@ -18,8 +18,9 @@ type MsgType = typeof MESSAGE_INITIALS;
 
 export const ChatContent = ({ user }: { user: IProfile }) => {
 	const { currentId, openModal, closeModal } = useModal();
+	const [members, setMembers] = useState('');
 	const currentChatId = useChatStore((state) => state.currentChat);
-	const currentChat = useChatListStore((state) => state.getCurrentChat());
+	const currentChat = useChatListStore((state) => state.currentChat);
 	const setCurrentChat = useChatStore((state) => state.setCurrentChat);
 	const chats = useChatStore((state) => state.currentMessages);
 	const loadChat = useChatStore((state) => state.loadChat);
@@ -32,12 +33,25 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 
 	useEffect(() => {
 		if (!currentChatId) return;
-		loadChat();
+		loadChat(currentChat);
 		const clearConfirmListener = messageConfirmListener();
 		return () => {
 			clearConfirmListener && clearConfirmListener();
 		};
 	}, [currentChatId]);
+	useEffect(() => {
+		if (!currentChat) return;
+		const memberNumber =
+			currentChat.type === 'group' &&
+			currentChat.members &&
+			`${currentChat.members.length} ${
+				currentChat.members.length > 1
+					? EN_US['chat.Members']
+					: EN_US['chat.Member']
+			}`;
+		if (!memberNumber) return;
+		setMembers(memberNumber);
+	}, [currentChat?.members?.length]);
 	const [mType, setMType] = useState<MessageTypes>('MESSAGE');
 
 	const { data: groupDetail, isLoading } = useGetUserGroupDetail(
@@ -51,14 +65,7 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 				{EN_US['chat.SelectChat']}
 			</section>
 		);
-	const memberNumber =
-		currentChat.type === 'group' &&
-		currentChat.members &&
-		`${currentChat.members.length} ${
-			currentChat.members.length > 1
-				? EN_US['chat.Members']
-				: EN_US['chat.Member']
-		}`;
+	
 
 	const to =
 		currentChat.type === 'user'
@@ -98,9 +105,9 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 						<h2 className="text-gray-700 font-medium text-xl">
 							{profile?.name}
 						</h2>
-						{memberNumber && (
+						{members && (
 							<span className="text-xs text-gray-400 font-medium">
-								{memberNumber}
+								{members}
 							</span>
 						)}
 					</section>

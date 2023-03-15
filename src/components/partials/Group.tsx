@@ -109,6 +109,7 @@ export const GroupProfileModal = ({
 			: `${groupDetail.members.length} ${EN_US['chat.Member']}`;
 	const leave = useChatListStore(state => state.leaveGroup);
 	const onLeaveGroup = () => {
+		closeModal(CHAT_INFO_MODAL);
 		leave(groupDetail._id);
 	}
 	return (
