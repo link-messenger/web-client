@@ -85,7 +85,7 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 			: currentChat;
 
 	return (
-		<section className="flex flex-col flex-grow h-full overflow-hidden">
+		<section className="flex flex-col flex-grow h-full overflow-hidden will-change-contents">
 			<header className="border-b border-b-gray-100 flex items-center justify-between p-3">
 				<section className="flex items-center gap-3">
 					<button onClick={() => setCurrentChat('')}>
@@ -114,7 +114,7 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 
 			<div
 				ref={ref}
-				className="bg-gray-50 p-4 scrollbar-hide flex-grow flex flex-col-reverse gap-3 overflow-auto w-full"
+				className="will-change-scroll bg-gray-50 p-4 scrollbar-hide flex-grow flex flex-col-reverse gap-3 overflow-auto w-full"
 			>
 				{chats.map(({ content, createdAt, sender, _id }) => (
 					<MessageBox
