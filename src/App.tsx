@@ -11,9 +11,7 @@ import { setApiHeader } from 'api';
 import Chat from 'views/app/chat';
 import { AuthLayout } from 'components/layouts';
 import { useAuthStore } from 'store';
-import { useEffect } from 'react';
-import Loading from 'views/app/loading';
-import { EN_US } from 'languages';
+
 
 const App = () => {
 	const token = useAuthStore((state) => state.token);

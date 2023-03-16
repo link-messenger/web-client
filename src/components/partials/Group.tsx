@@ -20,14 +20,8 @@ import {
 } from 'constants';
 import { Field, Form, Formik } from 'formik';
 import { useCreateGroup, useDeleteGroup, useEditGroup } from 'hooks';
-import {
-	FunctionalModalCardProps,
-	IGroupDetail,
-	IProfile,
-	ModalCardProps,
-} from 'interfaces';
+import { IGroupDetail, IProfile, ModalCardProps } from 'interfaces';
 import { EN_US } from 'languages';
-import { ReactNode } from 'react';
 import { useChatListStore, useChatStore } from 'store';
 import { ListAvatar } from './Avatar';
 import { InfoItem } from './Profile';
@@ -210,7 +204,7 @@ export const GroupProfileModal = ({
 								</section>
 								<section className="flex flex-col justify-center items-center gap-0.5">
 									<span className="text-xs mt-0.5 text-gray-500 ">{role}</span>
-									{isAdmin && (
+									{isAdmin && _id !== me?._id && (
 										<ToggleWithoutFormik
 											onClick={() => {
 												const roleToChange =
@@ -390,8 +384,7 @@ export const GroupProfileEditModal = ({
 				header={
 					<section className="p-3 pb-0 text-rose-400 font-bold text-xl">
 						<i className="uil uil-exclamation-triangle text-xl text-rose-400 mr-2"></i>
-						{EN_US['profile.DeleteGroupHeader']}
-						"{groupDetail.name}" ?
+						{EN_US['profile.DeleteGroupHeader']}"{groupDetail.name}" ?
 					</section>
 				}
 			/>

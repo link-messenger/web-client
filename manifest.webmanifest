@@ -1,0 +1,30 @@
+{
+	"name": "Link Messenger",
+	"short_name": "Link",
+	"description": "Link! the ultimate social experience.",
+	"theme_color": "#38bdf8",
+	"background_color": "#fff",
+	"display": "standalone",
+	"orientation": "portrait-primary",
+	"scope": "/",
+	"start_url": "/",
+  "id": "/",
+	"icons": [
+		{
+			"src": "/android-chrome-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png"
+		},
+		{
+			"src": "/android-chrome-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		},
+    {
+			"src": "/android-chrome-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+      "purpose": "maskable"
+		}
+	]
+}

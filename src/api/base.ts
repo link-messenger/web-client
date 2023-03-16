@@ -1,7 +1,7 @@
 import Axios from 'axios';
-import PocketBase from 'pocketbase';
+// import PocketBase from 'pocketbase';
 
-const pb = new PocketBase(import.meta.env.VITE_PB_BASE_URL);
+// const pb = new PocketBase(import.meta.env.VITE_PB_BASE_URL);
 
 const axios = Axios.create({
 	baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -17,4 +17,4 @@ const get = axios.get,
 	patch = axios.patch,
 	deleteApi = axios.delete;
 
-export { pb, post, get, put, patch, deleteApi, setApiHeader };
+export { post, get, put, patch, deleteApi, setApiHeader };
