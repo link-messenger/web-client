@@ -16,7 +16,7 @@ interface IChatListState {
 	clearChats: () => void;
 	addGroup: (grp: IGroup) => void;
 	removeGroup: (gip: string) => void;
-	addConv: (cid: string) => void;
+	addConv: (conv: IConversation) => void;
 	removeConv: (cid: string) => void;
 	joinGroup: (gid: string) => void;
 	leaveGroup: (gid: string) => void;
@@ -48,7 +48,16 @@ export const useChatListStore = create<IChatListState>((set, get) => ({
 	clearChats: () => {
 		set({ chats: [] });
 	},
-	addConv: (conv) => {},
+	addConv: (conv) => {
+		const chats = get().chats;
+		if (!chats) {
+			set({ chats: [{ ...conv, type: 'user' }] });
+			return;
+		}
+		const find = chats.find(({ _id }) => _id === conv._id);
+		if (!!find) return;
+		set({chats: [{...conv, type:'user'} ,...chats ]})
+	},
 	removeConv: (cid) => {},
 	addGroup: (grp) => {
 		const pre = get().chats;

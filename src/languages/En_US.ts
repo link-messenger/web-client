@@ -59,7 +59,7 @@ export const EN_US = {
 	'profile.Cancel': 'Cancel',
 	'profile.DeleteGroupMessage': 'Are you sure you want to delete this group? All info will be lost Upon Deleting',
 	'profile.DeleteGroupHeader': 'Deleting ',
-	'loading.Authenticating': 'Trying to Authenticate...',
+	'loading.Authenticating': 'Connecting to Server...',
 	'delete': 'Delete',
 	'no': 'No',
 	'yes': 'Yes',

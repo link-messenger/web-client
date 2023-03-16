@@ -1,4 +1,4 @@
-import { useDebounce, useSearchChat } from 'hooks';
+import { useCreateUserConversation, useDebounce, useSearchChat } from 'hooks';
 import { SearchInput } from '../core';
 import { IConversation, IGroup, IUser } from 'interfaces';
 import { EN_US } from 'languages';
@@ -19,8 +19,7 @@ export const ChatList = ({ uid }: { uid: string }) => {
 	const currentChatId = useChatStore((state) => state.currentChat);
 	const setCurrentChat = useChatStore((state) => state.setCurrentChat);
 
-	const onChatClick = (id: string) =>
-		setCurrentChat(id);
+	const onChatClick = (id: string) => setCurrentChat(id);
 	const searchIsActive = search.length > 2;
 	return (
 		<section
@@ -63,7 +62,11 @@ export const ChatList = ({ uid }: { uid: string }) => {
 			)}
 
 			{searchIsActive && (
-				<SearchList setSearch={setSearch} searchedResult={searchedResult} uid={uid} />
+				<SearchList
+					setSearch={setSearch}
+					searchedResult={searchedResult}
+					uid={uid}
+				/>
 			)}
 		</section>
 	);
@@ -78,13 +81,26 @@ const ItemHeader = ({ icon, message }: { icon: string; message: string }) => {
 	);
 };
 
-const SearchList = ({setSearch ,searchedResult, uid }: any) => {
+const SearchList = ({ setSearch, searchedResult, uid }: any) => {
 	const joinGroup = useChatListStore((state) => state.joinGroup);
-	const onChatClick = (id: string) => {
-		if (id) {
+	const addConv = useChatListStore((state) => state.addConv);
+	const setCurrentChat = useChatStore((state) => state.setCurrentChat);
+	const { mutateAsync: createConv } = useCreateUserConversation();
+	const onGroupClick = (id: string) => {
+		if (!id) return;
+		setSearch('');
+		joinGroup(id);
+	};
+
+	const onConversationClick = (id: string) => {
+		if (!id) return;
+		createConv({
+			targetUser: id,
+		}).then(res => {
 			setSearch('');
-			joinGroup(id);
-		}
+			addConv(res);
+			setCurrentChat(res._id);
+		});
 	};
 	return (
 		<>
@@ -92,7 +108,7 @@ const SearchList = ({setSearch ,searchedResult, uid }: any) => {
 			{searchedResult?.groups?.length ? (
 				<ChatListItem
 					isSearch={true}
-					onClick={onChatClick}
+					onClick={onGroupClick}
 					chats={searchedResult.groups}
 					uid={uid}
 				/>
@@ -106,7 +122,7 @@ const SearchList = ({setSearch ,searchedResult, uid }: any) => {
 			{searchedResult?.users?.length ? (
 				<ChatListItem
 					isSearch={true}
-					onClick={onChatClick}
+					onClick={onConversationClick}
 					chats={searchedResult.users}
 					uid={uid}
 				/>
@@ -234,7 +250,7 @@ export const ConversationItem = ({
 		: data.users.filter((u: any) => u._id !== uid)[0];
 	const time = formatTime(user.updatedAt);
 	const current = useChatStore((state) => state.currentChat);
-	const isActive =!isSearch && current === data._id ;
+	const isActive = !isSearch && current === data._id;
 	return (
 		<button
 			onClick={() => onClick(data._id)}
