@@ -1,4 +1,4 @@
-import { login, register, setApiHeader } from 'api';
+import { login, register, logout, setApiHeader } from 'api';
 import { useMutation } from '@tanstack/react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from 'store';
@@ -40,6 +40,23 @@ export const useRegister = () => {
 					},
 				});
 			}
+		},
+	});
+};
+
+export const useLogout = () => {
+	const clearAll = useAuthStore((state) => state.clearAll);
+	const navigate = useNavigate();
+	return useMutation(['LOGOUT'], logout, {
+		onSuccess: (data) => {
+			console.log(data);
+			clearAll();
+			navigate('/login', {
+				replace: true,
+				state: {
+					from: '/chat'
+				}
+			});
 		},
 	});
 };

@@ -174,6 +174,7 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 			{groupDetail && (
 				<GroupProfileEditModal
 					user={user}
+					openModal={openModal}
 					refetch={refetch}
 					groupDetail={groupDetail}
 					currentId={currentId}

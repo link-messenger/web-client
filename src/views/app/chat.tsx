@@ -5,8 +5,10 @@ import {
 	useGetUserGroup,
 	useGetUserProfile,
 } from 'hooks';
+import { EN_US } from 'languages';
 import { useEffect } from 'react';
 import { useChatListStore, useChatStore } from 'store';
+import Loading from './loading';
 
 const Chat = () => {
 	const initSocket = useChatStore((state) => state.initSocket);
@@ -49,6 +51,8 @@ const Chat = () => {
 		}
 	}, [isConvLoading, isGroupLoading, reloadChat]);
 
+	if (isGroupLoading || isConvLoading) 
+		return <Loading message={EN_US['loading.Authenticating']} />
 	return (
 		<main className="flex flex-row w-screen h-screen overflow-hidden">
 			<ChatList uid={userData?.id} />

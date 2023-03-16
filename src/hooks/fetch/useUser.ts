@@ -26,3 +26,5 @@ export const useGetUserById = ({ id }: { id: string }) => {
 		cacheTime: 2000000,
 	});
 };
+
+

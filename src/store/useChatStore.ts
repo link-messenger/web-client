@@ -45,7 +45,8 @@ interface IChatState {
 	currentChat: string;
 	currentMessages: IMessage[];
 	recieved: IMessage[];
-	initSocket: (uid: string) => Function;
+	initSocket: (uid: string) => () => void;
+	disconnect: () => void;
 	addMessage: (msg: IMessage) => void;
 	addRecievedMessage: (msg: IMessage) => void;
 	loadChat: (current: any, page?: number) => void;
@@ -75,7 +76,15 @@ export const useChatStore = create<IChatState>((set, get) => ({
 		set({
 			socket,
 		});
-		return socket.disconnect;
+		return () => {
+			 socket.disconnect();
+		};
+	},
+	disconnect: () => {
+		const socket = get().socket;
+		if (!socket) return;
+		socket.off();
+		socket.disconnect();
 	},
 	getCurrentChatId: () => get().currentChat,
 	clearChat: () => {
@@ -93,7 +102,6 @@ export const useChatStore = create<IChatState>((set, get) => ({
 		).catch((err) => {
 			console.log(err);
 			if (err.response.status === 404) {
-				
 				removeGroup(currentChat._id);
 			}
 		});

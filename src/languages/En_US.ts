@@ -57,5 +57,10 @@ export const EN_US = {
 	'profile.Leave': 'Leave Group',
 	'profile.Edit': 'Done',
 	'profile.Cancel': 'Cancel',
-	'profile.DeleteGroup': 'Delete Group',
+	'profile.DeleteGroupMessage': 'Are you sure you want to delete this group? All info will be lost Upon Deleting',
+	'profile.DeleteGroupHeader': 'Deleting ',
+	'loading.Authenticating': 'Trying to Authenticate...',
+	'delete': 'Delete',
+	'no': 'No',
+	'yes': 'Yes',
 };

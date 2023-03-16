@@ -7,20 +7,27 @@ import {
 	Toggle,
 	ToggleWithoutFormik,
 } from 'components/core';
-import { Modal } from 'components/core/Modal';
+import { ConfirmModal, Modal } from 'components/core/Modal';
 import {
 	CHAT_INFO_MODAL,
 	CREATE_GROUP_INITIALS,
 	CREATE_GROUP_MODAL,
 	CREATE_GROUP_VALIDATION,
+	DELETE_CONF_MODAL,
 	EDIT_GROUP_MODAL,
 	EDIT_GROUP_VALIDATION,
 	ROLES,
 } from 'constants';
 import { Field, Form, Formik } from 'formik';
 import { useCreateGroup, useDeleteGroup, useEditGroup } from 'hooks';
-import { IGroupDetail, IProfile, ModalCardProps } from 'interfaces';
+import {
+	FunctionalModalCardProps,
+	IGroupDetail,
+	IProfile,
+	ModalCardProps,
+} from 'interfaces';
 import { EN_US } from 'languages';
+import { ReactNode } from 'react';
 import { useChatListStore, useChatStore } from 'store';
 import { ListAvatar } from './Avatar';
 import { InfoItem } from './Profile';
@@ -236,14 +243,14 @@ export const GroupProfileModal = ({
 	);
 };
 
-
 export const GroupProfileEditModal = ({
 	currentId,
 	user,
 	closeModal,
+	openModal,
 	refetch,
 	groupDetail,
-}: Omit<GroupProfileModalProps, 'openModal'>) => {
+}: GroupProfileModalProps) => {
 	const memberNumber =
 		groupDetail?.members?.length > 1
 			? `${groupDetail.members.length} ${EN_US['chat.Members']}`
@@ -253,6 +260,14 @@ export const GroupProfileEditModal = ({
 	const { mutateAsync: deleteGroup } = useDeleteGroup(groupDetail._id);
 	const setCurrentChatId = useChatStore((state) => state.setCurrentChat);
 	const removeGroup = useChatListStore((state) => state.removeGroup);
+
+	const onDeleteGroup = () => {
+		deleteGroup().then(() => {
+			removeGroup(groupDetail._id);
+			setCurrentChatId('');
+			closeModal(EDIT_GROUP_MODAL);
+		});
+	};
 	return (
 		<Modal
 			className="justify-center items-center"
@@ -285,13 +300,21 @@ export const GroupProfileEditModal = ({
 						<Form>
 							<header className="p-3 border-b border-gray-100 flex gap-2 items-center">
 								<ListAvatar username={groupDetail?.name} size="w-14" />
-								<section className="flex flex-col flex-grow">
-									<Field
-										as={PaleInput}
-										name="name"
-										placeholder="Group Name..."
-										className="font-bold text-gray-700"
-									/>
+								<section className="flex flex-col gap-1.5 flex-grow">
+									<section className="flex items-center justify-between">
+										<Field
+											as={PaleInput}
+											name="name"
+											placeholder="Group Name..."
+											className="font-bold text-gray-700"
+										/>
+										<button
+											className="text-rose-500 text-xs font-medium underline"
+											onClick={() => openModal(DELETE_CONF_MODAL)}
+										>
+											{EN_US['delete']}
+										</button>
+									</section>
 									<section className="flex justify-between items-center">
 										<span className="text-sm text-gray-400 capitalize">
 											{values.isPublic ? 'Public' : 'Private'}
@@ -352,24 +375,26 @@ export const GroupProfileEditModal = ({
 										{EN_US['profile.Cancel']}
 									</Button>
 								</section>
-								<Button
-									onClick={() => {
-										deleteGroup().then(() => {
-											removeGroup(groupDetail._id);
-											setCurrentChatId('');
-											closeModal(EDIT_GROUP_MODAL);
-										});
-									}}
-									className="py-2 enabled:bg-rose-500"
-									type="button"
-								>
-									{EN_US['profile.DeleteGroup']}
-								</Button>
 							</section>
 						</Form>
 					)}
 				</Formik>
 			</Card>
+			<ConfirmModal
+				id={DELETE_CONF_MODAL}
+				closeModal={closeModal}
+				currentId={currentId}
+				onClick={onDeleteGroup}
+				onCancel={() => openModal(EDIT_GROUP_MODAL)}
+				message={EN_US['profile.DeleteGroupMessage']}
+				header={
+					<section className="p-3 pb-0 text-rose-400 font-bold text-xl">
+						<i className="uil uil-exclamation-triangle text-xl text-rose-400 mr-2"></i>
+						{EN_US['profile.DeleteGroupHeader']}
+						"{groupDetail.name}" ?
+					</section>
+				}
+			/>
 		</Modal>
 	);
 };
