@@ -60,6 +60,7 @@ export const EN_US = {
 	'profile.DeleteGroupMessage': 'Are you sure you want to delete this group? All info will be lost Upon Deleting',
 	'profile.DeleteGroupHeader': 'Deleting ',
 	'loading.Authenticating': 'Connecting to Server...',
+	'offline.Offline': 'You are offline please check your connection :)',
 	'delete': 'Delete',
 	'no': 'No',
 	'yes': 'Yes',

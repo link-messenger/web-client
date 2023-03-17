@@ -1,10 +1,8 @@
 import Axios from 'axios';
-// import PocketBase from 'pocketbase';
 
-// const pb = new PocketBase(import.meta.env.VITE_PB_BASE_URL);
 
 const axios = Axios.create({
-	baseURL: import.meta.env.VITE_API_BASE_URL,
+	baseURL: 'http://localhost:4000/',
 });
 
 const setApiHeader = (key: string, value: string | undefined) => {

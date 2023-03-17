@@ -1,4 +1,3 @@
-import { pb } from 'api';
 import { Button, NormalInput, PasswordInput } from 'components';
 import { AuthHeader, GoogleAuth, Seprator } from 'components/partials';
 import { REGISTER_INITIALS, REGISTER_VALIDATION } from 'constants';

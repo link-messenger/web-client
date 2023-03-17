@@ -1,8 +1,7 @@
-import { pb } from 'api';
 import { NormalInput, PasswordInput, Button } from 'components';
 import { ErrorMessage, Field, Form, Formik, FormikProvider } from 'formik';
 import { EN_US } from 'languages';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
 import { LOGIN_INITIALS, LOGIN_VALIDATION } from 'constants';
 import { useLogin } from 'hooks';

@@ -2,7 +2,6 @@ import { getLastMessages, Categories } from 'api';
 import { IUser } from 'interfaces';
 import { io, Socket } from 'socket.io-client';
 import { create } from 'zustand';
-import { useAuthStore } from './useAuthStore';
 import {
 	getCurrentChat,
 	iterateToGetCurrentChat,
@@ -67,11 +66,14 @@ export const useChatStore = create<IChatState>((set, get) => ({
 	currentMessages: [],
 	recieved: [],
 	initSocket: (uid: string) => {
-		const socket = io(import.meta.env.VITE_API_BASE_URL, {
+		const socket = io('http://localhost', {
 			port: '4000',
 			auth: {
 				id: uid,
 			},
+			transports: ['websocket', 'polling', 'flashsocket'],
+			forceNew: true,
+			reconnectionAttempts: 3,
 		});
 		set({
 			socket,

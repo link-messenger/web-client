@@ -16,7 +16,7 @@ const Loading = ({ message }: { message: string }) => {
 				</div>
 			</div>
 
-			<p className="text-center text-sky-400 mt-20 text-shadow font-medium text-xl md:text-3xl">
+			<p className="text-center text-sky-400 mt-20 text-shadow font-medium text-2xl md:text-3xl p-4">
 				{message}
 			</p>
 		</main>
