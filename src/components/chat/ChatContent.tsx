@@ -52,9 +52,7 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 
 	if (!currentChatId || !currentChat)
 		return (
-			<section className="w-0 hidden flex-grow lg:grid place-items-center text-slate-400 text-xl">
-				{EN_US['chat.SelectChat']}
-			</section>
+			<section className="chat-bg-1 bg-gray-50 relative w-0 hidden flex-grow lg:grid place-items-center text-sky-500 text-xl"></section>
 		);
 
 	const memberNumber =
@@ -88,9 +86,8 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 			? currentChat.users?.find((u) => u._id !== user.id)
 			: groupDetail;
 
-	
 	return (
-		<section className="flex flex-col flex-grow h-full overflow-hidden will-change-contents">
+		<section className=" flex flex-col flex-grow h-full overflow-hidden will-change-contents">
 			<header className="border-b border-b-gray-100 flex items-center justify-between p-3">
 				<section className="flex items-center gap-3">
 					<button onClick={() => setCurrentChat('')}>
@@ -119,7 +116,7 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 
 			<div
 				ref={ref}
-				className="will-change-scroll bg-gray-50 p-4 scrollbar-hide flex-grow flex flex-col-reverse gap-3 overflow-auto w-full"
+				className="chat-bg-1 will-change-scroll bg-gray-50 p-4 scrollbar-hide flex-grow flex flex-col-reverse gap-3 overflow-auto w-full"
 			>
 				{chats.map(({ content, createdAt, sender, _id }) => (
 					<MessageBox
@@ -141,22 +138,27 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 				validationSchema={SEND_MESSAGE_VALIDATION}
 				onSubmit={onSendMessage}
 			>
-				<Form className="w-full h-16 gap-2 p-2 lg:p-4 md:h-20 border-t border-gray-100 flex items-center justify-between">
-					<Avatar avatar={undefined} username={user?.username} />
-					<Field
-						autoFocus
-						type="text"
-						name="content"
-						className="h-12 bg-gray-50 min-w-0 outline-none rounded-lg px-4 text-gray-800 flex-grow"
-						placeholder="Enter text here..."
-						autoComplete="off"
-					/>
-					<SquareButton
-						type="submit"
-						className="w-12  bg-blue-500 text-white text-xl"
-					>
-						<i className="uil uil-message"></i>
-					</SquareButton>
+				<Form className="w-full h-16 gap-2 p-2 lg:p-4 lg:h-20 border-t border-gray-100">
+					<section className="bg-gray-50 flex items-center justify-between rounded-lg">
+						{/* <Avatar avatar={undefined} username={user?.username} /> */}
+						<Field
+							autoFocus
+							type="text"
+							name="content"
+							className="h-12 bg-transparent min-w-0 outline-none rounded-lg px-4 text-gray-800 flex-grow"
+							placeholder="Enter text here..."
+							autoComplete="off"
+						/>
+						<button className='text-2xl w-8 mr-1 text-gray-500 aspect-square'>
+							<i className="uil uil-microphone"></i>
+						</button>
+						<button
+							type="submit"
+							className="text-sky-600 text-2xl w-12 aspect-square"
+						>
+							<i className="uil uil-message"></i>
+						</button>
+					</section>
 				</Form>
 			</Formik>
 

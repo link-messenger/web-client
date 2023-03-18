@@ -226,7 +226,12 @@ export const GroupItem = ({
 				<p className="text-sm">{shortenString(data.description)}</p>
 			</section>
 			{!isSearch && (
-				<span className="self-baseline justify-end text-gray-400 text-sm">
+				<span
+					className={
+						'self-baseline justify-end text-sm ' +
+						(isActive ? 'text-sky-500' : 'text-gray-400')
+					}
+				>
 					{time}
 				</span>
 			)}
@@ -265,7 +270,12 @@ export const ConversationItem = ({
 				<p className="text-sm">{shortenString(user.username)}</p>
 			</section>
 			{!isSearch && (
-				<span className="self-baseline justify-end text-gray-400 text-sm">
+				<span
+					className={
+						'self-baseline justify-end text-sm ' +
+						(isActive ? 'text-sky-500' : 'text-gray-400')
+					}
+				>
 					{time}
 				</span>
 			)}

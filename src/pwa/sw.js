@@ -15,10 +15,7 @@ console.log(self);
 // clean old assets
 cleanupOutdatedCaches();
 
-// testing 2
-
-let allowlist;
-if (import.meta.env.DEV) allowlist = [/^\/$/, /^\/index.html$/];
+let allowlist = [/^\/$/];
 
 // to allow work offline
 registerRoute(

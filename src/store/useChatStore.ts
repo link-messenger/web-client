@@ -66,12 +66,12 @@ export const useChatStore = create<IChatState>((set, get) => ({
 	currentMessages: [],
 	recieved: [],
 	initSocket: (uid: string) => {
-		const socket = io('http://localhost', {
+		const socket = io(import.meta.env.VITE_API_BASE_URL, {
 			port: '4000',
 			auth: {
 				id: uid,
 			},
-			transports: ['websocket', 'polling', 'flashsocket'],
+			transports: ['websocket', 'polling'],
 			forceNew: true,
 			reconnectionAttempts: 3,
 		});

@@ -1,6 +1,7 @@
 import { useRegisterSW } from 'virtual:pwa-register/react';
 // @ts-expect-error
 import { pwaInfo } from 'virtual:pwa-info';
+import { Button } from 'components';
 
 // eslint-disable-next-line no-console
 console.log(pwaInfo);
@@ -44,10 +45,10 @@ function ReloadPrompt() {
 	};
 
 	return (
-		<div className="ReloadPrompt-container">
+		<div className="w-full h-full grid place-items-center bg-sky-50">
 			{(offlineReady || needRefresh) && (
-				<div className="ReloadPrompt-toast">
-					<div className="ReloadPrompt-message">
+				<div className="flex flex-col justify-center items-center gap-3">
+					<div className="font-medium text-center text-sky-500">
 						{offlineReady ? (
 							<span>App ready to work offline</span>
 						) : (
@@ -57,16 +58,15 @@ function ReloadPrompt() {
 						)}
 					</div>
 					{needRefresh && (
-						<button
-							className="ReloadPrompt-toast-button"
+						<Button
 							onClick={() => updateServiceWorker(true)}
 						>
 							Reload
-						</button>
+						</Button>
 					)}
-					<button className="ReloadPrompt-toast-button" onClick={() => close()}>
+					<Button onClick={() => close()}>
 						Close
-					</button>
+					</Button>
 				</div>
 			)}
 		</div>

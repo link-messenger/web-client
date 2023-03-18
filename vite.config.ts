@@ -90,8 +90,8 @@ export default defineConfig({
 				],
 			},
 			injectManifest: {
-				swSrc: 'src/sw.js',
-				swDest: 'sw.js',
+				swSrc: 'src/pwa/sw.js',
+				swDest: '/dist/sw.js',
 			},
 
 			workbox: {
