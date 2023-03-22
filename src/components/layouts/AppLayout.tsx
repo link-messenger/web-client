@@ -6,7 +6,7 @@ const AppLayout = () => {
   return (
     <div>
       <Outlet />
-			<ReloadPrompt />
+			{/* <ReloadPrompt /> */}
 		</div>
 	);
 }

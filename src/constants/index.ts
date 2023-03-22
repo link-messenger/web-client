@@ -7,3 +7,7 @@ export const ROLES = {
   admin: 'ADMIN',
   user: 'USER',
 }
+
+export const CHAT_CHUNK_LENGTH = 50
+
+export const CHAT_HISTORY_LENGTH = 800;

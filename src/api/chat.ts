@@ -4,10 +4,9 @@ export type Categories = 'group' | 'user';
 
 export const getLastMessages = async (
 	id: string,
-	type: Categories,
 	page?: number
 ) => {
-	return get(`message/${type}/${id}`, {
+	return get(`message/${id}`, {
 		params: {
 			page,
 		},

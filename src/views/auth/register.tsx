@@ -7,13 +7,17 @@ import { EN_US } from 'languages';
 import React from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useAuthStore } from 'store';
+import { getDevice } from 'utils/device';
 
 const Register = () => {
-	const { mutate: register } = useRegister();
+	const { mutate: register, isLoading } = useRegister();
 	const isValid = useAuthStore((state) => state.token);
-	if (!!isValid) return <Navigate to="/chat" state={{ from: '/register' }} />;
+	if (!!isValid) return <Navigate to="/chat" />;
 	const onHandleRegister = (data: typeof REGISTER_INITIALS) => {
-		register(data);
+		register({
+			...data,
+			device: getDevice(),
+		});
 	};
 	return (
 		<section className="space-y-7">
@@ -73,7 +77,7 @@ const Register = () => {
 						<section className="text-right text-sm font-medium text-sky-700">
 							<Link to="/forgetpass">{EN_US['login.ForgetPassword']}</Link>
 						</section>
-						<Button type="submit">{EN_US['register.Register']}</Button>
+						<Button disabled={isLoading} type="submit">{EN_US['register.Register']}</Button>
 						<section className="text-rose-400">
 							{Object.keys(errors).map((key: string) => (
 								<ErrorMessage name={key} />

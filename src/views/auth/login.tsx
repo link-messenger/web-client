@@ -1,5 +1,5 @@
 import { NormalInput, PasswordInput, Button } from 'components';
-import { ErrorMessage, Field, Form, Formik, FormikProvider } from 'formik';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { EN_US } from 'languages';
 import { Link, Navigate } from 'react-router-dom';
 
@@ -7,14 +7,18 @@ import { LOGIN_INITIALS, LOGIN_VALIDATION } from 'constants';
 import { useLogin } from 'hooks';
 import { GoogleAuth, AuthHeader, Seprator } from 'components/partials';
 import { useAuthStore } from 'store';
+import { getDevice } from 'utils/device';
 
 const Login = () => {
-	const { mutate: login } = useLogin();
+	const { mutate: login, isLoading } = useLogin();
 	const isValid = useAuthStore((state) => state.token);
-	if (!!isValid) return <Navigate to="/chat" state={{ from: '/login' }} />;
+	if (!!isValid) return <Navigate to="/chat" />;
 
 	const onHandleLogin = async (data: typeof LOGIN_INITIALS) => {
-		login(data);
+		login({
+			...data,
+			device: getDevice(),
+		});
 	};
 
 	return (
@@ -49,7 +53,7 @@ const Login = () => {
 						<section className="text-right text-sm font-medium text-sky-700">
 							<Link to="/forgetpass">{EN_US['login.ForgetPassword']}</Link>
 						</section>
-						<Button type="submit">{EN_US['login.Login']}</Button>
+						<Button disabled={isLoading} type="submit">{EN_US['login.Login']}</Button>
 						<section className="text-rose-400">
 							{Object.keys(errors).map((key: string) => (
 								<ErrorMessage name={key} />
@@ -64,7 +68,7 @@ const Login = () => {
 			<GoogleAuth />
 			<section className="text-sm flex justify-center items-baseline space-x-2">
 				<p className="text-slate-500">{EN_US['login.SignUpMessage']}</p>
-				<Link to="/register" state={{from: '/login'}} className="text-sky-700 font-medium">
+				<Link to="/register" className="text-sky-700 font-medium">
 					{EN_US['login.SignUp']}
 				</Link>
 			</section>

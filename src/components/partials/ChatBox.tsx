@@ -1,52 +1,59 @@
+import { forwardRef, LegacyRef } from 'react';
+import { IMessage } from 'store';
 import { formatDateTime, formatTime } from 'utils/time';
 
-export const MessageBox = ({
-	uid,
-	content,
-	user,
-	created,
-}: {
-	created: string;
-	user: {
-		id: string;
-		username: string;
-	};
-	content: string;
+interface IMessageBoxProps extends IMessage {
 	uid: string;
-}) => {
-	const time = formatTime(created);
-	const isMe = user.id === uid;
+}
+
+const MessageBoxComponent = (
+	{ uid, sender, updatedAt, content }: IMessageBoxProps,
+	ref: LegacyRef<HTMLElement>
+) => {
+	const time = formatTime(updatedAt);
+	const isMe = sender._id === uid;
 	return (
 		<section
 			className={'flex flex-col gap-0.5' + (isMe ? ' self-end items-end' : '')}
+			ref={ref}
 		>
-			<section
+			<h6 className="font-bold capitalize text-sm text-gray-700">
+				{isMe ? 'You' : sender.name}
+			</h6>
+			<p
 				className={
-					'w-fit flex items-baseline justify-between gap-3' +
-					(isMe ? ' flex-row-reverse' : '')
-				}
-			>
-				<h6 className="font-bold capitalize text-sm text-gray-700">
-					{isMe ? 'You' : user.username}
-				</h6>
-				<span
-					className={
-						'text-xs text-gray-400 font-medium' + (isMe ? ' self-end' : '')
-					}
-				>
-					{time}
-				</span>
-			</section>
-			<section
-				className={
-					'max-w-xl w-fit p-3 rounded-lg' +
+					'whitespace-pre-line max-w-xl w-fit p-3 rounded-lg' +
 					(isMe
 						? ' rounded-br-sm bg-blue-500 text-white self-end'
 						: ' bg-gray-200 rounded-tl-sm text-gray-800')
 				}
 			>
-				<p className="text-sm">{content}</p>
-			</section>
+				{content}
+			</p>
+			<span
+				className={
+					'text-xs text-gray-400 font-medium' + (isMe ? ' self-end' : '')
+				}
+			>
+				{time}
+			</span>
 		</section>
 	);
 };
+
+export const MessageBox = forwardRef(MessageBoxComponent);
+
+const DateTagComponent = (
+	{ date }: { date: string },
+	ref: LegacyRef<HTMLElement>
+) => {
+	return (
+		<section ref={ref} className="flex justify-between items-center gap-4">
+			<span className="border-b border-gray-200 flex-grow"></span>
+			<span className='bg-gray-200 text-gray-500 text-xs px-2 py-0.5 rounded-full'>{date}</span>
+			<span className="border-b border-gray-200 flex-grow"></span>
+		</section>
+	);
+};
+
+export const DateTag = forwardRef(DateTagComponent);

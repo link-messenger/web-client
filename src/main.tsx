@@ -8,15 +8,28 @@ import {
 	QueryClientProvider,
 } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { clearAuthStorage } from 'store';
+import { clearAuthStorage, getRefreshToken, setToken } from 'store';
+import { postRefreshToken } from 'api';
 const qc = new QueryClient({
 	queryCache: new QueryCache({
 		onError: async (error, query) => {
 			// @ts-ignore
 			const response = error?.response as Response;
+			const refresh = getRefreshToken();
+
 			if (response.status === 401) {
+				if (refresh) {
+					const { token, refresh: newRefresh } = await postRefreshToken({
+						refresh,
+					});
+					if (token && newRefresh) {
+						setToken(token, newRefresh);
+						window.location.replace(new URL('/chat', window.location.origin));
+						return;
+					}
+				}
 				clearAuthStorage();
-				window.location.replace(new URL('/', window.location.origin));
+				window.location.replace(new URL('/login', window.location.origin));
 			}
 		},
 	}),

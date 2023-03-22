@@ -1,4 +1,14 @@
-import { InputHTMLAttributes, useState } from 'react';
+import {
+	ForwardedRef,
+	forwardRef,
+	HTMLAttributes,
+	InputHTMLAttributes,
+	KeyboardEvent,
+	LegacyRef,
+	RefObject,
+	useRef,
+	useState,
+} from 'react';
 
 interface INoramlInput extends InputHTMLAttributes<HTMLInputElement> {
 	icon?: React.ReactNode;
@@ -11,12 +21,14 @@ export const NormalInput = ({
 }: INoramlInput) => {
 	return (
 		<section className="flex items-center bg-slate-100 p-1.5 w-full rounded-xl">
-			{icon && <label
-				htmlFor={id}
-				className="bg-white rounded-lg w-12 aspect-square text-lg grid place-items-center text-sky-600"
-			>
-				{icon}
-			</label>}
+			{icon && (
+				<label
+					htmlFor={id}
+					className="bg-white rounded-lg w-12 aspect-square text-lg grid place-items-center text-sky-600"
+				>
+					{icon}
+				</label>
+			)}
 			<input
 				id={id}
 				className={
@@ -57,7 +69,7 @@ export const PaleInput = ({
 	return (
 		<input
 			className={
-				'outline-none bg-transparent focus:outline-none border-none focus:border-none ' +
+				'outline-none w-full bg-transparent focus:outline-none border-none focus:border-none ' +
 				(className ?? '')
 			}
 			{...others}
@@ -76,7 +88,7 @@ export const SearchInput = ({
 				htmlFor={id}
 				className="rounded-lg w-12 aspect-square text-2xl text-gray-400 grid place-items-center"
 			>
-				<button className='outline-none'>
+				<button className="outline-none">
 					<i className="uil uil-search"></i>
 				</button>
 			</label>
@@ -89,3 +101,28 @@ export const SearchInput = ({
 		</section>
 	);
 };
+
+interface TextAreaProps extends HTMLAttributes<HTMLTextAreaElement>{
+	inputRef: RefObject<HTMLTextAreaElement>
+}
+
+export const TextArea = ({
+	className,
+	inputRef,
+	...others
+}: TextAreaProps) => {
+	// const inputRef = useRef<HTMLTextAreaElement>(null);
+	
+	return (
+		<textarea
+			ref={inputRef}
+			rows={2}
+			// onKeyDown={handleKeyDown}
+			className={
+				'bg-transparent h-5 scrollbar-hide resize-none ' + (className ?? '')
+			}
+			{...others}
+		></textarea>
+	);
+};
+

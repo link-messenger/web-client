@@ -11,29 +11,40 @@ interface IUser {
 
 interface IAuthState {
 	token: string;
+	refresh: string;
 	user: IUser | null;
-	setToken: (token: string) => void;
+	setToken: (token: string, refresh: string) => void;
 	setUser: (user: IUser) => void;
 	clearAll: () => void;
-	setAuth: (token: string, user: IUser) => void;
+	setAuth: (token: string, refresh: string, user: IUser) => void;
+	getToken: () => string;
+	getRefresh: () => string;
 }
 
 export const useAuthStore = create<IAuthState>()(
 	persist(
 		(set, get) => ({
 			token: '',
+			refresh: '',
 			user: null,
 
-			setToken: (token: string) => set({ token, user: get()?.user }),
-			setUser: (user: IUser) => set({ token: get()?.token, user }),
-			clearAll: () => set({ token: '', user: null }),
-			setAuth: (token, user) => set({ token, user }),
+			setToken: (token, refresh) =>
+				set((state) => ({ token, refresh, user: state?.user })),
+			setUser: (user) => set({ token: get()?.token, user }),
+			clearAll: () => set({ token: '', refresh: '', user: null }),
+			setAuth: (token, refresh, user) => set({ token, refresh, user }),
+			getToken: () => get().token,
+			getRefresh: () => get().refresh,
 		}),
 		{
 			name: 'OLU_AUTH',
-			partialize: (state) => ({ token: state.token, user: state.user }),
+			partialize: (state) => ({ token: state.token, refresh: state.refresh, user: state.user }),
 		}
 	)
 );
 
 export const clearAuthStorage = useAuthStore.getState().clearAll;
+export const setToken = useAuthStore.getState().setToken;
+
+export const getRefreshToken = useAuthStore.getState().getRefresh;
+

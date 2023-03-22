@@ -1,6 +1,8 @@
 import { getLastMessages, Categories } from 'api';
+import { CHAT_HISTORY_LENGTH } from 'constants';
 import { IUser } from 'interfaces';
 import { io, Socket } from 'socket.io-client';
+import { trimChats } from 'utils/chats';
 import { create } from 'zustand';
 import {
 	getCurrentChat,
@@ -9,19 +11,28 @@ import {
 	setCurrentChat,
 } from './useChatListStore';
 
-interface IMessage {
+export type MessageStatus = 'seen' | 'unseen';
+
+export interface IDateTag {
+	_id: string;
+	date: string;
+	modelType: 'DATE';
+}
+
+export interface IMessage {
+	_id: string;
 	content: string;
 	type: MessageTypes;
 	sender: {
+		_id: string;
 		name: string;
 		username: string;
-		_id: string;
-		email: string;
 	};
-	_id: string;
-	onModel: Categories;
 	to: string;
+	status: MessageStatus;
 	createdAt: string;
+	updatedAt: string;
+	modelType: 'MESSAGE';
 }
 
 export type MessageTypes = 'FILE' | 'MESSAGE' | 'IMAGE' | 'VOICE';
@@ -42,13 +53,19 @@ export interface IChatType {
 interface IChatState {
 	socket: null | Socket;
 	currentChat: string;
-	currentMessages: IMessage[];
+	currentMessages: (IMessage | IDateTag)[];
+	chatLoading: boolean;
+	pages: {
+		hasMore: boolean;
+		hasLess: boolean;
+		maxNumber: number;
+	};
 	recieved: IMessage[];
 	initSocket: (uid: string) => () => void;
 	disconnect: () => void;
 	addMessage: (msg: IMessage) => void;
 	addRecievedMessage: (msg: IMessage) => void;
-	loadChat: (current: any, page?: number) => void;
+	loadChat: (current: any, page: number) => void;
 	sendMessage: (msg: ISendable) => void;
 	setMessageListener: () => (() => void) | undefined;
 	messageConfirmListener: () => (() => void) | undefined;
@@ -65,6 +82,12 @@ export const useChatStore = create<IChatState>((set, get) => ({
 	currentChat: '',
 	currentMessages: [],
 	recieved: [],
+	chatLoading: false,
+	pages: {
+		hasMore: false,
+		hasLess: false,
+		maxNumber: 0,
+	},
 	initSocket: (uid: string) => {
 		const socket = io(import.meta.env.VITE_API_BASE_URL, {
 			port: '4000',
@@ -79,7 +102,7 @@ export const useChatStore = create<IChatState>((set, get) => ({
 			socket,
 		});
 		return () => {
-			 socket.disconnect();
+			socket.disconnect();
 		};
 	},
 	disconnect: () => {
@@ -90,24 +113,53 @@ export const useChatStore = create<IChatState>((set, get) => ({
 	},
 	getCurrentChatId: () => get().currentChat,
 	clearChat: () => {
-		set({ currentChat: '', currentMessages: [] });
+		set({ currentMessages: [] });
 	},
 	addMessage: (msg) => {
-		set({ currentMessages: [msg, ...get().currentMessages] });
-	},
-	loadChat: async (currentChat, page?: number) => {
-		if (!currentChat) return;
-		const chats = await getLastMessages(
-			currentChat._id as string,
-			currentChat.type as Categories,
-			page
-		).catch((err) => {
-			console.log(err);
-			if (err.response.status === 404) {
-				removeGroup(currentChat._id);
-			}
+		set({
+			currentMessages: [
+				...get().currentMessages,
+				{
+					...msg,
+					modelType: 'MESSAGE',
+				},
+			],
 		});
-		set({ currentMessages: chats });
+	},
+	loadChat: async (currentChat, page) => {
+		if (!currentChat || (!get().pages.hasMore && page !== 1)) return;
+		set({ chatLoading: true });
+
+		const chats = await getLastMessages(currentChat._id as string, page)
+			.then((res) => {
+				const pages = res.pages;
+				set({
+					pages: {
+						hasMore: pages > page,
+						hasLess: page > 1,
+						maxNumber: pages,
+					},
+				});
+
+				set({ chatLoading: false });
+
+				return res.data;
+			})
+			.catch((err) => {
+				if (err.response.status === 404) {
+					removeGroup(currentChat._id);
+				}
+			});
+		const trimmedChats = trimChats(chats);
+		if (page === 1) {
+			set({ currentMessages: trimmedChats });
+		} else {
+			set((state) => {
+				const current = state.currentMessages;
+				const pre = current.length > CHAT_HISTORY_LENGTH ? current.slice(0, CHAT_HISTORY_LENGTH) : current;
+				return { currentMessages: [...pre, ...chats] };
+			});
+		}
 	},
 	sendMessage: (msg) => {
 		const socket = get().socket;
@@ -136,13 +188,7 @@ export const useChatStore = create<IChatState>((set, get) => ({
 		const addRecievedMessage = get().addRecievedMessage;
 		socket.on('recieve-message', (msg: IMessage) => {
 			const currentChat = getCurrentChat() as any;
-			if (
-				currentChat &&
-				msg.onModel === currentChat.type &&
-				((currentChat.type === 'user' &&
-					!!currentChat.users.find((u: IUser) => u._id === msg.sender._id)) ||
-					currentChat._id === msg.to)
-			) {
+			if (currentChat && currentChat._id === msg.to) {
 				addMessage(msg);
 			} else {
 				addRecievedMessage(msg);

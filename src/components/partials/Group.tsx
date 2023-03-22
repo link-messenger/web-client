@@ -266,7 +266,6 @@ export const GroupProfileEditModal = ({
 		<Modal
 			className="justify-center items-center"
 			isOpen={currentId === EDIT_GROUP_MODAL}
-			onClick={() => closeModal(EDIT_GROUP_MODAL)}
 		>
 			<Card
 				onClick={(e) => e.stopPropagation()}
@@ -293,8 +292,8 @@ export const GroupProfileEditModal = ({
 					{({ isValid, values, resetForm }) => (
 						<Form>
 							<header className="p-3 border-b border-gray-100 flex gap-2 items-center">
-								<ListAvatar username={groupDetail?.name} size="w-14" />
-								<section className="flex flex-col gap-1.5 flex-grow">
+								<ListAvatar username={groupDetail.name} size="w-14" />
+								<section className="flex flex-col gap-1.5">
 									<section className="flex items-center justify-between">
 										<Field
 											as={PaleInput}

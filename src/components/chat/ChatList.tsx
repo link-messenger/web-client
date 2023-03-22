@@ -13,7 +13,7 @@ export const ChatList = ({ uid }: { uid: string }) => {
 	const chatList = useChatListStore((state) => state.chats);
 	const toggleMenu = useMenuStore((state) => state.toggle);
 	const [search, setSearch] = useState('');
-	const debouncedSearch = useDebounce(search, 1000);
+	const debouncedSearch = useDebounce(search, 500);
 	const { data: searchedResult } = useSearchChat(debouncedSearch);
 
 	const currentChatId = useChatStore((state) => state.currentChat);
