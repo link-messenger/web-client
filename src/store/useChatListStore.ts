@@ -11,7 +11,7 @@ interface IChatListState {
 	setChats: (chats: IChat[]) => void;
 	clearChats: () => void;
 	addGroup: (grp: IGroup) => void;
-	editChat: (chat: Partial<IChat>) => void;
+	editChat: (chat: Partial<IChat>, ordered?:boolean) => void;
 	removeGroup: (gip: string) => void;
 	addConv: (conv: IConversation) => void;
 	removeConv: (cid: string) => void;
@@ -98,14 +98,17 @@ export const useChatListStore = create<IChatListState>((set, get) => ({
 		get().editChat({
 			_id: chat?._id,
 			unseen: 0,
-		});
+		}, true);
 		set({ currentChat: chat });
 	},
-	editChat: (chat) => {
+	editChat: (chat, ordered=false) => {
 		const chats = get().chats;
 		if (!chats) return;
 		const target: IChat[] = chats.reduce((acc, curr) => {
-			if (curr._id === chat._id) {
+			if (curr._id === chat._id ) {
+				if (ordered) {
+					return [...acc, { ...curr, ...chat }];
+				}
 				return [{ ...curr, ...chat }, ...acc];
 			}
 			return [...acc, curr];

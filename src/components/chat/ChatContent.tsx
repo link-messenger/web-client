@@ -1,12 +1,12 @@
-import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
+import { KeyboardEvent, useRef, useState } from 'react';
+import { motion, Variants } from 'framer-motion';
 
-import { TextArea } from '../core';
 import {
 	GroupProfileEditModal,
 	GroupProfileModal,
 	ListAvatar,
 } from '../partials';
-import { CHAT_INFO_MODAL, MESSAGE_INITIALS } from 'constants';
+import { CHAT_INFO_MODAL } from 'constants';
 import { EN_US } from 'languages';
 import { useChatListStore, useChatStore } from 'store';
 import { useGetUserGroupDetail, useModal } from 'hooks';
@@ -14,6 +14,30 @@ import { MessageTypes } from 'store';
 import { IGroupDetail, IProfile } from 'interfaces';
 import { Categories } from 'api';
 import { ChatBox } from './ChatBox';
+
+const chatContentVariant:Variants = {
+	hidden: {
+		x: '100%',
+		opacity: 0,
+		width:0,
+		transitionEnd: {
+			display: 'none',
+		},
+		transition: {
+			duration: 0.1,
+			ease: 'easeInOut',
+		},
+	},
+	visible: {
+		display: 'flex',
+		x: 0,
+		opacity: 1,
+		transition: {
+			duration: 0.1,
+			ease: 'easeInOut',
+		},
+	},
+};
 
 export const ChatContent = ({ user }: { user: IProfile }) => {
 	const { currentId, openModal, closeModal } = useModal();
@@ -25,13 +49,16 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 		currentChat?.type as Categories
 	);
 
-	if (!currentChatId || !currentChat)
-		return (
-			<section className="chat-bg-1 bg-gray-50 relative w-0 hidden flex-grow lg:grid place-items-center text-sky-500 text-xl"></section>
-		);
+	// if (!currentChatId || !currentChat)
+	// 	return (
+	// 		<section className="chat-bg-1 bg-gray-50 relative w-0 hidden flex-grow lg:grid place-items-center text-sky-500 text-xl"></section>
+	// 	);
 
 	return (
-		<section className="chat-bg-1 bg-gray-50 flex flex-col flex-grow h-full overflow-hidden will-change-contents">
+		<motion.section variants={chatContentVariant}
+			initial="hidden"
+			animate={currentChatId ? "visible" : "hidden"}
+			className="flex-col flex-grow h-full overflow-hidden will-change-contents">
 			<ChatContentHeader
 				groupDetail={groupDetail}
 				openModal={openModal}
@@ -60,7 +87,7 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 					closeModal={closeModal}
 				/>
 			)}
-		</section>
+		</motion.section>
 	);
 };
 

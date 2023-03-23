@@ -120,13 +120,35 @@ export const useChatStore = create<IChatState>((set, get) => ({
 		set({ currentMessages: [] });
 	},
 	addMessage: (msg) => {
+	const chatList = getChatList();
+	const cid = getCurrentChatId();
+	if (chatList) {
+		const target = chatList.find((chat) => chat._id === msg.to);
+		if (target) {
+			editChat({
+				_id: target._id,
+				lastMessage: {
+					content: msg.content,
+					createdAt: msg.createdAt,
+					sender: {
+						_id: msg.sender._id,
+						name: msg.sender.name,
+						updatedAt: msg.sender.updatedAt,
+						username: msg.sender.username,
+					},
+					to: msg.to,
+				},
+				unseen: target._id !== cid ? target.unseen + 1 : target.unseen,
+			});
+		}
+	}
 		set({
 			currentMessages: [
-				...get().currentMessages,
 				{
 					...msg,
 					modelType: 'MESSAGE',
 				},
+				...get().currentMessages,
 			],
 		});
 	},
@@ -216,6 +238,7 @@ export const useChatStore = create<IChatState>((set, get) => ({
 		const addMessage = get().addMessage;
 		const addRecievedMessage = get().addRecievedMessage;
 		socket.on('recieve-message', (msg: IMessage) => {
+			console.log('called');
 			const currentChat = getCurrentChat() as any;
 			if (currentChat && currentChat._id === msg.to) {
 				addMessage(msg);
@@ -232,6 +255,7 @@ export const useChatStore = create<IChatState>((set, get) => ({
 		if (!socket) return;
 		const addMessage = get().addMessage;
 		socket.on('message-sent', (msg: IMessage) => {
+			console.log('called');
 			addMessage(msg);
 		});
 		return () => {

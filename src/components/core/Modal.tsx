@@ -1,18 +1,33 @@
 import { FunctionalModalCardProps } from 'interfaces';
 import { EN_US } from 'languages';
-import {
-	HTMLAttributes,
-	MouseEventHandler,
-	PropsWithChildren,
-	ReactNode,
-} from 'react';
+import { HTMLAttributes, ReactNode } from 'react';
+import { motion, Variants } from 'framer-motion';
 import { Portal } from 'react-portal';
+
 import { Button } from './Button';
 import { Card } from './Card';
 
 interface ModalProps extends HTMLAttributes<HTMLDivElement> {
 	isOpen?: boolean;
 }
+
+const modalVariant: Variants = {
+	hidden: {
+		opacity: 0,
+		transitionEnd: {
+			display: 'none',
+		},
+		transition: {
+			duration: 0.2,
+			staggerChildren: 10,
+			when: 'afterChildren',
+		},
+	},
+	visible: {
+		display: 'flex',
+		opacity: 1,
+	},
+};
 
 export const Modal = ({
 	onClick,
@@ -22,16 +37,18 @@ export const Modal = ({
 }: ModalProps) => {
 	return (
 		<Portal node={document.getElementById('modal')}>
-			<div
+			<motion.div
+				variants={modalVariant}
+				initial="hidden"
+				animate={isOpen ? 'visible' : 'hidden'}
 				onClick={onClick}
 				className={
 					'absolute top-0 left-0 z-30 w-screen h-screen bg-black bg-opacity-50 ' +
-					(className ?? '') +
-					(isOpen ? ' flex' : ' w-0 hidden')
+					(className ?? '')
 				}
 			>
 				{children}
-			</div>
+			</motion.div>
 		</Portal>
 	);
 };

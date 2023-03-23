@@ -1,20 +1,33 @@
-import { Button, Card, NormalInput, Toggle } from 'components/core';
+import { MouseEventHandler } from 'react';
+import { motion, Variants } from 'framer-motion';
+
 import { Modal } from 'components/core/Modal';
 import {
-	CREATE_GROUP_INITIALS,
 	CREATE_GROUP_MODAL,
-	CREATE_GROUP_VALIDATION,
 	USER_PROFILE_MODAL,
 } from 'constants';
-import { Field, Form, Formik } from 'formik';
 import { useLogout, useModal } from 'hooks';
 import { IProfile } from 'interfaces';
 import { EN_US } from 'languages';
-import { MouseEventHandler, PropsWithChildren } from 'react';
-import { useChatStore, useMenuStore } from 'store';
+import { useMenuStore } from 'store';
 import { ListAvatar } from './Avatar';
 import { CreateGroupModal } from './Group';
 import { EditUserProfileModal } from './Profile';
+
+
+const sideMenuVariant: Variants = {
+	hidden: {
+		x: '-200px',
+	},
+	visible: {
+		x: 0,
+		transition: {
+			bounce: 0,
+			ease: 'easeInOut',
+			duration: 0.2
+		}
+	},
+};
 
 export const SideMenu = ({ user }: { user: IProfile }) => {
 	const open = useMenuStore((state) => state.open);
@@ -46,7 +59,10 @@ export const SideMenu = ({ user }: { user: IProfile }) => {
 
 	return (
 		<Modal onClick={toggle} isOpen={open}>
-			<nav
+			<motion.nav
+				variants={sideMenuVariant}
+				initial="hidden"
+				animate={open ? 'visible' : 'hidden'}
 				onClick={(e) => e.stopPropagation()}
 				className="w-4/5 md:w-96 h-full flex flex-col bg-white border-r border-r-gray-400 min-w-xs shadow-xl"
 			>
@@ -85,7 +101,7 @@ export const SideMenu = ({ user }: { user: IProfile }) => {
 						/>
 					</section>
 				</section>
-			</nav>
+			</motion.nav>
 			<CreateGroupModal closeModal={closeModal} currentId={currentId} />
 			<EditUserProfileModal closeModal={closeModal} currentId={currentId} />
 		</Modal>

@@ -38,7 +38,7 @@ const Chat = () => {
 	}, [userData?.id]);
 
 	return (
-		<main className="flex flex-row w-screen h-screen overflow-hidden">
+		<main className="chat-bg-1 bg-gray-50  flex flex-row w-screen h-screen overflow-hidden">
 			<ChatList uid={userData?.id} />
 			<ChatContent user={userData} />
 			<SideMenu user={userData} />

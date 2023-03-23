@@ -1,9 +1,12 @@
 import { useField } from 'formik';
 import { HTMLAttributes, InputHTMLAttributes } from 'react';
+import { motion, Variants } from 'framer-motion';
+
+type ToggleSize = 'sm' | 'md' | 'lg';
 
 interface ToggleProps
 	extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
-	size?: 'sm' | 'md' | 'lg';
+	size?: ToggleSize;
 }
 
 const SIZE_MAP = {
@@ -15,19 +18,36 @@ const SIZE_MAP = {
 const CIRCLE_SIZE_MAP = {
 	sm: 'w-4',
 	md: 'w-5',
-	lg: 'w-6',
+	lg: 'w-7',
 };
 
 const CIRCLE_LEFT_SIZE_MAP = {
-	sm: 'left-0.5',
-	md: 'left-1',
-	lg: 'left-1.5',
+	sm: '2px',
+	md: '4px',
+	lg: '6px',
 };
 const CIRCLE_RIGHT_SIZE_MAP = {
-	sm: 'right-0.5',
-	md: 'right-1',
-	lg: 'right-1.5',
+	sm: '22px',
+	md: '32px',
+	lg: '46px',
 };
+
+const toggleVariant = (size: ToggleSize): Variants => ({
+	unchecked: {
+		left: CIRCLE_LEFT_SIZE_MAP[size],
+		transition: {
+			duration: 0.1,
+			ease: 'linear',
+		},
+	},
+	checked: {
+		left: CIRCLE_RIGHT_SIZE_MAP[size],
+		transition: {
+			duration: 0.1,
+			ease: 'linear',
+		},
+	},
+});
 
 export const Toggle = ({
 	id,
@@ -54,13 +74,14 @@ export const Toggle = ({
 				{...others}
 				className="hidden"
 			/>
-			<span
+			<motion.span
+				variants={toggleVariant(size)}
+				animate={value ? 'checked' : 'unchecked'}
 				className={
 					CIRCLE_SIZE_MAP[size] +
-					' bg-white top-1/2 -translate-y-1/2 aspect-square absolute z-50 rounded-full ' +
-					(value ? CIRCLE_RIGHT_SIZE_MAP[size] : CIRCLE_LEFT_SIZE_MAP[size])
+					' bg-white top-1/2 -translate-y-1/2 aspect-square absolute z-50 rounded-full '
 				}
-			></span>
+			></motion.span>
 		</label>
 	);
 };
@@ -95,13 +116,14 @@ export const ToggleWithoutFormik = ({
 				{...others}
 				className="hidden"
 			/>
-			<span
+			<motion.span
+				variants={toggleVariant(size)}
+				animate={value ? 'checked' : 'unchecked'}
 				className={
 					CIRCLE_SIZE_MAP[size] +
-					' bg-white top-1/2 -translate-y-1/2 aspect-square absolute z-50 rounded-full ' +
-					(value ? CIRCLE_RIGHT_SIZE_MAP[size] : CIRCLE_LEFT_SIZE_MAP[size])
+					' bg-white top-1/2 -translate-y-1/2 aspect-square absolute z-50 rounded-full '
 				}
-			></span>
+			></motion.span>
 		</label>
 	);
 };

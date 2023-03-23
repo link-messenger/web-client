@@ -4,12 +4,10 @@ import {
 	useCreateUserConversation,
 	useDebounce,
 	useSearchChat,
-	useGetUserConversation,
-	useGetUserGroup,
 	useGetUserChatList,
 } from 'hooks';
 import { SearchInput } from '../core';
-import { IChat, IGroup } from 'interfaces';
+import { IChat } from 'interfaces';
 import { EN_US } from 'languages';
 import { useChatListStore, useChatStore, useMenuStore } from 'store';
 import { ListAvatar } from 'components/partials';
@@ -48,7 +46,7 @@ export const ChatList = ({ uid }: { uid: string }) => {
 		<section
 			className={
 				(currentChatId ? 'w-0  max-lg:hidden' : 'w-full') +
-				' lg:w-96 flex flex-col lg:border-r lg:border-r-slate-100'
+				' lg:w-96 flex flex-col lg:border-r bg-white lg:border-r-slate-100'
 			}
 		>
 			<header className="p-4 pb-0 flex items-center justify-between">
