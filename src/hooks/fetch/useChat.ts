@@ -18,5 +18,7 @@ export const useCreateUserConversation = () => {
 
 
 export const useGetUserChatList = () => {
-	return useQuery<IChat[]>(['GET-USER-CHAT-LIST'], getUserChatList);
+	return useQuery<IChat[]>(['GET-USER-CHAT-LIST'], getUserChatList, {
+		refetchInterval: 100000,
+	});
 }

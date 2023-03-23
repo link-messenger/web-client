@@ -160,8 +160,11 @@ export const useChatStore = create<IChatState>((set, get) => ({
 		} else {
 			set((state) => {
 				const current = state.currentMessages;
-				const pre = current.length > CHAT_HISTORY_LENGTH ? current.slice(0, CHAT_HISTORY_LENGTH) : current;
-				return { currentMessages: [...pre, ...chats] };
+				const pre =
+					current.length > CHAT_HISTORY_LENGTH
+						? current.slice(-1 * CHAT_HISTORY_LENGTH)
+						: current;
+				return { currentMessages: [...pre, ...trimmedChats] };
 			});
 		}
 	},

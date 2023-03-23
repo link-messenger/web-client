@@ -17,36 +17,13 @@ import { ChatBox } from './ChatBox';
 
 export const ChatContent = ({ user }: { user: IProfile }) => {
 	const { currentId, openModal, closeModal } = useModal();
-	const [page, setPage] = useState(1);
-
 	const currentChatId = useChatStore((state) => state.currentChat);
 	const currentChat = useChatListStore((state) => state.currentChat);
-	const clearChat = useChatStore((state) => state.clearChat);
-	const loadChat = useChatStore((state) => state.loadChat);
-	const messageConfirmListener = useChatStore(
-		(state) => state.messageConfirmListener
-	);
 
 	const { data: groupDetail, refetch } = useGetUserGroupDetail(
 		currentChatId,
 		currentChat?.type as Categories
 	);
-
-	useEffect(() => {
-		if (!currentChatId) return;
-		loadChat(currentChat, page);
-		console.log('called');
-	}, [currentChatId, page]);
-
-	useEffect(() => {
-		if (!currentChatId) return;
-		const clearConfirmListener = messageConfirmListener();
-		return () => {
-			clearConfirmListener && clearConfirmListener();
-			setPage(1);
-			clearChat();
-		};
-	}, [currentChatId]);
 
 	if (!currentChatId || !currentChat)
 		return (
@@ -60,7 +37,7 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 				openModal={openModal}
 				user={user}
 			/>
-			<ChatBox setPage={setPage} user={user} />
+			<ChatBox user={user} />
 			<ChatContentMessage />
 			{groupDetail && (
 				<GroupProfileModal

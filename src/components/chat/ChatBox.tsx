@@ -4,27 +4,37 @@ import { DateTag, MessageBox } from 'components/partials';
 import { useChatScroll, useDebounce, useScrollObserver } from 'hooks';
 import { IProfile } from 'interfaces';
 import { EN_US } from 'languages';
-import React, { LegacyRef, useRef, useState } from 'react';
-import { useChatStore } from 'store';
+import React, { LegacyRef, useEffect, useRef, useState } from 'react';
+import { useChatListStore, useChatStore } from 'store';
 import { scrollToBottom } from 'utils/scroll';
 import RenderIfVisible from 'react-render-if-visible';
 import { CHAT_CHUNK_LENGTH } from 'constants';
 
 interface ChatBoxProps {
 	user: IProfile;
-	setPage: Function;
 	isScrolling: boolean;
 }
 
-const ChatBoxComponent = ({ isScrolling, user, setPage }: ChatBoxProps) => {
+const ChatBoxComponent = ({
+	isScrolling,
+	user,
+}: ChatBoxProps) => {
+	const [page, setPage] = useState(1);
+	const clearChat = useChatStore((state) => state.clearChat);
+	const loadChat = useChatStore((state) => state.loadChat);
+	const messageConfirmListener = useChatStore(
+		(state) => state.messageConfirmListener
+	);
 	const chats = useChatStore((state) => state.currentMessages);
 	const isChatLoading = useChatStore((state) => state.chatLoading);
 	const hasMore = useChatStore((state) => state.pages.hasMore);
 	const hasLess = useChatStore((state) => state.pages.hasLess);
+	const currentChatId = useChatStore((state) => state.currentChat);
+	const currentChat = useChatListStore((state) => state.currentChat);
+
 	const ref = useChatScroll(chats);
 	const lObserver = useRef<IntersectionObserver>();
 	const fObserver = useRef<IntersectionObserver>();
-	// chats.slice()
 	const lastMessageElementRef = useScrollObserver(
 		lObserver,
 		() => setPage((page: number) => page + 1),
@@ -37,29 +47,21 @@ const ChatBoxComponent = ({ isScrolling, user, setPage }: ChatBoxProps) => {
 		isChatLoading,
 		hasLess
 	);
-	const chatElems = [];
 
-	for (let i = 0, len = chats.length; i < len; i += CHAT_CHUNK_LENGTH) {
-		chatElems.unshift(
-			<RenderIfVisible key={`chunk_Key_${i}`}>
-				{chats.slice(i, i + CHAT_CHUNK_LENGTH).map((chat, index) => (
-					<MessageCreator
-						key={chat._id}
-						ref={
-							index === chats.length - 1
-								? lastMessageElementRef
-								: index === 0
-								? firstMessageElement
-								: undefined
-						}
-						data={chat}
-						uid={user.id}
-						modelType={chat.modelType}
-					/>
-				))}
-			</RenderIfVisible>
-		);
-	}
+	useEffect(() => {
+		if (!currentChatId) return;
+		loadChat(currentChat, page);
+	}, [currentChatId, page]);
+
+	useEffect(() => {
+		if (!currentChatId) return;
+		const clearConfirmListener = messageConfirmListener();
+		return () => {
+			clearConfirmListener && clearConfirmListener();
+			setPage(1);
+			clearChat();
+		};
+	}, [currentChatId]);
 
 	return (
 		<section
@@ -73,7 +75,21 @@ const ChatBoxComponent = ({ isScrolling, user, setPage }: ChatBoxProps) => {
 			) : (
 				''
 			)}
-			{chatElems}
+			{chats.map((chat, index) => (
+				<MessageCreator
+					key={chat._id}
+					ref={
+						index + 1 === chats.length
+							? lastMessageElementRef
+							: index === 1
+							? firstMessageElement
+							: undefined
+					}
+					data={chat}
+					uid={user.id}
+					modelType={chat.modelType}
+				/>
+			))}
 			{!isScrolling && ref.current && ref.current.scrollTop < -500 && (
 				<button
 					onClick={() => scrollToBottom(ref)}

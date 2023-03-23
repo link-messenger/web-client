@@ -8,12 +8,12 @@ export const trimChats = (chats: any) => {
 		const [date, messages] = entries[i];
 		const dateTag = createDateTage(date);
 		for (const message of messages as Omit<IMessage, 'modelType'>[]) {
-			combinedChats.unshift({
+			combinedChats.push({
 				...message,
 				modelType: 'MESSAGE',
 			});
 		}
-		combinedChats.unshift(dateTag);
+		combinedChats.push(dateTag);
   }
   
   return combinedChats;
