@@ -5,6 +5,8 @@ import { io, Socket } from 'socket.io-client';
 import { trimChats } from 'utils/chats';
 import { create } from 'zustand';
 import {
+	editChat,
+	getChatList,
 	getCurrentChat,
 	iterateToGetCurrentChat,
 	removeGroup,
@@ -27,6 +29,8 @@ export interface IMessage {
 		_id: string;
 		name: string;
 		username: string;
+		createdAt: string;
+		updatedAt: string;
 	};
 	to: string;
 	status: MessageStatus;
@@ -167,6 +171,28 @@ export const useChatStore = create<IChatState>((set, get) => ({
 		socket.emit('send-message', msg);
 	},
 	addRecievedMessage: (msg) => {
+		const chatList = getChatList();
+		const cid = getCurrentChatId();
+		if (chatList) {
+			const target = chatList.find((chat) => chat._id === msg.to);
+			if (target) {
+				editChat({
+					_id: target._id,
+					lastMessage: {
+						content: msg.content,
+						createdAt: msg.createdAt,
+						sender: {
+							_id: msg.sender._id,
+							name: msg.sender.name,
+							updatedAt: msg.sender.updatedAt,
+							username: msg.sender.username,
+						},
+						to: msg.to,
+					},
+					unseen: target._id !== cid ? target.unseen + 1 : target.unseen,
+				});
+			}
+		}
 		set({ recieved: [msg, ...get().recieved] });
 	},
 	setCurrentChat: (id) => {

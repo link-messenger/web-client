@@ -293,7 +293,7 @@ export const GroupProfileEditModal = ({
 						<Form>
 							<header className="p-3 border-b border-gray-100 flex gap-2 items-center">
 								<ListAvatar username={groupDetail.name} size="w-14" />
-								<section className="flex flex-col gap-1.5">
+								<section className="flex-grow flex flex-col gap-1.5">
 									<section className="flex items-center justify-between">
 										<Field
 											as={PaleInput}

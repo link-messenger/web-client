@@ -1,28 +1,22 @@
 import { ChatContent, ChatList } from 'components/chat';
 import { SideMenu } from 'components/partials';
-import {
-	useGetUserConversation,
-	useGetUserGroup,
-	useGetUserProfile,
-} from 'hooks';
-import { EN_US } from 'languages';
+import { useGetUserProfile } from 'hooks';
 import { useEffect } from 'react';
 import { useChatListStore, useChatStore } from 'store';
-import Loading from './loading';
 
 const Chat = () => {
 	const initSocket = useChatStore((state) => state.initSocket);
 	const setMessageListener = useChatStore((state) => state.setMessageListener);
-	const setJoinConfirmListener = useChatListStore((state) => state.setJoinConfirmListener);
+	const setJoinConfirmListener = useChatListStore(
+		(state) => state.setJoinConfirmListener
+	);
 	const setJoinListener = useChatListStore((state) => state.setJoinListener);
 	const setLeaveListener = useChatListStore((state) => state.setLeaveListener);
-	const setLeaveConfirmListener = useChatListStore((state) => state.setLeaveConfirmListener);
-	const setChats = useChatListStore(state => state.setChats);
-	const reloadChat = useChatListStore(state => state.reloadChat);
-	const { data: userData, isLoading } = useGetUserProfile();
+	const setLeaveConfirmListener = useChatListStore(
+		(state) => state.setLeaveConfirmListener
+	);
 
-	const { data: groups, isLoading: isGroupLoading, refetch:refetchGroup } = useGetUserGroup();
-	const { data: convs, isLoading: isConvLoading,refetch:refetchChat } = useGetUserConversation();
+	const { data: userData, isLoading } = useGetUserProfile();
 
 	useEffect(() => {
 		if (isLoading) return;
@@ -43,16 +37,6 @@ const Chat = () => {
 		};
 	}, [userData?.id]);
 
-	useEffect(() => {
-		if (!groups || !convs) return;
-		setChats(groups, convs);
-		if (reloadChat) {
-			refetchGroup();
-		}
-	}, [isConvLoading, isGroupLoading, reloadChat]);
-
-	if (isGroupLoading || isConvLoading) 
-		return <Loading message={EN_US['loading.Authenticating']} />
 	return (
 		<main className="flex flex-row w-screen h-screen overflow-hidden">
 			<ChatList uid={userData?.id} />

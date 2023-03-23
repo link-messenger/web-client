@@ -1,13 +1,20 @@
-import { useCreateUserConversation, useDebounce, useSearchChat } from 'hooks';
+import { useEffect, useState } from 'react';
+
+import {
+	useCreateUserConversation,
+	useDebounce,
+	useSearchChat,
+	useGetUserConversation,
+	useGetUserGroup,
+	useGetUserChatList,
+} from 'hooks';
 import { SearchInput } from '../core';
-import { IConversation, IGroup, IUser } from 'interfaces';
+import { IChat, IGroup } from 'interfaces';
 import { EN_US } from 'languages';
 import { useChatListStore, useChatStore, useMenuStore } from 'store';
 import { ListAvatar } from 'components/partials';
-import { shortenString, usernameShorter } from 'utils/str';
+import { shortenString } from 'utils/str';
 import { formatTime } from 'utils/time';
-import { useFormik } from 'formik';
-import { useState } from 'react';
 
 export const ChatList = ({ uid }: { uid: string }) => {
 	const chatList = useChatListStore((state) => state.chats);
@@ -15,6 +22,22 @@ export const ChatList = ({ uid }: { uid: string }) => {
 	const [search, setSearch] = useState('');
 	const debouncedSearch = useDebounce(search, 500);
 	const { data: searchedResult } = useSearchChat(debouncedSearch);
+
+	const setChats = useChatListStore((state) => state.setChats);
+	const reloadChat = useChatListStore((state) => state.reloadChat);
+	const {
+		data: chats,
+		isLoading: isChatsLoading,
+		refetch,
+	} = useGetUserChatList();
+
+	useEffect(() => {
+		if (!chats) return;
+		setChats(chats);
+		if (reloadChat) {
+			refetch();
+		}
+	}, [isChatsLoading, reloadChat]);
 
 	const currentChatId = useChatStore((state) => state.currentChat);
 	const setCurrentChat = useChatStore((state) => state.setCurrentChat);
@@ -96,7 +119,7 @@ const SearchList = ({ setSearch, searchedResult, uid }: any) => {
 		if (!id) return;
 		createConv({
 			targetUser: id,
-		}).then(res => {
+		}).then((res) => {
 			setSearch('');
 			addConv(res);
 			setCurrentChat(res._id);
@@ -185,7 +208,14 @@ export const ChatItem = ({
 }) => {
 	switch (item.type) {
 		case 'group':
-			return <GroupItem data={item} isSearch={isSearch} onClick={onClick} />;
+			return (
+				<GroupItem
+					uid={uid}
+					data={item}
+					isSearch={isSearch}
+					onClick={onClick}
+				/>
+			);
 		case 'user':
 			return (
 				<ConversationItem
@@ -204,12 +234,14 @@ export const GroupItem = ({
 	isSearch,
 	data,
 	onClick,
+	uid,
 }: {
 	onClick: any;
 	isSearch: boolean;
-	data: IGroup;
+	data: IChat;
+	uid: string;
 }) => {
-	const time = formatTime(data.updatedAt);
+	const time = formatTime(data?.lastMessage?.createdAt ?? data.updatedAt);
 	const current = useChatStore((state) => state.currentChat);
 	const isActive = current === data._id && !isSearch;
 	return (
@@ -223,18 +255,32 @@ export const GroupItem = ({
 			<ListAvatar username={data.name} />
 			<section className="flex-1">
 				<h5 className="font-medium whitespace-nowrap">{data.name}</h5>
-				<p className="text-sm">{shortenString(data.description)}</p>
+				<p className="text-sm opacity-70">
+					<span className="font-bold">
+						{data?.lastMessage?.sender._id === uid
+							? 'You'
+							: data?.lastMessage?.sender.name}{' '}
+					</span>
+					{shortenString(data?.lastMessage?.content ?? '')}
+				</p>
 			</section>
-			{!isSearch && (
-				<span
-					className={
-						'self-baseline justify-end text-sm ' +
-						(isActive ? 'text-sky-500' : 'text-gray-400')
-					}
-				>
-					{time}
-				</span>
-			)}
+			<section className="flex flex-col justify-between">
+				{!isSearch && (
+					<span
+						className={
+							'self-baseline justify-end text-sm ' +
+							(isActive ? 'text-sky-500' : 'text-gray-400')
+						}
+					>
+						{time}
+					</span>
+				)}
+				{data.unseen > 0 && (
+					<span className="self-end text-white grid place-items-center bg-sky-500 w-5 text-xs text-center rounded-full aspect-square">
+						{data.unseen}
+					</span>
+				)}
+			</section>
 		</button>
 	);
 };
@@ -253,7 +299,7 @@ export const ConversationItem = ({
 	const user = isSearch
 		? data
 		: data.users.filter((u: any) => u._id !== uid)[0];
-	const time = formatTime(user.updatedAt);
+	const time = formatTime(data?.lastMessage?.createdAt ?? data.createdAt);
 	const current = useChatStore((state) => state.currentChat);
 	const isActive = !isSearch && current === data._id;
 	return (
@@ -267,18 +313,34 @@ export const ConversationItem = ({
 			<ListAvatar username={user.username} />
 			<section className="flex-1">
 				<h5 className="font-medium">{user.name}</h5>
-				<p className="text-sm">{shortenString(user.username)}</p>
+				{!isSearch ? (
+					<p className="text-sm opacity-70">
+						<span className="font-bold">
+							{data?.lastMessage?.sender._id === uid ? 'You' : user.name}{' '}
+						</span>
+						{shortenString(data?.lastMessage?.content ?? '')}
+					</p>
+				) : (
+					<p className="text-sm">{shortenString(user.username)}</p>
+				)}
 			</section>
-			{!isSearch && (
-				<span
-					className={
-						'self-baseline justify-end text-sm ' +
-						(isActive ? 'text-sky-500' : 'text-gray-400')
-					}
-				>
-					{time}
-				</span>
-			)}
+			<section className="flex flex-col justify-between">
+				{!isSearch && (
+					<span
+						className={
+							'self-baseline justify-end text-sm ' +
+							(isActive ? 'text-sky-500' : 'text-gray-400')
+						}
+					>
+						{time}
+					</span>
+				)}
+				{data.unseen > 0 && (
+					<span className="self-end text-white grid place-items-center bg-sky-500 w-5 text-xs text-center rounded-full aspect-square">
+						{data.unseen}
+					</span>
+				)}
+			</section>
 		</button>
 	);
 };

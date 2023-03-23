@@ -35,6 +35,7 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 	useEffect(() => {
 		if (!currentChatId) return;
 		loadChat(currentChat, page);
+		console.log('called');
 	}, [currentChatId, page]);
 
 	useEffect(() => {
