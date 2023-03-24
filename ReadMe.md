@@ -13,17 +13,15 @@ run `npm build` or `yarn build` to build the project.
 
 ## TODO
  
-1. animtion
-2. user profile edit and account delete
-3. conversation profile and online status
-4.  avatar
-5.  emojis
-6.  sound effects
-7.  voice message
-8.  image message
-9.  file message
-10. landing page
-11. dockerizing and up on server
+1. adding deleted accounts status and bugfix
+2. avatar
+3. emojis
+4. sound effects
+5. voice message
+6. image message
+7. file message
+8. landing page
+9. dockerizing and up on server
 ------------------ v0.1 ---------------------
 1.  **android-app** / bugfix -- user delete group then clear current group and remove from list - error handling and showing -- and hope :)
 2.  going for v1 ---- (add seprate by dating tags - showing online members - (reply - edit - delete message) - bg for chat and customizing it - location features - api for bots - in app calls with webrtc - Intl8 - edit user info + app settings)
@@ -50,5 +48,8 @@ run `npm build` or `yarn build` to build the project.
 18. [X] reset Password - forget password - device hash
 19. [X] tags for unseen messages
 20. [X] group by date
+21. [X] animtion
+22. [X] user profile edit and account delete
+23. [X] conversation profile and online status
 
 > BoilerPlate made by Mjn

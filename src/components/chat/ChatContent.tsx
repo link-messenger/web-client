@@ -15,17 +15,16 @@ import { IGroupDetail, IProfile } from 'interfaces';
 import { Categories } from 'api';
 import { ChatBox } from './ChatBox';
 
-const chatContentVariant:Variants = {
+const chatContentVariant: Variants = {
 	hidden: {
-		x: '100%',
+		x: '200px',
 		opacity: 0,
-		width:0,
 		transitionEnd: {
 			display: 'none',
 		},
 		transition: {
 			duration: 0.1,
-			ease: 'easeInOut',
+			ease: 'linear',
 		},
 	},
 	visible: {
@@ -34,7 +33,7 @@ const chatContentVariant:Variants = {
 		opacity: 1,
 		transition: {
 			duration: 0.1,
-			ease: 'easeInOut',
+			ease: 'linear',
 		},
 	},
 };

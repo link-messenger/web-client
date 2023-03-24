@@ -1,27 +1,28 @@
 export const formatDateTime = (time: string) => {
-  const locale = navigator.language;
-  return new Date(time).toLocaleString(locale, {
-    minute: 'numeric',
-    hour: '2-digit',
-    hour12: false,
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric'
-  })
-}
+	const locale = navigator.language;
+	return new Date(time).toLocaleString(locale, {
+		minute: 'numeric',
+		hour: '2-digit',
+		hour12: false,
+		day: 'numeric',
+		month: 'short',
+		year: 'numeric',
+	});
+};
 
 export const formatTime = (time: string) => {
-  const locale = navigator.language;
+	const locale = navigator.language;
 	return new Date(time).toLocaleString(locale, {
 		minute: 'numeric',
 		hour: '2-digit',
 		hour12: true,
 	});
-}
+};
+type DateFormat = 'short' | 'medium' | 'long' | 'full';
 
-export const formatDate = (date: string) => {
-  const locale = navigator.language;
-  const today = new Date();
+export const formatDate = (date: string, pref: DateFormat = 'medium') => {
+	const locale = navigator.language;
+	const today = new Date();
 	const yesterday = new Date(today);
 	yesterday.setDate(yesterday.getDate() - 1);
 
@@ -33,10 +34,10 @@ export const formatDate = (date: string) => {
 	} else if (dateToFormat.toDateString() === yesterday.toDateString()) {
 		formattedDate = 'Yesterday';
 	} else {
-    formattedDate = dateToFormat.toLocaleDateString(locale, {
-      dateStyle:'medium'
-    });
-  }
-  
-  return formattedDate;
-}
+		formattedDate = dateToFormat.toLocaleDateString(locale, {
+			dateStyle: pref,
+		});
+	}
+
+	return formattedDate;
+};

@@ -22,6 +22,7 @@ export const EN_US = {
 	'register.SignIn': 'Sign In',
 	'register.Register': 'Create Account',
 	'user.Logout': 'Logout',
+	'user.DeleteAccount': 'Delete Account',
 	'dashboard.Dashboard': 'Dashboard',
 	'dashboard.CreateRoom': 'Create new room',
 	'dashboard.Call': 'Call',
@@ -49,6 +50,7 @@ export const EN_US = {
 	'settings.GroupDesc': 'Group Description... (optional)',
 	'settings.GroupName': 'Group Name',
 	'settings.GroupStatus': 'Group Status',
+	'settings.ProfileLastUpdate': 'Last Update',
 	'settings.NotePublicGroup':
 		'Note: Public groups are visible to everyone and appear in searchs.',
 	'settings.NotePrivateGroup':
@@ -61,7 +63,7 @@ export const EN_US = {
 	'profile.Info': 'Info',
 	'profile.GroupDesc': 'Group Description',
 	'profile.Link': 'Group Link (share to join)',
-	'profile.LastUpdatedAt': 'Last Profile Update',
+	'profile.LastUpdatedAt': 'Updated',
 	'profile.CreatedAt': 'Created At',
 	'profile.Status': 'Group Status',
 	'profile.Leave': 'Leave Group',
@@ -69,6 +71,8 @@ export const EN_US = {
 	'profile.Cancel': 'Cancel',
 	'profile.DeleteGroupMessage': 'Are you sure you want to delete this group? All info will be lost Upon Deleting',
 	'profile.DeleteGroupHeader': 'Deleting ',
+	'profile.DeleteAccountHeader': 'Deleting Your Account ',
+	'profile.DeleteAccountMessage': 'This action will delete your account and all your data permanently, are you sure you want to continue?',
 	'loading.Authenticating': 'Connecting to Server...',
 	'offline.Offline': 'You are offline please check your connection :)',
 	'delete': 'Delete',

@@ -1,4 +1,4 @@
-import { getProfile, getUserById } from 'api';
+import { getProfile, getUserById, editAccount, deleteAccount } from 'api';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from 'store';
@@ -25,4 +25,17 @@ export const useGetUserById = ({ id }: { id: string }) => {
 	});
 };
 
+export const useEditProfile = () => {
+	return useMutation(['EDIT-PROFILE'], editAccount);
+};
 
+export const useDeleteAccount = () => {
+	const navigate = useNavigate();
+	const clearAll = useAuthStore((state) => state.clearAll);
+	return useMutation(['DELETE-ACCOUNT'], deleteAccount, {
+		onSuccess: () => {
+			navigate('/login');
+			clearAll();
+		},
+	});
+};

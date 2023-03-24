@@ -1,11 +1,8 @@
-import { MouseEventHandler } from 'react';
+import { MouseEventHandler, useMemo } from 'react';
 import { motion, Variants } from 'framer-motion';
 
 import { Modal } from 'components/core/Modal';
-import {
-	CREATE_GROUP_MODAL,
-	USER_PROFILE_MODAL,
-} from 'constants';
+import { CREATE_GROUP_MODAL, USER_PROFILE_MODAL } from 'constants';
 import { useLogout, useModal } from 'hooks';
 import { IProfile } from 'interfaces';
 import { EN_US } from 'languages';
@@ -13,7 +10,6 @@ import { useMenuStore } from 'store';
 import { ListAvatar } from './Avatar';
 import { CreateGroupModal } from './Group';
 import { EditUserProfileModal } from './Profile';
-
 
 const sideMenuVariant: Variants = {
 	hidden: {
@@ -24,8 +20,8 @@ const sideMenuVariant: Variants = {
 		transition: {
 			bounce: 0,
 			ease: 'easeInOut',
-			duration: 0.2
-		}
+			duration: 0.2,
+		},
 	},
 };
 
@@ -34,21 +30,24 @@ export const SideMenu = ({ user }: { user: IProfile }) => {
 	const toggle = useMenuStore((state) => state.toggle);
 	const close = useMenuStore((state) => state.close);
 	const { currentId, openModal, closeModal } = useModal();
-	const MAIN_MENU = [
-		{
-			name: 'new group',
-			onClick: () => {
-				toggle();
-				openModal(CREATE_GROUP_MODAL);
+	const MAIN_MENU = useMemo(
+		() => [
+			{
+				name: 'new group',
+				onClick: () => {
+					toggle();
+					openModal(CREATE_GROUP_MODAL);
+				},
+				icon: 'uil uil-users-alt',
 			},
-			icon: 'uil uil-users-alt',
-		},
-		{
-			name: 'about us',
-			onClick: () => {},
-			icon: 'uil uil-info-circle',
-		},
-	];
+			{
+				name: 'about us',
+				onClick: () => {},
+				icon: 'uil uil-info-circle',
+			},
+		],
+		[]
+	);
 
 	const { mutateAsync: logout } = useLogout();
 	const onLogout = () => {
@@ -88,7 +87,12 @@ export const SideMenu = ({ user }: { user: IProfile }) => {
 				<section className="flex-grow flex flex-col justify-between">
 					<section className="flex flex-col gap-3 p-4">
 						{MAIN_MENU.map(({ icon, name, onClick }, index) => (
-							<ListItem key={`menu-item-${index}`} icon={icon} name={name} onClick={onClick} />
+							<ListItem
+								key={`menu-item-${index}`}
+								icon={icon}
+								name={name}
+								onClick={onClick}
+							/>
 						))}
 					</section>
 
@@ -103,7 +107,7 @@ export const SideMenu = ({ user }: { user: IProfile }) => {
 				</section>
 			</motion.nav>
 			<CreateGroupModal closeModal={closeModal} currentId={currentId} />
-			<EditUserProfileModal closeModal={closeModal} currentId={currentId} />
+			<EditUserProfileModal openModal={openModal} closeModal={closeModal} currentId={currentId} />
 		</Modal>
 	);
 };

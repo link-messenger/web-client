@@ -1,4 +1,5 @@
 import { FORGET_PASSWORD_INITIALS, LOGIN_INITIALS, REGISTER_INITIALS, RESET_PASSWORD_INITIALS } from 'constants';
+import { EditUserProfile } from 'interfaces';
 import { deleteApi, get, post, put } from './base';
 
 export const login = (data: { device: string } & typeof LOGIN_INITIALS) =>
@@ -12,11 +13,7 @@ export const getProfile = () => get('/auth/me').then((res) => res.data);
 export const deleteAccount = () =>
 	deleteApi('/auth/me').then((res) => res.data);
 
-export const editAccount = (data: {
-	name: string;
-	username: string;
-	email: string;
-}) => put('/auth/me', data);
+export const editAccount = (data: EditUserProfile) => put('/auth/me', data);
 
 export const postRefreshToken = (data: { refresh: string }) =>
 	post('/auth/token/refresh', data).then((res) => res.data);

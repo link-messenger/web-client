@@ -266,16 +266,16 @@ export const GroupItem = ({
 				{!isSearch && (
 					<span
 						className={
-							'self-baseline justify-end text-sm ' +
+							'justify-end text-xs ' +
 							(isActive ? 'text-sky-500' : 'text-gray-400')
 						}
 					>
 						{time}
 					</span>
 				)}
-				{data.unseen > 0 && (
-					<span className="self-end text-white grid place-items-center bg-sky-500 w-5 text-xs text-center rounded-full aspect-square">
-						{data.unseen}
+				{data.unseen > 0 &&(
+					<span className="self-end text-white flex justify-center items-center text-center bg-sky-500 w-5 text-[0.65rem] rounded-full aspect-square">
+						<span className="h-3.5">{data.unseen}</span>
 					</span>
 				)}
 			</section>
@@ -308,25 +308,25 @@ export const ConversationItem = ({
 				(isActive ? 'text-sky-700 bg-sky-100' : 'text-gray-700 bg-white')
 			}
 		>
-			<ListAvatar username={user.username} />
+			<ListAvatar username={user?.username} />
 			<section className="flex-1">
-				<h5 className="font-medium">{user.name}</h5>
+				<h5 className="font-medium">{user?.name}</h5>
 				{!isSearch ? (
 					<p className="text-sm opacity-70">
 						<span className="font-bold">
-							{data?.lastMessage?.sender._id === uid ? 'You' : user.name}{' '}
+							{data?.lastMessage?.sender._id === uid ? 'You' : user?.name}{' '}
 						</span>
 						{shortenString(data?.lastMessage?.content ?? '')}
 					</p>
 				) : (
-					<p className="text-sm">{shortenString(user.username)}</p>
+					<p className="text-sm">{shortenString(user?.username)}</p>
 				)}
 			</section>
 			<section className="flex flex-col justify-between">
 				{!isSearch && (
 					<span
 						className={
-							'self-baseline justify-end text-sm ' +
+							'justify-end text-xs ' +
 							(isActive ? 'text-sky-500' : 'text-gray-400')
 						}
 					>
@@ -334,8 +334,10 @@ export const ConversationItem = ({
 					</span>
 				)}
 				{data.unseen > 0 && (
-					<span className="self-end text-white grid place-items-center bg-sky-500 w-5 text-xs text-center rounded-full aspect-square">
+					<span className="self-end text-white flex justify-center items-center text-center bg-sky-500 w-5 text-[0.65rem] rounded-full aspect-square">
+						<span className='h-3.5'>
 						{data.unseen}
+						</span>
 					</span>
 				)}
 			</section>

@@ -11,6 +11,11 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { clearAuthStorage, getRefreshToken, setToken } from 'store';
 import { postRefreshToken } from 'api';
 const qc = new QueryClient({
+	defaultOptions: {
+		queries: {
+			retry: false,
+		}
+	},
 	queryCache: new QueryCache({
 		onError: async (error, query) => {
 			// @ts-ignore

@@ -13,7 +13,7 @@ import {
 	CREATE_GROUP_INITIALS,
 	CREATE_GROUP_MODAL,
 	CREATE_GROUP_VALIDATION,
-	DELETE_CONF_MODAL,
+	DELETE_GROUP_CONF_MODAL,
 	EDIT_GROUP_MODAL,
 	EDIT_GROUP_VALIDATION,
 	ROLES,
@@ -303,7 +303,7 @@ export const GroupProfileEditModal = ({
 										/>
 										<button
 											className="text-rose-500 text-xs font-medium underline"
-											onClick={() => openModal(DELETE_CONF_MODAL)}
+											onClick={() => openModal(DELETE_GROUP_CONF_MODAL)}
 										>
 											{EN_US['delete']}
 										</button>
@@ -374,7 +374,7 @@ export const GroupProfileEditModal = ({
 				</Formik>
 			</Card>
 			<ConfirmModal
-				id={DELETE_CONF_MODAL}
+				id={DELETE_GROUP_CONF_MODAL}
 				closeModal={closeModal}
 				currentId={currentId}
 				onClick={onDeleteGroup}
