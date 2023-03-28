@@ -1,10 +1,9 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom';
-import ReloadPrompt from 'views/app/offline';
 
 const AppLayout = () => {
   return (
-    <div>
+    <div className='dark:bg-light-gray'>
       <Outlet />
 			{/* <ReloadPrompt /> */}
 		</div>

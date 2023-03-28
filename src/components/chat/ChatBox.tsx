@@ -1,14 +1,12 @@
 // @ts-expect-error
 import IsScrolling from 'react-is-scrolling';
 import { DateTag, MessageBox } from 'components/partials';
-import { useChatScroll, useDebounce, useScrollObserver } from 'hooks';
+import { useChatScroll, useScrollObserver } from 'hooks';
 import { IProfile } from 'interfaces';
 import { EN_US } from 'languages';
 import React, { LegacyRef, useEffect, useRef, useState } from 'react';
 import { useChatListStore, useChatStore } from 'store';
 import { scrollToBottom } from 'utils/scroll';
-import RenderIfVisible from 'react-render-if-visible';
-import { CHAT_CHUNK_LENGTH } from 'constants';
 
 interface ChatBoxProps {
 	user: IProfile;
@@ -69,7 +67,7 @@ const ChatBoxComponent = ({
 			className="relative will-change-scroll p-4 scrollbar-hide flex-grow flex flex-col-reverse gap-1.5 overflow-auto w-full"
 		>
 			{isChatLoading ? (
-				<section className="bg-gray-200 bg-opacity-50 text-gray-600 px-3 text-sm rounded-full fixed top-20 left-1/2 lg:left-[calc(50%+384px)] -translate-x-1/2 lg:-translate-x-[calc(50%+192px)] z-10">
+				<section className="bg-gray-200 dark:bg-lighter-gray dark:text-gray-200 bg-opacity-50 text-gray-600 px-3 text-sm rounded-full fixed top-20 left-1/2 lg:left-[calc(50%+384px)] -translate-x-1/2 lg:-translate-x-[calc(50%+192px)] z-10">
 					{EN_US['common.IsLoading']}
 				</section>
 			) : (

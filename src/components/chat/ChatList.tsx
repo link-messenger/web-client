@@ -46,40 +46,28 @@ export const ChatList = ({ uid }: { uid: string }) => {
 		<section
 			className={
 				(currentChatId ? 'w-0  max-lg:hidden' : 'w-full') +
-				' lg:w-96 flex flex-col lg:border-r bg-white lg:border-r-slate-100'
+				' lg:w-[345px] flex flex-col lg:border-r bg-white py-6 px-3.5 gap-5 dark:bg-dark-gray dark:border-0  lg:border-r-slate-100'
 			}
 		>
-			<header className="p-4 pb-0 flex items-center justify-between">
-				<h1 className="text-2xl flex gap-3 items-center md:text-3xl font-medium text-gray-800">
-					<i className="uil uil-comment text-blue-600 bg-sky-50 aspect-square w-9 md:w-11 grid place-items-center rounded-full"></i>
-					<span>{EN_US['chat.Chats']}</span>
-				</h1>
-				<button
-					onClick={toggleMenu}
-					className="text-2xl md:text-3xl text-gray-500"
-				>
-					<i className="uil uil-ellipsis-h"></i>
-				</button>
+			<header className="text-xl dark:text-gray-400 font-medium">
+				{EN_US['chat.Chats']}
 			</header>
-
-			<section className="p-4">
-				<SearchInput
-					name="search"
-					id="search"
-					onChange={(e) => setSearch(e.target.value)}
-					value={search}
-					placeholder="Search..."
-				/>
-			</section>
+			<SearchInput
+				name="search"
+				id="search"
+				onChange={(e) => setSearch(e.target.value)}
+				value={search}
+				placeholder="Search here..."
+			/>
 
 			{!searchIsActive && (
-				<>
+				<section className="space-y-3">
 					<ItemHeader
-						icon="uil uil-comment-lines"
+						icon="uil uil-comment-alt-lines"
 						message={EN_US['chat.AllMessages']}
 					/>
 					<ChatListItem onClick={onChatClick} chats={chatList} uid={uid} />
-				</>
+				</section>
 			)}
 
 			{searchIsActive && (
@@ -95,8 +83,8 @@ export const ChatList = ({ uid }: { uid: string }) => {
 
 const ItemHeader = ({ icon, message }: { icon: string; message: string }) => {
 	return (
-		<section className="px-4 py-2 text-gray-400 font-medium flex items-center gap-1.5">
-			<i className={icon + ' text-xl font-bold'}></i>
+		<section className="text-neutral-400 uppercase text-sm gap-2 flex items-center">
+			<i className={'text-base ' + icon} />
 			{message}
 		</section>
 	);
@@ -177,7 +165,7 @@ export const ChatListItem = ({
 	return (
 		<section
 			className={
-				'flex flex-col overflow-scroll scrollbar-hide' +
+				'flex flex-col gap-1 overflow-scroll scrollbar-hide' +
 				(isSearch ? '' : ' flex-grow')
 			}
 		>
@@ -246,38 +234,35 @@ export const GroupItem = ({
 		<button
 			onClick={() => onClick(data._id)}
 			className={
-				'p-4 border-b flex text-left items-center gap-3 border-b-gray-100 ' +
-				(isActive ? 'text-sky-700 bg-sky-100' : 'text-gray-700 bg-white')
+				'dark:text-gray-100 p-3 rounded-md transition-colors hover:dark:bg-opacity-20 hover:dark:bg-primary-light flex text-left items-center gap-3 ' +
+				(isActive
+					? 'bg-primary-light bg-opacity-20'
+					: 'text-gray-700 bg-white dark:bg-dark-gray')
 			}
 		>
 			<ListAvatar username={data.name} />
 			<section className="flex-1">
-				<h5 className="font-medium whitespace-nowrap">{data.name}</h5>
-				<p className="text-sm opacity-70">
-					<span className="font-bold">
-						{data?.lastMessage?.sender._id === uid
-							? 'You'
-							: data?.lastMessage?.sender.name}{' '}
-					</span>
-					{shortenString(data?.lastMessage?.content ?? '')}
-				</p>
-			</section>
-			<section className="flex flex-col justify-between">
-				{!isSearch && (
-					<span
-						className={
-							'justify-end text-xs ' +
-							(isActive ? 'text-sky-500' : 'text-gray-400')
-						}
-					>
-						{time}
-					</span>
-				)}
-				{data.unseen > 0 &&(
-					<span className="self-end text-white flex justify-center items-center text-center bg-sky-500 w-5 text-[0.65rem] rounded-full aspect-square">
-						<span className="h-3.5">{data.unseen}</span>
-					</span>
-				)}
+				<h5 className="font-medium whitespace-nowrap flex justify-between items-center">
+					<span>{data.name}</span>
+					{!isSearch && (
+						<span className={'text-xs text-neutral-500'}>{time}</span>
+					)}
+				</h5>
+				<section className="text-sm flex gap-3 items-center opacity-70">
+					<p className="flex-grow whitespace-nowrap">
+						<span className="font-bold">
+							{data?.lastMessage?.sender._id === uid
+								? 'You'
+								: data?.lastMessage?.sender.name}
+						</span>{' '}
+						{shortenString(data?.lastMessage?.content ?? '', 18)}
+					</p>
+					{data.unseen > 0 && (
+						<span className="text-white text-center leading-3 bg-primary bg-opacity-50 px-1 py-0.5 text-xs rounded-md">
+							{data.unseen}
+						</span>
+					)}
+				</section>
 			</section>
 		</button>
 	);
@@ -304,42 +289,35 @@ export const ConversationItem = ({
 		<button
 			onClick={() => onClick(data._id)}
 			className={
-				'p-4 text-gray-700 border-b flex text-left items-center gap-3 border-b-gray-100 ' +
-				(isActive ? 'text-sky-700 bg-sky-100' : 'text-gray-700 bg-white')
+				'dark:text-gray-100 p-3 rounded-md transition-colors hover:dark:bg-opacity-20 hover:dark:bg-primary-light flex text-left items-center gap-3 ' +
+				(isActive
+					? 'bg-primary-light bg-opacity-20'
+					: 'text-gray-700 bg-white dark:bg-dark-gray')
 			}
 		>
 			<ListAvatar username={user?.username} />
 			<section className="flex-1">
-				<h5 className="font-medium">{user?.name}</h5>
-				{!isSearch ? (
-					<p className="text-sm opacity-70">
+				<h5 className="font-medium whitespace-nowrap flex justify-between items-center">
+					<span>{user.name}</span>
+					{!isSearch && (
+						<span className={'text-xs text-neutral-500'}>{time}</span>
+					)}
+				</h5>
+				<section className="text-sm flex gap-3 items-center opacity-70">
+					<p className="flex-grow whitespace-nowrap">
 						<span className="font-bold">
-							{data?.lastMessage?.sender._id === uid ? 'You' : user?.name}{' '}
-						</span>
-						{shortenString(data?.lastMessage?.content ?? '')}
+							{data?.lastMessage?.sender._id === uid
+								? 'You'
+								: data?.lastMessage?.sender.name}
+						</span>{' '}
+						{shortenString(data?.lastMessage?.content ?? '', 15)}
 					</p>
-				) : (
-					<p className="text-sm">{shortenString(user?.username)}</p>
-				)}
-			</section>
-			<section className="flex flex-col justify-between">
-				{!isSearch && (
-					<span
-						className={
-							'justify-end text-xs ' +
-							(isActive ? 'text-sky-500' : 'text-gray-400')
-						}
-					>
-						{time}
-					</span>
-				)}
-				{data.unseen > 0 && (
-					<span className="self-end text-white flex justify-center items-center text-center bg-sky-500 w-5 text-[0.65rem] rounded-full aspect-square">
-						<span className='h-3.5'>
-						{data.unseen}
+					{data.unseen > 0 && (
+						<span className="text-white text-center leading-3 bg-primary bg-opacity-50 px-1 py-0.5 text-xs rounded-md">
+							{data.unseen}
 						</span>
-					</span>
-				)}
+					)}
+				</section>
 			</section>
 		</button>
 	);

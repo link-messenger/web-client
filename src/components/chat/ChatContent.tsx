@@ -48,16 +48,30 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 		currentChat?.type as Categories
 	);
 
-	// if (!currentChatId || !currentChat)
-	// 	return (
-	// 		<section className="chat-bg-1 bg-gray-50 relative w-0 hidden flex-grow lg:grid place-items-center text-sky-500 text-xl"></section>
-	// 	);
+	if (!currentChatId)
+		return (
+			<section className="h-full hidden lg:flex flex-grow text-neutral-300 text-center  flex-col gap-4 justify-center items-center">
+				<section className="text-7xl p-4 bg-opacity-50 text-primary bg-primary-light rounded-full">
+					<i className="uil uil-bolt-alt"></i>
+				</section>
+				<h3 className="text-3xl font-medium">
+					{EN_US['chat.EmptyContentHeader']}
+				</h3>
+				<p className="font-light text-sm text-neutral-400">
+					{EN_US['chat.EmptyContentExpl1']}
+					<br />
+					{EN_US['chat.EmptyContentExpl2']}
+				</p>
+			</section>
+		);
 
 	return (
-		<motion.section variants={chatContentVariant}
+		<motion.section
+			variants={chatContentVariant}
 			initial="hidden"
-			animate={currentChatId ? "visible" : "hidden"}
-			className="flex-col flex-grow h-full overflow-hidden will-change-contents">
+			animate={currentChatId ? 'visible' : 'hidden'}
+			className="flex-col flex-grow h-full overflow-hidden will-change-contents"
+		>
 			<ChatContentHeader
 				groupDetail={groupDetail}
 				openModal={openModal}
@@ -123,7 +137,7 @@ const ChatContentMessage = () => {
 		if (event.shiftKey && event.key === 'Enter') {
 			if (inputRef.current && lineRef.current < 10) {
 				lineRef.current = lineRef.current + 1;
-				inputRef.current.style.height = `${lineRef.current * 20}px`;
+				inputRef.current.style.height = `${lineRef.current * 23}px`;
 			}
 		} else if (event.key === 'Enter') {
 			event.preventDefault();
@@ -136,28 +150,28 @@ const ChatContentMessage = () => {
 				const lastLine = lines[lines.length - 1];
 				if (lastLine === '' && lineRef.current > 1) {
 					lineRef.current = lineRef.current - 1;
-					inputRef.current.style.height = `${lineRef.current * 20}px`;
+					inputRef.current.style.height = `${lineRef.current * 23}px`;
 				}
 			}
 		}
 	};
 
 	return (
-		<section className="w-full gap-2 p-2 lg:p-4 border-t bg-white border-gray-100">
-			<section className="bg-gray-50 p-2 flex items-center justify-between gap-0.5 rounded-lg">
+		<section className="w-full gap-2 p-2 lg:p-4 border-t bg-white dark:bg-light-gray dark:border-content-gray border-gray-100">
+			<section className="bg-gray-50 dark:bg-content-gray p-2 flex items-center justify-between gap-0.5 rounded-lg">
 				{/* <Avatar avatar={undefined} username={user?.username} /> */}
 				<textarea
 					ref={inputRef}
 					onKeyDown={handleKeyDown}
-					className="h-5 scrollbar-hide resize-none bg-transparent min-w-0 outline-none rounded-lg px-4 text-gray-800 flex-grow"
-					placeholder="Enter text here..."
+					className="h-5 scrollbar-hide resize-none bg-transparent min-w-0 outline-none rounded-lg px-4 text-gray-800 dark:text-neutral-200 placeholder:text-neutral-500 placeholder:text-sm leading-5 flex-grow"
+					placeholder="Type your message..."
 				/>
-				<button className="text-2xl w-6 mr-1 text-gray-500 aspect-square">
+				<button className="text-2xl w-6 mr-1 text-neutral-400 aspect-square">
 					<i className="uil uil-microphone"></i>
 				</button>
 				<button
 					onClick={onSendMessage}
-					className="text-sky-600 text-2xl w-8 aspect-square"
+					className="text-primary text-2xl w-8 aspect-square"
 				>
 					<i className="uil uil-message"></i>
 				</button>
@@ -182,7 +196,7 @@ const ChatContentHeader = ({
 
 	if (!currentChat)
 		return (
-			<section className="border-b bg-white border-b-gray-100 flex items-center justify-between p-3">
+			<section className="bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-60 border border-gray-200 border-b dark:text-neutral-200 dark:bg-light-gray dark:border-b-content-gray bg-white border-b-gray-100 flex items-center justify-between p-3">
 				{EN_US['chat.NoInfo']}
 			</section>
 		);
@@ -201,27 +215,34 @@ const ChatContentHeader = ({
 			: groupDetail;
 
 	return (
-		<header className="border-b bg-white border-b-gray-100 flex items-center justify-between p-3">
-			<section className="flex items-center gap-3">
-				<button onClick={() => setCurrentChat('')}>
-					<i className="uil uil-angle-double-left text-3xl text-gray-600"></i>
-				</button>
-				<ListAvatar username={profile?.name} />
-				<section
-					className="flex flex-col cursor-pointer"
-					onClick={() => openModal(CHAT_INFO_MODAL)}
-				>
-					<h2 className="text-gray-700 font-medium text-xl">{profile?.name}</h2>
-					{memberNumber && (
-						<span className="text-xs text-gray-400 font-medium">
-							{memberNumber}
-						</span>
-					)}
-				</section>
+		<header className="bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-60 gap-4 border-b text-gray-600 dark:text-neutral-200 dark:bg-light-gray dark:border-b-content-gray bg-white border-b-gray-100 flex items-center p-5">
+			<button onClick={() => setCurrentChat('')}>
+				<i className="uil uil-angle-double-left text-3xl"></i>
+			</button>
+			<ListAvatar username={profile?.name} />
+			<section
+				className="flex flex-col cursor-pointer flex-grow whitespace-nowrap"
+				onClick={() => openModal(CHAT_INFO_MODAL)}
+			>
+				<h2 className="font-medium text-xl">{profile?.name}</h2>
+				{memberNumber && (
+					<span className="text-xs text-gray-400 font-medium">
+						{memberNumber}
+					</span>
+				)}
 			</section>
 
-			<button className="text-2xl md:text-3xl text-gray-500">
-				<i className="uil uil-ellipsis-h"></i>
+			<button className="text-lg dark:text-neutral-300 text-gray-600">
+				<i className="uil uil-search"></i>
+			</button>
+			<button className="hidden sm:block text-xl dark:text-neutral-300 text-gray-600">
+				<i className="uil uil-phone-volume"></i>
+			</button>
+			<button className="hidden sm:block text-2xl dark:text-neutral-300 text-gray-600">
+				<i className="uil uil-video"></i>
+			</button>
+			<button className="text-xl dark:text-neutral-300 text-gray-600">
+				<i className="uil uil-ellipsis-v"></i>
 			</button>
 		</header>
 	);

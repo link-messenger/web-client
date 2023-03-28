@@ -12,15 +12,15 @@ export const Avatar = ({avatar, username}: {avatar?: string, username?: string})
 export const ListAvatar = ({
 	avatar,
 	username,
-	size='w-12',
+	size='w-11',
 }: {
 	avatar?: string;
 		username?: string;
-	size?: 'w-10' |'w-12' | 'w-14' | 'w-16' | 'w-20';
+	size?: 'w-11' |'w-12' | 'w-14' | 'w-16' | 'w-20';
 }) => {
 	const uname = usernameShorter(username ?? '');
 	return (
-		<span className={"grid overflow-hidden aspect-square  place-items-center rounded-full bg-slate-100 " + size}>
+		<span className={"grid overflow-hidden aspect-square  place-items-center rounded-full bg-slate-100 dark:bg-lighter-gray dark:text-gray-400 " + size}>
 			{avatar ? <img src={avatar} alt=":profile" /> : uname}
 		</span>
 	);

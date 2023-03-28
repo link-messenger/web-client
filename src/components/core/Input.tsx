@@ -83,36 +83,30 @@ export const SearchInput = ({
 	...others
 }: InputHTMLAttributes<HTMLInputElement>) => {
 	return (
-		<section className="flex items-center bg-slate-100 p-1.5 w-full rounded-xl">
-			<label
-				htmlFor={id}
-				className="rounded-lg w-12 aspect-square text-2xl text-gray-400 grid place-items-center"
-			>
-				<button className="outline-none">
-					<i className="uil uil-search"></i>
-				</button>
-			</label>
+		<section className="flex items-center bg-slate-100 dark:bg-light-gray py-2.5 space-x-4 px-4 w-full rounded-md">
 			<input
 				id={id}
 				type="search"
-				className="outline-none ml-1 bg-transparent focus:bg-transparent autofill:bg-transparent block text-slate-700  w-full"
+				className="outline-none ml-1 bg-transparent placeholder:text-sm placeholder:dark:text-neutral-500 dark:text-gray-200 focus:bg-transparent autofill:bg-transparent block text-slate-700  w-full"
 				{...others}
 			/>
+			<label
+				htmlFor={id}
+				className="rounded-lg aspect-square text-gray-400 text-lg grid place-items-center"
+			>
+				<button className="uil uil-search "></button>
+			</label>
 		</section>
 	);
 };
 
-interface TextAreaProps extends HTMLAttributes<HTMLTextAreaElement>{
-	inputRef: RefObject<HTMLTextAreaElement>
+interface TextAreaProps extends HTMLAttributes<HTMLTextAreaElement> {
+	inputRef: RefObject<HTMLTextAreaElement>;
 }
 
-export const TextArea = ({
-	className,
-	inputRef,
-	...others
-}: TextAreaProps) => {
+export const TextArea = ({ className, inputRef, ...others }: TextAreaProps) => {
 	// const inputRef = useRef<HTMLTextAreaElement>(null);
-	
+
 	return (
 		<textarea
 			ref={inputRef}
@@ -125,4 +119,3 @@ export const TextArea = ({
 		></textarea>
 	);
 };
-

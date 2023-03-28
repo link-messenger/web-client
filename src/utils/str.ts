@@ -11,10 +11,7 @@ export const turnEmailIntoUsrname = (
 export const usernameShorter = (
   username: string,
 ) =>
-  username.charAt(0).toUpperCase() +
-  username
-    .charAt(username.length - 1)
-    .toUpperCase();
+  username.charAt(0).toUpperCase()
 
 export const shortenString = (str: string, limit=20) => {
   if (str.length > limit) {

@@ -1,6 +1,6 @@
 import { forwardRef, LegacyRef } from 'react';
 import { IMessage } from 'store';
-import { formatDateTime, formatTime } from 'utils/time';
+import { formatTime } from 'utils/time';
 
 interface IMessageBoxProps extends IMessage {
 	uid: string;
@@ -17,15 +17,15 @@ const MessageBoxComponent = (
 			className={'flex flex-col gap-0.5' + (isMe ? ' self-end items-end' : '')}
 			ref={ref}
 		>
-			<h6 className="font-bold capitalize text-sm text-gray-700">
-				{isMe ? 'You' : sender.name}
-			</h6>
+			{!isMe && <h6 className="font-bold capitalize text-sm text-gray-700 dark:text-neutral-100">
+				{sender.name}
+			</h6>}
 			<p
 				className={
 					'whitespace-pre-line max-w-xl w-fit p-3 rounded-lg' +
 					(isMe
-						? ' rounded-br-sm bg-blue-500 text-white self-end'
-						: ' bg-gray-200 rounded-tl-sm text-gray-800')
+						? ' rounded-br-sm bg-primary text-white self-end'
+						: ' bg-gray-200 dark:bg-lighter-gray dark:text-neutral-200 rounded-tl-sm text-gray-800')
 				}
 			>
 				{content}
@@ -49,9 +49,11 @@ const DateTagComponent = (
 ) => {
 	return (
 		<section ref={ref} className="flex justify-between items-center gap-4">
-			<span className="border-b border-gray-200 flex-grow"></span>
-			<span className='bg-gray-200 text-gray-500 text-xs px-2 py-0.5 rounded-full'>{date}</span>
-			<span className="border-b border-gray-200 flex-grow"></span>
+			<span className="border-b dark:border-lighter-gray border-gray-200 flex-grow"></span>
+			<span className="bg-gray-200 dark:bg-lighter-gray dark:text-gray-300 text-gray-500 text-xs px-2 py-0.5 rounded-full">
+				{date}
+			</span>
+			<span className="border-b dark:border-lighter-gray border-gray-200 flex-grow"></span>
 		</section>
 	);
 };

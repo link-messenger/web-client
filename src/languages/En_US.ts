@@ -1,10 +1,12 @@
 export const EN_US = {
 	'login.Verify': 'Verify',
-	'login.OTPMessage': 'An Email has been sent to your email address, please enter code to login',
+	'login.OTPMessage':
+		'An Email has been sent to your email address, please enter code to login',
 	'login.OTPHeader': '2 Step Verification',
 	'login.Welcome': 'Welcome Back!',
 	'login.ForgetPasswordHeader': 'Enter Email',
-	'login.ForgetPasswordMessage': 'Please enter your email address to get a reset code',
+	'login.ForgetPasswordMessage':
+		'Please enter your email address to get a reset code',
 	'login.ResetPasswordHeader': 'Reset Password',
 	'login.ResetPasswordMessage': 'Please enter reset code and new password',
 	'login.GetCode': 'Get Code',
@@ -34,6 +36,11 @@ export const EN_US = {
 	'chat.Chats': 'Chats',
 	'chat.Personal': 'Personal',
 	'chat.Messages': 'Messages',
+	'chat.EmptyContentHeader': 'Welcome to Link!',
+	'chat.EmptyContentExpl1':
+		'We hope you have a nice time while staying you can start chatting with',
+	'chat.EmptyContentExpl2': "searching you'r friends names or usernames",
+
 	'chat.ChatEmpty': 'There is no messages yet...',
 	'chat.ItemNotExist': 'Item does not exist',
 	'chat.SelectChat': 'Select a chat to start messaging',
@@ -69,13 +76,15 @@ export const EN_US = {
 	'profile.Leave': 'Leave Group',
 	'profile.Edit': 'Done',
 	'profile.Cancel': 'Cancel',
-	'profile.DeleteGroupMessage': 'Are you sure you want to delete this group? All info will be lost Upon Deleting',
+	'profile.DeleteGroupMessage':
+		'Are you sure you want to delete this group? All info will be lost Upon Deleting',
 	'profile.DeleteGroupHeader': 'Deleting ',
 	'profile.DeleteAccountHeader': 'Deleting Your Account ',
-	'profile.DeleteAccountMessage': 'This action will delete your account and all your data permanently, are you sure you want to continue?',
+	'profile.DeleteAccountMessage':
+		'This action will delete your account and all your data permanently, are you sure you want to continue?',
 	'loading.Authenticating': 'Connecting to Server...',
 	'offline.Offline': 'You are offline please check your connection :)',
-	'delete': 'Delete',
-	'no': 'No',
-	'yes': 'Yes',
+	delete: 'Delete',
+	no: 'No',
+	yes: 'Yes',
 };

@@ -16,11 +16,14 @@ import AppLayout from 'components/layouts/AppLayout';
 import Verify from 'views/auth/verify';
 import ForgetPassword from 'views/auth/forgetPassword';
 import ResetPassword from 'views/auth/resetPassword';
+import { useEffect } from 'react';
 
 const App = () => {
 	const token = useAuthStore((state) => state.token);
 	setApiHeader('Authorization', `Bearer ${token}`);
-
+	useEffect(() => {
+		document.documentElement.classList.add('dark')
+	}, []);
 	return (
 		<Router>
 			<Routes>

@@ -1,5 +1,5 @@
 import { ChatContent, ChatList } from 'components/chat';
-import { SideMenu } from 'components/partials';
+import { NavMenu } from 'components/partials';
 import { useGetUserProfile } from 'hooks';
 import { useEffect } from 'react';
 import { useChatListStore, useChatStore } from 'store';
@@ -38,10 +38,10 @@ const Chat = () => {
 	}, [userData?.id]);
 
 	return (
-		<main className="chat-bg-1 bg-gray-50  flex flex-row w-screen h-screen overflow-hidden">
+		<main className="chat-bg-1 bg-gray-50 dark:bg-light-gray flex flex-row w-screen h-screen overflow-hidden">
+			<NavMenu /> 
 			<ChatList uid={userData?.id} />
 			<ChatContent user={userData} />
-			<SideMenu user={userData} />
 		</main>
 	);
 };
