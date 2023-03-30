@@ -10,13 +10,12 @@ import { SearchInput } from '../core';
 import { IChat } from 'interfaces';
 import { EN_US } from 'languages';
 import { useChatListStore, useChatStore, useMenuStore } from 'store';
-import { ListAvatar } from 'components/partials';
+import { ListAvatar, NavMenu } from 'components/partials';
 import { shortenString } from 'utils/str';
 import { formatTime } from 'utils/time';
 
 export const ChatList = ({ uid }: { uid: string }) => {
 	const chatList = useChatListStore((state) => state.chats);
-	const toggleMenu = useMenuStore((state) => state.toggle);
 	const [search, setSearch] = useState('');
 	const debouncedSearch = useDebounce(search, 500);
 	const { data: searchedResult } = useSearchChat(debouncedSearch);
@@ -46,7 +45,7 @@ export const ChatList = ({ uid }: { uid: string }) => {
 		<section
 			className={
 				(currentChatId ? 'w-0  max-lg:hidden' : 'w-full') +
-				' lg:w-[345px] flex flex-col lg:border-r bg-white py-6 px-3.5 gap-5 dark:bg-dark-gray dark:border-0  lg:border-r-slate-100'
+				' lg:w-[345px] flex flex-col flex-grow lg:flex-grow-0 bg-white py-6 px-3.5 gap-5 dark:bg-dark-gray'
 			}
 		>
 			<header className="text-xl dark:text-gray-400 font-medium">
@@ -234,10 +233,10 @@ export const GroupItem = ({
 		<button
 			onClick={() => onClick(data._id)}
 			className={
-				'dark:text-gray-100 p-3 rounded-md transition-colors hover:dark:bg-opacity-20 hover:dark:bg-primary-light flex text-left items-center gap-3 ' +
+				'dark:text-gray-100 p-3 rounded-md transition-colors flex text-left items-center gap-3 ' +
 				(isActive
-					? 'bg-primary-light bg-opacity-20'
-					: 'text-gray-700 bg-white dark:bg-dark-gray')
+					? 'bg-primary dark:bg-primary-light bg-opacity-20'
+					: 'text-gray-700 bg-white dark:bg-dark-gray hover:bg-primary hover:bg-opacity-10 hover:dark:bg-opacity-10 hover:dark:bg-primary-light ')
 			}
 		>
 			<ListAvatar username={data.name} />
@@ -289,10 +288,10 @@ export const ConversationItem = ({
 		<button
 			onClick={() => onClick(data._id)}
 			className={
-				'dark:text-gray-100 p-3 rounded-md transition-colors hover:dark:bg-opacity-20 hover:dark:bg-primary-light flex text-left items-center gap-3 ' +
+				'dark:text-gray-100 p-3 rounded-md transition-colors flex text-left items-center gap-3 ' +
 				(isActive
-					? 'bg-primary-light bg-opacity-20'
-					: 'text-gray-700 bg-white dark:bg-dark-gray')
+					? 'bg-primary dark:bg-primary-light bg-opacity-20'
+					: 'text-gray-700 bg-white dark:bg-dark-gray hover:bg-primary hover:bg-opacity-10 hover:dark:bg-opacity-10 hover:dark:bg-primary-light ')
 			}
 		>
 			<ListAvatar username={user?.username} />

@@ -238,7 +238,6 @@ export const useChatStore = create<IChatState>((set, get) => ({
 		const addMessage = get().addMessage;
 		const addRecievedMessage = get().addRecievedMessage;
 		socket.on('recieve-message', (msg: IMessage) => {
-			console.log('called');
 			const currentChat = getCurrentChat() as any;
 			if (currentChat && currentChat._id === msg.to) {
 				addMessage(msg);

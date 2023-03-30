@@ -13,10 +13,7 @@ interface ChatBoxProps {
 	isScrolling: boolean;
 }
 
-const ChatBoxComponent = ({
-	isScrolling,
-	user,
-}: ChatBoxProps) => {
+const ChatBoxComponent = ({ isScrolling, user }: ChatBoxProps) => {
 	const [page, setPage] = useState(1);
 	const clearChat = useChatStore((state) => state.clearChat);
 	const loadChat = useChatStore((state) => state.loadChat);
@@ -67,7 +64,7 @@ const ChatBoxComponent = ({
 			className="relative will-change-scroll p-4 scrollbar-hide flex-grow flex flex-col-reverse gap-1.5 overflow-auto w-full"
 		>
 			{isChatLoading ? (
-				<section className="bg-gray-200 dark:bg-lighter-gray dark:text-gray-200 bg-opacity-50 text-gray-600 px-3 text-sm rounded-full fixed top-20 left-1/2 lg:left-[calc(50%+384px)] -translate-x-1/2 lg:-translate-x-[calc(50%+192px)] z-10">
+				<section className="bg-gray-200 dark:bg-dark-lighter-gray dark:text-gray-200 bg-opacity-50 text-gray-600 px-3 text-sm rounded-full fixed top-20 left-1/2 lg:left-[calc(50%+384px)] -translate-x-1/2 lg:-translate-x-[calc(50%+192px)] z-10">
 					{EN_US['common.IsLoading']}
 				</section>
 			) : (
@@ -91,7 +88,7 @@ const ChatBoxComponent = ({
 			{!isScrolling && ref.current && ref.current.scrollTop < -500 && (
 				<button
 					onClick={() => scrollToBottom(ref)}
-					className="border border-gray-100 shadow-lg fixed bottom-18 lg:bottom-24 right-3 z-10 bg-white w-11 aspect-square text-center grid place-items-center rounded-full"
+					className="border border-gray-100 shadow-lg fixed bottom-18 lg:bottom-24 right-3 z-10 bg-white dark:bg-dark-lighter-gray dark:border-dark-light-gray w-11 aspect-square text-center grid place-items-center rounded-full"
 				>
 					<i className="text-4xl text-gray-500 uil uil-angle-down"></i>
 				</button>

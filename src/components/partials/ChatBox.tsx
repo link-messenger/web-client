@@ -25,7 +25,7 @@ const MessageBoxComponent = (
 					'whitespace-pre-line max-w-xl w-fit p-3 rounded-lg' +
 					(isMe
 						? ' rounded-br-sm bg-primary text-white self-end'
-						: ' bg-gray-200 dark:bg-lighter-gray dark:text-neutral-200 rounded-tl-sm text-gray-800')
+						: ' bg-gray-200 dark:bg-dark-lighter-gray dark:text-neutral-200 rounded-tl-sm text-gray-800')
 				}
 			>
 				{content}
@@ -49,11 +49,11 @@ const DateTagComponent = (
 ) => {
 	return (
 		<section ref={ref} className="flex justify-between items-center gap-4">
-			<span className="border-b dark:border-lighter-gray border-gray-200 flex-grow"></span>
-			<span className="bg-gray-200 dark:bg-lighter-gray dark:text-gray-300 text-gray-500 text-xs px-2 py-0.5 rounded-full">
+			<span className="border-b dark:border-dark-lighter-gray border-gray-200 flex-grow"></span>
+			<span className="bg-gray-200 dark:bg-dark-lighter-gray dark:text-gray-400 text-gray-500 text-xs px-2 py-0.5 rounded-full">
 				{date}
 			</span>
-			<span className="border-b dark:border-lighter-gray border-gray-200 flex-grow"></span>
+			<span className="border-b dark:border-dark-lighter-gray border-gray-200 flex-grow"></span>
 		</section>
 	);
 };

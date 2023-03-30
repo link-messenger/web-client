@@ -38,10 +38,9 @@ const Chat = () => {
 	}, [userData?.id]);
 
 	return (
-		<main className="chat-bg-1 bg-gray-50 dark:bg-light-gray flex flex-row w-screen h-screen overflow-hidden">
-			<NavMenu /> 
+		<main className="chat-bg-1 dark:bg-dark-light-gray flex flex-row h-screen w-screen overflow-hidden">
 			<ChatList uid={userData?.id} />
-			<ChatContent user={userData} />
+			<ChatContent user={userData} /> 
 		</main>
 	);
 };

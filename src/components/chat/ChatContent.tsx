@@ -50,14 +50,14 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 
 	if (!currentChatId)
 		return (
-			<section className="h-full hidden lg:flex flex-grow text-neutral-300 text-center  flex-col gap-4 justify-center items-center">
-				<section className="text-7xl p-4 bg-opacity-50 text-primary bg-primary-light rounded-full">
+			<section className="h-full hidden lg:flex flex-grow text-gray-600 dark:text-neutral-300 text-center  flex-col gap-4 justify-center items-center">
+				<section className="text-7xl p-4 bg-opacity-20 text-primary bg-primary rounded-full">
 					<i className="uil uil-bolt-alt"></i>
 				</section>
-				<h3 className="text-3xl font-medium">
+				<h3 className="text-3xl font-medium ">
 					{EN_US['chat.EmptyContentHeader']}
 				</h3>
-				<p className="font-light text-sm text-neutral-400">
+				<p className="font-light text-sm text-neutral-500 dark:text-neutral-400">
 					{EN_US['chat.EmptyContentExpl1']}
 					<br />
 					{EN_US['chat.EmptyContentExpl2']}
@@ -157,13 +157,13 @@ const ChatContentMessage = () => {
 	};
 
 	return (
-		<section className="w-full gap-2 p-2 lg:p-4 border-t bg-white dark:bg-light-gray dark:border-content-gray border-gray-100">
-			<section className="bg-gray-50 dark:bg-content-gray p-2 flex items-center justify-between gap-0.5 rounded-lg">
+		<section className="w-full gap-2 p-2 lg:p-4 border-t bg-light-light-back-gray dark:bg-dark-light-gray dark:border-dark-content-gray border-light-border-gray">
+			<section className="bg-white dark:bg-dark-content-gray p-2 flex items-center justify-between gap-0.5 rounded-lg">
 				{/* <Avatar avatar={undefined} username={user?.username} /> */}
 				<textarea
 					ref={inputRef}
 					onKeyDown={handleKeyDown}
-					className="h-5 scrollbar-hide resize-none bg-transparent min-w-0 outline-none rounded-lg px-4 text-gray-800 dark:text-neutral-200 placeholder:text-neutral-500 placeholder:text-sm leading-5 flex-grow"
+					className="h-5 scrollbar-hide resize-none bg-transparent min-w-0 outline-none rounded-lg px-4 text-gray-800 dark:text-neutral-200 placeholder:text-gray-500 placeholder:dark:text-neutral-500 placeholder:text-sm leading-5 flex-grow"
 					placeholder="Type your message..."
 				/>
 				<button className="text-2xl w-6 mr-1 text-neutral-400 aspect-square">
@@ -196,7 +196,7 @@ const ChatContentHeader = ({
 
 	if (!currentChat)
 		return (
-			<section className="bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-60 border border-gray-200 border-b dark:text-neutral-200 dark:bg-light-gray dark:border-b-content-gray bg-white border-b-gray-100 flex items-center justify-between p-3">
+			<section className="bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-60 border border-gray-200 border-b dark:text-neutral-200 bg-light-light-back-gray dark:bg-dark-light-gray dark:border-b-dark-content-gray border-b-gray-100 flex items-center justify-between p-3">
 				{EN_US['chat.NoInfo']}
 			</section>
 		);
@@ -215,11 +215,11 @@ const ChatContentHeader = ({
 			: groupDetail;
 
 	return (
-		<header className="bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-60 gap-4 border-b text-gray-600 dark:text-neutral-200 dark:bg-light-gray dark:border-b-content-gray bg-white border-b-gray-100 flex items-center p-5">
+		<header className="bg-clip-padding gap-4 p-3 border-b text-gray-600 dark:text-neutral-200 dark:bg-dark-light-gray dark:border-b-dark-content-gray bg-light-light-gray border-b-light-border-gray flex items-center">
 			<button onClick={() => setCurrentChat('')}>
 				<i className="uil uil-angle-double-left text-3xl"></i>
 			</button>
-			<ListAvatar username={profile?.name} />
+			<ListAvatar size='w-12' username={profile?.name} />
 			<section
 				className="flex flex-col cursor-pointer flex-grow whitespace-nowrap"
 				onClick={() => openModal(CHAT_INFO_MODAL)}

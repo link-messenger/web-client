@@ -37,7 +37,7 @@ export const useAuthStore = create<IAuthState>()(
 			getRefresh: () => get().refresh,
 		}),
 		{
-			name: 'OLU_AUTH',
+			name: 'LINK_AUTH',
 			partialize: (state) => ({ token: state.token, refresh: state.refresh, user: state.user }),
 		}
 	)

@@ -11,7 +11,7 @@ import { setApiHeader } from 'api';
 
 import Chat from 'views/app/chat';
 import { AuthLayout } from 'components/layouts';
-import { useAuthStore } from 'store';
+import { useAuthStore, useThemeStore } from 'store';
 import AppLayout from 'components/layouts/AppLayout';
 import Verify from 'views/auth/verify';
 import ForgetPassword from 'views/auth/forgetPassword';
@@ -21,9 +21,16 @@ import { useEffect } from 'react';
 const App = () => {
 	const token = useAuthStore((state) => state.token);
 	setApiHeader('Authorization', `Bearer ${token}`);
+
+	const theme = useThemeStore((state) => state.theme);
+
 	useEffect(() => {
-		document.documentElement.classList.add('dark')
-	}, []);
+		if (theme === 'dark') {
+			document.body.classList.add('dark');
+		} else {
+			document.body.classList.remove('dark');
+		}
+	}, [theme]);
 	return (
 		<Router>
 			<Routes>
@@ -33,13 +40,13 @@ const App = () => {
 						element={token ? <Navigate to="/chat" /> : <Navigate to="/login" />}
 					/>
 					<Route path="/chat" element={<Chat />} />
-					<Route element={<AuthLayout />}>
-						<Route path="/login" element={<Login />} />
-						<Route path="/register" element={<Register />} />
-						<Route path="/verify" element={<Verify />} />
-						<Route path="/forgetpass" element={<ForgetPassword />} />
-						<Route path="/resetpass" element={<ResetPassword />} />
-					</Route>
+				</Route>
+				<Route element={<AuthLayout />}>
+					<Route path="/login" element={<Login />} />
+					<Route path="/register" element={<Register />} />
+					<Route path="/verify" element={<Verify />} />
+					<Route path="/forgetpass" element={<ForgetPassword />} />
+					<Route path="/resetpass" element={<ResetPassword />} />
 				</Route>
 			</Routes>
 		</Router>

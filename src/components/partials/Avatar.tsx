@@ -20,7 +20,7 @@ export const ListAvatar = ({
 }) => {
 	const uname = usernameShorter(username ?? '');
 	return (
-		<span className={"grid overflow-hidden aspect-square  place-items-center rounded-full bg-slate-100 dark:bg-lighter-gray dark:text-gray-400 " + size}>
+		<span className={"grid overflow-hidden aspect-square  place-items-center rounded-full bg-gray-50 border-white dark:bg-dark-lighter-gray dark:text-gray-400 " + size}>
 			{avatar ? <img src={avatar} alt=":profile" /> : uname}
 		</span>
 	);

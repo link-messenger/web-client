@@ -83,11 +83,11 @@ export const SearchInput = ({
 	...others
 }: InputHTMLAttributes<HTMLInputElement>) => {
 	return (
-		<section className="flex items-center bg-slate-100 dark:bg-light-gray py-2.5 space-x-4 px-4 w-full rounded-md">
+		<section className="flex items-center bg-light-lighter-gray dark:bg-dark-light-gray py-2.5 space-x-4 px-4 w-full rounded-md">
 			<input
 				id={id}
 				type="search"
-				className="outline-none ml-1 bg-transparent placeholder:text-sm placeholder:dark:text-neutral-500 dark:text-gray-200 focus:bg-transparent autofill:bg-transparent block text-slate-700  w-full"
+				className="outline-none ml-1 bg-transparent placeholder:text-sm placeholder:text-gray-500 placeholder:dark:text-neutral-500 dark:text-gray-200 focus:bg-transparent autofill:bg-transparent block text-slate-700  w-full"
 				{...others}
 			/>
 			<label

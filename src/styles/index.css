@@ -121,3 +121,7 @@
 .chat-bg-1 {
 	background: url('/pattern1.png');
 }
+
+.nav-menu-active.active {
+	@apply text-primary border-t-4 lg:border-t-0 lg:border-r-4 border-primary;
+}
