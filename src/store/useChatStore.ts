@@ -1,9 +1,9 @@
+import { io, Socket } from 'socket.io-client';
+import { create } from 'zustand';
+
 import { getLastMessages, Categories } from 'api';
 import { CHAT_HISTORY_LENGTH } from 'constants';
-import { IUser } from 'interfaces';
-import { io, Socket } from 'socket.io-client';
 import { trimChats } from 'utils/chats';
-import { create } from 'zustand';
 import {
 	editChat,
 	getChatList,

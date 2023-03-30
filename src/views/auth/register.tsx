@@ -1,11 +1,17 @@
-import { Button, NormalInput, PasswordInput } from 'components';
-import { AuthHeader, GoogleAuth, Seprator } from 'components/partials';
-import { REGISTER_INITIALS, REGISTER_VALIDATION } from 'constants';
+import { Link, Navigate } from 'react-router-dom';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
+
+import {
+	Button,
+	NormalInput,
+	PasswordInput,
+	AuthHeader,
+	GoogleAuth,
+	Seprator,
+} from 'components';
+import { REGISTER_INITIALS, REGISTER_VALIDATION } from 'constants';
 import { useRegister } from 'hooks';
 import { EN_US } from 'languages';
-import React from 'react';
-import { Link, Navigate } from 'react-router-dom';
 import { useAuthStore } from 'store';
 import { getDevice } from 'utils/device';
 

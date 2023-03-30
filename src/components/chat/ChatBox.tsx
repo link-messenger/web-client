@@ -1,10 +1,11 @@
+import React, { LegacyRef, useEffect, useRef, useState } from 'react';
 // @ts-expect-error
 import IsScrolling from 'react-is-scrolling';
-import { DateTag, MessageBox } from 'components/partials';
+
+import { DateTag, MessageBox } from 'components';
 import { useChatScroll, useScrollObserver } from 'hooks';
 import { IProfile } from 'interfaces';
 import { EN_US } from 'languages';
-import React, { LegacyRef, useEffect, useRef, useState } from 'react';
 import { useChatListStore, useChatStore } from 'store';
 import { scrollToBottom } from 'utils/scroll';
 

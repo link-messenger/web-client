@@ -1,14 +1,12 @@
-import { Button, NormalInput } from 'components';
-import { AuthHeader } from 'components/partials';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+
+import { Button, NormalInput, AuthHeader } from 'components';
 import {
 	FORGET_PASSWORD_INITIALS,
 	FORGET_PASSWORD_VALIDATION,
-	LOGIN_VALIDATION,
 } from 'constants';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { useForgetPassword } from 'hooks';
 import { EN_US } from 'languages';
-import React from 'react';
 
 const ForgetPassword = () => {
 	const { mutate , isLoading} = useForgetPassword();

@@ -1,47 +1,13 @@
-import { ChatContent, ChatList } from 'components/chat';
-import { NavMenu } from 'components/partials';
+import { ChatList, MainListWrapper } from 'components';
 import { useGetUserProfile } from 'hooks';
-import { useEffect } from 'react';
-import { useChatListStore, useChatStore } from 'store';
+import { EN_US } from 'languages';
 
 const Chat = () => {
-	const initSocket = useChatStore((state) => state.initSocket);
-	const setMessageListener = useChatStore((state) => state.setMessageListener);
-	const setJoinConfirmListener = useChatListStore(
-		(state) => state.setJoinConfirmListener
-	);
-	const setJoinListener = useChatListStore((state) => state.setJoinListener);
-	const setLeaveListener = useChatListStore((state) => state.setLeaveListener);
-	const setLeaveConfirmListener = useChatListStore(
-		(state) => state.setLeaveConfirmListener
-	);
-
-	const { data: userData, isLoading } = useGetUserProfile();
-
-	useEffect(() => {
-		if (isLoading) return;
-		const disconnect = initSocket(userData.id);
-		const clearMessageListener = setMessageListener();
-		const clearJoinConfirmListener = setJoinConfirmListener();
-		const clearJoinListener = setJoinListener();
-		const clearLeaveConfirmListener = setLeaveConfirmListener();
-		const clearLeaveListener = setLeaveListener();
-		return () => {
-			// remove all subscriptions in the collection
-			disconnect();
-			clearMessageListener && clearMessageListener();
-			clearJoinConfirmListener && clearJoinConfirmListener();
-			clearJoinListener && clearJoinListener();
-			clearLeaveListener && clearLeaveListener();
-			clearLeaveConfirmListener && clearLeaveConfirmListener();
-		};
-	}, [userData?.id]);
-
+	const { data: userData } = useGetUserProfile();
 	return (
-		<main className="chat-bg-1 dark:bg-dark-light-gray flex flex-row h-screen w-screen overflow-hidden">
+		<MainListWrapper title={EN_US['chat.Chats']}>
 			<ChatList uid={userData?.id} />
-			<ChatContent user={userData} /> 
-		</main>
+		</MainListWrapper>
 	);
 };
 

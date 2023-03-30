@@ -1,16 +1,12 @@
-import { Button, NormalInput, PasswordInput } from 'components';
-import { AuthHeader } from 'components/partials';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+
+import { Button, NormalInput, PasswordInput, AuthHeader } from 'components';
 import {
-	FORGET_PASSWORD_INITIALS,
-	FORGET_PASSWORD_VALIDATION,
-	LOGIN_VALIDATION,
   RESET_PASSWORD_INITIALS,
   RESET_PASSWORD_VALIDATION,
 } from 'constants';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
-import { useForgetPassword, useResetPassword } from 'hooks';
+import { useResetPassword } from 'hooks';
 import { EN_US } from 'languages';
-import React from 'react';
 
 const ResetPassword = () => {
 	const { mutate, isLoading } = useResetPassword();

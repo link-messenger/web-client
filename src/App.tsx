@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
 	BrowserRouter as Router,
 	Routes,
@@ -5,18 +6,16 @@ import {
 	Navigate,
 } from 'react-router-dom';
 
-import Login from 'views/auth/login';
-import Register from 'views/auth/register';
+import { AuthLayout, AppLayout, ChatLayout } from 'components';
+import { useAuthStore, useThemeStore } from 'store';
 import { setApiHeader } from 'api';
 
+import Login from 'views/auth/login';
+import Register from 'views/auth/register';
 import Chat from 'views/app/chat';
-import { AuthLayout } from 'components/layouts';
-import { useAuthStore, useThemeStore } from 'store';
-import AppLayout from 'components/layouts/AppLayout';
 import Verify from 'views/auth/verify';
 import ForgetPassword from 'views/auth/forgetPassword';
 import ResetPassword from 'views/auth/resetPassword';
-import { useEffect } from 'react';
 
 const App = () => {
 	const token = useAuthStore((state) => state.token);
@@ -34,12 +33,15 @@ const App = () => {
 	return (
 		<Router>
 			<Routes>
-				<Route path="/" element={<AppLayout />}>
-					<Route
-						path="/"
-						element={token ? <Navigate to="/chat" /> : <Navigate to="/login" />}
-					/>
-					<Route path="/chat" element={<Chat />} />
+				<Route
+					path="/"
+					element={token ? <Navigate to="/chat" /> : <Navigate to="/login" />}
+				/>
+				<Route element={<AppLayout />}>
+					<Route element={<ChatLayout />}>
+						<Route path="/chat" element={<Chat />} />
+						<Route path='/profile' element={<>wtf</>} />
+					</Route>
 				</Route>
 				<Route element={<AuthLayout />}>
 					<Route path="/login" element={<Login />} />

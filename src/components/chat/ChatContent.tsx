@@ -8,22 +8,18 @@ import {
 } from '../partials';
 import { CHAT_INFO_MODAL } from 'constants';
 import { EN_US } from 'languages';
-import { useChatListStore, useChatStore } from 'store';
+import { useChatListStore, useChatStore, MessageTypes } from 'store';
 import { useGetUserGroupDetail, useModal } from 'hooks';
-import { MessageTypes } from 'store';
 import { IGroupDetail, IProfile } from 'interfaces';
 import { Categories } from 'api';
 import { ChatBox } from './ChatBox';
 
 const chatContentVariant: Variants = {
 	hidden: {
-		x: '200px',
+		x: 200,
 		opacity: 0,
-		transitionEnd: {
-			display: 'none',
-		},
+		display: 'none',
 		transition: {
-			duration: 0.1,
 			ease: 'linear',
 		},
 	},
@@ -219,7 +215,7 @@ const ChatContentHeader = ({
 			<button onClick={() => setCurrentChat('')}>
 				<i className="uil uil-angle-double-left text-3xl"></i>
 			</button>
-			<ListAvatar size='w-12' username={profile?.name} />
+			<ListAvatar size="w-12" username={profile?.name} />
 			<section
 				className="flex flex-col cursor-pointer flex-grow whitespace-nowrap"
 				onClick={() => openModal(CHAT_INFO_MODAL)}

@@ -9,8 +9,8 @@ import {
 import { SearchInput } from '../core';
 import { IChat } from 'interfaces';
 import { EN_US } from 'languages';
-import { useChatListStore, useChatStore, useMenuStore } from 'store';
-import { ListAvatar, NavMenu } from 'components/partials';
+import { useChatListStore, useChatStore } from 'store';
+import { ListAvatar } from '../partials';
 import { shortenString } from 'utils/str';
 import { formatTime } from 'utils/time';
 
@@ -36,21 +36,12 @@ export const ChatList = ({ uid }: { uid: string }) => {
 		}
 	}, [isChatsLoading, reloadChat]);
 
-	const currentChatId = useChatStore((state) => state.currentChat);
 	const setCurrentChat = useChatStore((state) => state.setCurrentChat);
 
 	const onChatClick = (id: string) => setCurrentChat(id);
 	const searchIsActive = search.length > 2;
 	return (
-		<section
-			className={
-				(currentChatId ? 'w-0  max-lg:hidden' : 'w-full') +
-				' lg:w-[345px] flex flex-col flex-grow lg:flex-grow-0 bg-white py-6 px-3.5 gap-5 dark:bg-dark-gray'
-			}
-		>
-			<header className="text-xl dark:text-gray-400 font-medium">
-				{EN_US['chat.Chats']}
-			</header>
+		<>
 			<SearchInput
 				name="search"
 				id="search"
@@ -76,7 +67,7 @@ export const ChatList = ({ uid }: { uid: string }) => {
 					uid={uid}
 				/>
 			)}
-		</section>
+		</>
 	);
 };
 
