@@ -1,7 +1,9 @@
+import { Tooltip } from '../core';
 import { NAV_MENU } from 'constants';
 import { NavLink } from 'react-router-dom';
 import { useAuthStore, useChatStore, useThemeStore } from 'store';
 import { ListAvatar } from './Avatar';
+import { isMobile } from 'react-device-detect';
 
 export const NavMenu = () => {
 	const user = useAuthStore((state) => state.user);
@@ -22,7 +24,9 @@ export const NavMenu = () => {
 					className="nav-menu-active max-lg:h-[75px] grid place-items-center lg:w-full text-3xl max-[430px]:text-2xl text-neutral-500"
 					to={path}
 				>
-					<i className={icon} />
+					<Tooltip dir={isMobile ? 'top' : 'right'} content={title}>
+						<i className={icon} />
+					</Tooltip>
 				</NavLink>
 			))}
 			<section className="hidden lg:flex flex-grow flex-col justify-end items-center">
