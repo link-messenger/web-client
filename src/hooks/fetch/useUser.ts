@@ -15,6 +15,7 @@ export const useGetUserProfile = () => {
 				username,
 			});
 		},
+		retry: 3,
 		cacheTime: 2000000,
 	});
 };

@@ -20,7 +20,6 @@ const ChatBoxComponent = ({ isScrolling, user }: ChatBoxProps) => {
 	const clearChat = useChatStore((state) => state.clearChat);
 	const loadChat = useChatStore((state) => state.loadChat);
 
-
 	const messageConfirmListener = useChatStore(
 		(state) => state.messageConfirmListener
 	);
@@ -105,13 +104,15 @@ const MessageCreatorComponent = (
 	{ data, uid, modelType }: any,
 	ref: LegacyRef<HTMLElement>
 ) => {
+	const currentChat = useChatListStore(state => state.currentChat);
+	const isChatUser = currentChat?.type === 'user';
 	switch (modelType) {
 		case 'MESSAGE':
-			return <MessageBox ref={ref} {...data} uid={uid} />;
+			return <MessageBox userHidden={isChatUser} ref={ref} {...data} uid={uid} />;
 		case 'DATE':
 			return <DateTag ref={ref} {...data} />;
 		default:
-			return <></>;
+			return null;
 	}
 };
 

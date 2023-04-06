@@ -36,7 +36,7 @@ export const NavMenu = () => {
 				>
 					<i className={theme === 'dark' ? 'uil uil-sun' : 'uil uil-moon'} />
 				</button>
-				<Avatar username={user?.username} />
+				<Avatar username={user?.name} />
 			</section>
 		</nav>
 	);

@@ -4,10 +4,11 @@ import { formatTime } from 'utils/time';
 
 interface IMessageBoxProps extends IMessage {
 	uid: string;
+	userHidden?: boolean;
 }
 
 const MessageBoxComponent = (
-	{ uid, sender, updatedAt, content }: IMessageBoxProps,
+	{ uid, sender, updatedAt, content, userHidden }: IMessageBoxProps,
 	ref: LegacyRef<HTMLElement>
 ) => {
 	const time = formatTime(updatedAt);
@@ -17,7 +18,7 @@ const MessageBoxComponent = (
 			className={'flex flex-col gap-0.5' + (isMe ? ' self-end items-end' : '')}
 			ref={ref}
 		>
-			{!isMe && (
+			{(!isMe && !userHidden) && (
 				<h6 className="font-medium capitalize text-sm text-gray-700 dark:text-neutral-200">
 					{sender.name}
 				</h6>
@@ -32,11 +33,7 @@ const MessageBoxComponent = (
 			>
 				{content}
 			</p>
-			<span
-				className='text-xs text-gray-400'
-			>
-				{time}
-			</span>
+			<span className="text-xs text-gray-400">{time}</span>
 		</section>
 	);
 };

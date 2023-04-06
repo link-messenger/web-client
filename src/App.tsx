@@ -16,6 +16,7 @@ import Chat from 'views/app/chat';
 import Verify from 'views/auth/verify';
 import ForgetPassword from 'views/auth/forgetPassword';
 import ResetPassword from 'views/auth/resetPassword';
+import Loading from 'views/app/loading';
 
 const App = () => {
 	const token = useAuthStore((state) => state.token);

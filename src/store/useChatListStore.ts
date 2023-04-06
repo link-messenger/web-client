@@ -1,4 +1,4 @@
-import { IChat, IConversation, IGroup, IUser } from 'interfaces';
+import { IChat, IConversation, IGroup, IUser, UserStatus } from 'interfaces';
 import { create } from 'zustand';
 import { getCurrentChatId, getSocket, setCurrentChatId } from './useChatStore';
 
@@ -11,7 +11,7 @@ interface IChatListState {
 	setChats: (chats: IChat[]) => void;
 	clearChats: () => void;
 	addGroup: (grp: IGroup) => void;
-	editChat: (chat: Partial<IChat>, ordered?:boolean) => void;
+	editChat: (chat: Partial<IChat>, ordered?: boolean) => void;
 	removeGroup: (gip: string) => void;
 	addConv: (conv: IConversation) => void;
 	removeConv: (cid: string) => void;
@@ -21,6 +21,7 @@ interface IChatListState {
 	setJoinConfirmListener: () => (() => void) | undefined;
 	setLeaveConfirmListener: () => (() => void) | undefined;
 	setLeaveListener: () => (() => void) | undefined;
+	setStatusListener: () => (() => void) | undefined;
 	getCurrentChat: () => IChat | null;
 	setCurrentChat: (chat: IChat | null) => void;
 	iterateToGetChat: (cid: string) => IChat | null;
@@ -53,6 +54,7 @@ export const useChatListStore = create<IChatListState>((set, get) => ({
 				name: usr.name,
 				username: usr.username,
 			})),
+			status: conv.status,
 		};
 		if (!chats) {
 			set({
@@ -95,17 +97,20 @@ export const useChatListStore = create<IChatListState>((set, get) => ({
 	},
 	getCurrentChat: () => get().currentChat,
 	setCurrentChat: (chat) => {
-		get().editChat({
-			_id: chat?._id,
-			unseen: 0,
-		}, true);
+		get().editChat(
+			{
+				_id: chat?._id,
+				unseen: 0,
+			},
+			true
+		);
 		set({ currentChat: chat });
 	},
-	editChat: (chat, ordered=false) => {
+	editChat: (chat, ordered = false) => {
 		const chats = get().chats;
 		if (!chats) return;
 		const target: IChat[] = chats.reduce((acc, curr) => {
-			if (curr._id === chat._id ) {
+			if (curr._id === chat._id) {
 				if (ordered) {
 					return [...acc, { ...curr, ...chat }];
 				}
@@ -211,6 +216,32 @@ export const useChatListStore = create<IChatListState>((set, get) => ({
 
 		return () => {
 			socket.off('left');
+		};
+	},
+	setStatusListener: () => {
+		const socket = getSocket();
+		if (!socket) return;
+		socket.on('user-status', (conv: { _id: string; status: UserStatus }) => {
+			const currentChat = get().currentChat;
+			const chat: IChat | undefined = get()
+				.getChatList()
+				?.find((c) => c._id === conv._id);
+			if (currentChat?._id === conv._id) {
+				get().setCurrentChat({
+					...currentChat,
+					status: conv.status,
+				});
+			}
+			get().editChat(
+				{
+					...chat,
+					status: conv.status,
+				},
+				true
+			);
+		});
+		return () => {
+			socket.off('user-status');
 		};
 	},
 }));

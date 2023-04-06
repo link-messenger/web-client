@@ -1,11 +1,7 @@
 import { KeyboardEvent, useRef, useState } from 'react';
 import { motion, Variants } from 'framer-motion';
 
-import {
-	GroupProfileEditModal,
-	GroupProfileModal,
-	Avatar,
-} from '../partials';
+import { GroupProfileEditModal, GroupProfileModal, Avatar } from '../partials';
 import { CHAT_INFO_MODAL } from 'constants';
 import { EN_US } from 'languages';
 import { useChatListStore, useChatStore, MessageTypes } from 'store';
@@ -16,19 +12,15 @@ import { ChatBox } from './ChatBox';
 
 const chatContentVariant: Variants = {
 	hidden: {
-		x: 200,
+		x: 300,
 		opacity: 0,
-		display: 'none',
-		transition: {
-			ease: 'linear',
-		},
 	},
 	visible: {
 		display: 'flex',
 		x: 0,
 		opacity: 1,
 		transition: {
-			duration: 0.1,
+			duration: 0.2,
 			ease: 'linear',
 		},
 	},
@@ -43,7 +35,6 @@ export const ChatContent = ({ user }: { user: IProfile }) => {
 		currentChatId,
 		currentChat?.type as Categories
 	);
-
 	if (!currentChatId)
 		return (
 			<section className="h-full hidden lg:flex flex-grow text-gray-600 dark:text-neutral-300 text-center  flex-col gap-4 justify-center items-center">
@@ -189,7 +180,6 @@ const ChatContentHeader = ({
 }: ChatContentHeaderProps) => {
 	const currentChat = useChatListStore((state) => state.currentChat);
 	const setCurrentChat = useChatStore((state) => state.setCurrentChat);
-
 	if (!currentChat)
 		return (
 			<section className="backdrop-blur-xl bg-opacity-60 border border-gray-200 border-b dark:text-neutral-200 bg-light-light-back-gray dark:bg-dark-light-gray dark:border-b-dark-content-gray border-b-gray-100 flex items-center justify-between p-3">
@@ -223,11 +213,9 @@ const ChatContentHeader = ({
 				}}
 			>
 				<h2 className="font-medium text-xl">{profile?.name}</h2>
-				{memberNumber && (
-					<span className="text-xs text-gray-400 font-medium">
-						{memberNumber}
-					</span>
-				)}
+				<span className="text-xs text-gray-400 font-medium capitalize">
+					{currentChat.type === 'group' ? memberNumber : currentChat.status}
+				</span>
 			</section>
 
 			<button className="text-lg dark:text-neutral-300 text-gray-600">

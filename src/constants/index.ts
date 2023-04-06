@@ -10,4 +10,4 @@ export const ROLES = {
 
 export const CHAT_CHUNK_LENGTH = 50
 
-export const CHAT_HISTORY_LENGTH = 250;
+export const CHAT_HISTORY_LENGTH = 200;

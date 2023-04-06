@@ -1,5 +1,5 @@
-import { PropsWithChildren } from "react";
-import { useChatStore } from "store";
+import { PropsWithChildren } from 'react';
+import { useChatStore } from 'store';
 
 export const MainListWrapper = ({
 	title,

@@ -2,7 +2,7 @@ import { Button, Card, Modal, PaleInput, ConfirmModal } from '../core';
 import { DELETE_ACCOUNT_CONF_MODAL, USER_PROFILE_MODAL } from 'constants';
 import { Field, Form, Formik } from 'formik';
 import { useDeleteAccount, useEditProfile, useGetUserProfile } from 'hooks';
-import { EditUserProfile, ModalCardProps } from 'interfaces';
+import { IEditUserProfile, ModalCardProps } from 'interfaces';
 import { EN_US } from 'languages';
 import { formatDate } from 'utils/time';
 import { Avatar } from './Avatar';
@@ -34,7 +34,7 @@ export const EditUserProfileModal = ({
 
 	const updatedAt = formatDate(user.updatedAt, 'short');
 
-	const onEditProfileSubmit = (data: EditUserProfile) => {
+	const onEditProfileSubmit = (data: IEditUserProfile) => {
 		editProfile(data).then(() => {
 			refetch();
 		});
