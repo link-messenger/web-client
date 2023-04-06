@@ -20,11 +20,11 @@ export const NormalInput = ({
 	...others
 }: INoramlInput) => {
 	return (
-		<section className="flex items-center bg-slate-100 p-1.5 w-full rounded-xl">
+		<section className="flex items-center bg-indigo-50 p-1.5 w-full rounded-xl">
 			{icon && (
 				<label
 					htmlFor={id}
-					className="bg-white rounded-lg w-12 aspect-square text-lg grid place-items-center text-sky-600"
+					className="bg-white rounded-lg w-12 aspect-square text-lg grid place-items-center text-primary"
 				>
 					{icon}
 				</label>
@@ -32,7 +32,7 @@ export const NormalInput = ({
 			<input
 				id={id}
 				className={
-					'outline-none ml-2 p-2 bg-transparent focus:bg-transparent autofill:bg-transparent block text-slate-700  w-full ' +
+					'outline-none ml-2 p-2 bg-transparent focus:bg-transparent autofill:bg-transparent block text-indigo-700  w-full ' +
 					(className ?? '')
 				}
 				{...others}
@@ -55,7 +55,7 @@ export const PasswordInput = ({
 			<i
 				onClick={() => setVisible(!visible)}
 				className={
-					'absolute z-10 cursor-pointer text-gray-700 text-xl top-1/2 -translate-y-1/2 right-3.5' +
+					'absolute z-10 cursor-pointer text-indigo-700 text-xl top-1/2 -translate-y-1/2 right-3.5' +
 					(visible ? ' uil uil-eye-slash' : ' uil uil-eye')
 				}
 			></i>

@@ -4,7 +4,7 @@ import { motion, Variants } from 'framer-motion';
 import {
 	GroupProfileEditModal,
 	GroupProfileModal,
-	ListAvatar,
+	Avatar,
 } from '../partials';
 import { CHAT_INFO_MODAL } from 'constants';
 import { EN_US } from 'languages';
@@ -192,7 +192,7 @@ const ChatContentHeader = ({
 
 	if (!currentChat)
 		return (
-			<section className="bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-60 border border-gray-200 border-b dark:text-neutral-200 bg-light-light-back-gray dark:bg-dark-light-gray dark:border-b-dark-content-gray border-b-gray-100 flex items-center justify-between p-3">
+			<section className="backdrop-blur-xl bg-opacity-60 border border-gray-200 border-b dark:text-neutral-200 bg-light-light-back-gray dark:bg-dark-light-gray dark:border-b-dark-content-gray border-b-gray-100 flex items-center justify-between p-3">
 				{EN_US['chat.NoInfo']}
 			</section>
 		);
@@ -211,14 +211,16 @@ const ChatContentHeader = ({
 			: groupDetail;
 
 	return (
-		<header className="bg-clip-padding gap-4 p-3 border-b text-gray-600 dark:text-neutral-200 dark:bg-dark-light-gray dark:border-b-dark-content-gray bg-light-light-gray border-b-light-border-gray flex items-center">
+		<header className="gap-4 p-3 border-b text-gray-600 dark:text-neutral-200 dark:bg-dark-light-gray dark:border-b-dark-content-gray bg-light-light-gray border-b-light-border-gray flex items-center">
 			<button onClick={() => setCurrentChat('')}>
 				<i className="uil uil-angle-double-left text-3xl"></i>
 			</button>
-			<ListAvatar size="w-12" username={profile?.name} />
+			<Avatar size="w-12" username={profile?.name} />
 			<section
 				className="flex flex-col cursor-pointer flex-grow whitespace-nowrap"
-				onClick={() => openModal(CHAT_INFO_MODAL)}
+				onClick={() => {
+					if (currentChat.type === 'group') openModal(CHAT_INFO_MODAL);
+				}}
 			>
 				<h2 className="font-medium text-xl">{profile?.name}</h2>
 				{memberNumber && (

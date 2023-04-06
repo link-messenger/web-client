@@ -23,7 +23,7 @@ import { useCreateGroup, useDeleteGroup, useEditGroup } from 'hooks';
 import { IGroupDetail, IProfile, ModalCardProps } from 'interfaces';
 import { EN_US } from 'languages';
 import { useChatListStore, useChatStore } from 'store';
-import { ListAvatar } from './Avatar';
+import { Avatar } from './Avatar';
 import { InfoItem } from './Profile';
 
 export const CreateGroupModal = ({ closeModal, currentId }: ModalCardProps) => {
@@ -139,12 +139,14 @@ export const GroupProfileModal = ({
 		>
 			<Card
 				onClick={(e) => e.stopPropagation()}
-				className="w-full m-2  md:w-[600px]"
+				className="w-full m-2 space-y-2 p-3 md:w-[600px]"
 			>
-				<header className="p-3 border-b border-gray-100 flex gap-2 items-center">
-					<ListAvatar username={groupDetail.name} size="w-14" />
+				<section className="flex gap-2 items-center">
+					<Avatar username={groupDetail.name} size="w-14" />
 					<section className="flex flex-col flex-grow">
-						<span className="font-bold text-gray-700">{groupDetail.name}</span>
+						<span className="font-bold text-gray-700 dark:text-neutral-200">
+							{groupDetail.name}
+						</span>
 						<span className="text-sm text-gray-400">{memberNumber}</span>
 					</section>
 					{me?.role === 'ADMIN' && (
@@ -153,23 +155,25 @@ export const GroupProfileModal = ({
 								closeModal(CHAT_INFO_MODAL);
 								openModal(EDIT_GROUP_MODAL);
 							}}
-							className="mt-0.5 text-xl text-sky-500 self-start"
+							className="mt-0.5 text-xl text-primary self-start"
 						>
 							<i className="uil uil-comment-edit"></i>
 						</button>
 					)}
-				</header>
+				</section>
 
-				<section className="p-3 border-b flex flex-col gap-1 text-sm border-gray-100">
-					<section className="font-medium text-gray-700 flex items-center gap-2 h-fit">
+				<section className="flex flex-col gap-1 text-sm">
+					<section className="font-medium text-gray-700 dark:text-neutral-100 flex items-center gap-2 h-fit">
 						<i className="uil uil-comment-info text-xl"></i>
 						<h5 className="font-medium">{EN_US['profile.Info']}</h5>
 					</section>
 
 					{groupDetail.description && (
 						<section className="space-y-1">
-							<p className="text-gray-800">{EN_US['profile.GroupDesc']}:</p>
-							<p className="text-gray-600 bg-slate-50 border border-slate-100 rounded-lg px-2 py-1">
+							<p className="text-gray-800 dark:text-neutral-100">
+								{EN_US['profile.GroupDesc']}:
+							</p>
+							<p className="text-gray-600 dark:text-neutral-300 rounded-lg py-1">
 								{groupDetail.description}
 							</p>
 						</section>
@@ -187,15 +191,15 @@ export const GroupProfileModal = ({
 					/>
 				</section>
 
-				<section className="scrollbar-hide px-3 relative flex flex-col max-h-64 overflow-y-auto text-sm">
-					<section className="text-gray-700 sticky top-0 w-full bg-white py-3 flex items-center gap-2 h-10">
+				<section className="scrollbar-hide relative flex flex-col max-h-64 overflow-y-auto text-sm">
+					<section className="text-gray-700 sticky top-0 w-full bg-inherit py-3 flex items-center gap-2 h-10">
 						<i className="uil uil-users-alt text-xl"></i>
 						<h4 className="font-medium">{memberNumber}</h4>
 					</section>
 					<section className="flex-grow flex flex-col gap-2">
 						{groupDetail?.members?.map(({ user, role, _id }) => (
 							<section key={_id} className="flex gap-3 ">
-								<ListAvatar username={user.username} />
+								<Avatar username={user.username} />
 								<section className="flex-grow text-sm text-gray-400 flex flex-col justify-center">
 									<p className="font-bold text-base text-gray-800">
 										{user.name}
@@ -227,7 +231,8 @@ export const GroupProfileModal = ({
 						))}
 					</section>
 				</section>
-				<section className="p-3 mt-1 ">
+				
+				<section>
 					<Button onClick={onLeaveGroup} className="py-2 enabled:bg-rose-500">
 						{EN_US['profile.Leave']}
 					</Button>
@@ -292,7 +297,7 @@ export const GroupProfileEditModal = ({
 					{({ isValid, values, resetForm }) => (
 						<Form>
 							<header className="p-3 border-b border-gray-100 flex gap-2 items-center">
-								<ListAvatar username={groupDetail.name} size="w-14" />
+								<Avatar username={groupDetail.name} size="w-14" />
 								<section className="flex-grow flex flex-col gap-1.5">
 									<section className="flex items-center justify-between">
 										<Field
@@ -337,7 +342,7 @@ export const GroupProfileEditModal = ({
 								<section className="flex-grow flex flex-col gap-2">
 									{groupDetail.members.map(({ user, role, _id }) => (
 										<section key={_id} className="flex gap-3 ">
-											<ListAvatar username={user.username} />
+											<Avatar username={user.username} />
 											<section className="flex-grow text-sm text-gray-400 flex flex-col justify-center">
 												<p className="font-bold text-base text-gray-800">
 													{user.name}

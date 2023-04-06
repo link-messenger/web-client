@@ -30,11 +30,9 @@ export const useLogin = () => {
 
 export const useRegister = () => {
 	const navigate = useNavigate();
-	const setAuth = useAuthStore((state) => state.setAuth);
 	return useMutation(['REGISTER'], register, {
-		onSuccess: ({ user, token, refresh }) => {
-			setAuth(token, refresh, user);
-			navigate('/chat', { replace: true });
+		onSuccess: () => {
+			navigate('/verify');
 		},
 	});
 };

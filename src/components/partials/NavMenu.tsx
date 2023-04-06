@@ -2,7 +2,7 @@ import { Tooltip } from '../core';
 import { NAV_MENU } from 'constants';
 import { NavLink } from 'react-router-dom';
 import { useAuthStore, useChatStore, useThemeStore } from 'store';
-import { ListAvatar } from './Avatar';
+import { Avatar } from './Avatar';
 import { isMobile } from 'react-device-detect';
 
 export const NavMenu = () => {
@@ -36,7 +36,7 @@ export const NavMenu = () => {
 				>
 					<i className={theme === 'dark' ? 'uil uil-sun' : 'uil uil-moon'} />
 				</button>
-				<ListAvatar username={user?.username} />
+				<Avatar username={user?.username} />
 			</section>
 		</nav>
 	);

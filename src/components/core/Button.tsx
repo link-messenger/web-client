@@ -8,7 +8,7 @@ export const Button = ({
   return (
     <button
       className={
-        'cursor-pointer block w-full capitalize enabled:bg-sky-500 disabled:bg-gray-300 text-white p-3.5 font-semibold rounded-lg ' +
+        'cursor-pointer block w-full capitalize enabled:bg-primary disabled:bg-gray-300 text-white p-3.5 font-semibold rounded-lg ' +
         (className ?? '')
       }
       {...others}

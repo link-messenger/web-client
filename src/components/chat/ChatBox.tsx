@@ -8,6 +8,7 @@ import { IProfile } from 'interfaces';
 import { EN_US } from 'languages';
 import { useChatListStore, useChatStore } from 'store';
 import { scrollToBottom } from 'utils/scroll';
+import { useQuery } from 'react-query';
 
 interface ChatBoxProps {
 	user: IProfile;
@@ -18,6 +19,8 @@ const ChatBoxComponent = ({ isScrolling, user }: ChatBoxProps) => {
 	const [page, setPage] = useState(1);
 	const clearChat = useChatStore((state) => state.clearChat);
 	const loadChat = useChatStore((state) => state.loadChat);
+
+
 	const messageConfirmListener = useChatStore(
 		(state) => state.messageConfirmListener
 	);

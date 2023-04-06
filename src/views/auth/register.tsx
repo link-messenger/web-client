@@ -80,9 +80,6 @@ const Register = () => {
 							placeholder="Type your password again"
 							id="confirmPassword"
 						/>
-						<section className="text-right text-sm font-medium text-sky-700">
-							<Link to="/forgetpass">{EN_US['login.ForgetPassword']}</Link>
-						</section>
 						<Button disabled={isLoading} type="submit">{EN_US['register.Register']}</Button>
 						<section className="text-rose-400">
 							{Object.keys(errors).map((key: string) => (
@@ -98,7 +95,7 @@ const Register = () => {
 			<GoogleAuth />
 			<section className="text-sm flex justify-center items-baseline space-x-2">
 				<p className="text-slate-500">{EN_US['register.SignInMessage']}</p>
-				<Link to="/login" className="text-sky-700 font-medium">
+				<Link to="/login" className="text-indigo-700 font-medium">
 					{EN_US['register.SignIn']}
 				</Link>
 			</section>

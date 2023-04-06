@@ -10,8 +10,7 @@ import { SearchInput } from '../core';
 import { IChat } from 'interfaces';
 import { EN_US } from 'languages';
 import { useChatListStore, useChatStore } from 'store';
-import { ListAvatar } from '../partials';
-import { shortenString } from 'utils/str';
+import { Avatar } from '../partials';
 import { formatTime } from 'utils/time';
 
 export const ChatList = ({ uid }: { uid: string }) => {
@@ -112,7 +111,7 @@ const SearchList = ({ setSearch, searchedResult, uid }: any) => {
 					uid={uid}
 				/>
 			) : (
-				<p className="text-center text-gray-400 font-medium">
+				<p className="text-center text-neutral-600 font-medium">
 					{EN_US['chat.NoGroupFound']}
 				</p>
 			)}
@@ -126,7 +125,7 @@ const SearchList = ({ setSearch, searchedResult, uid }: any) => {
 					uid={uid}
 				/>
 			) : (
-				<p className="text-center text-gray-400 font-medium">
+				<p className="text-center text-neutral-600 font-medium">
 					{EN_US['chat.NoUserFound']}
 				</p>
 			)}
@@ -147,7 +146,7 @@ export const ChatListItem = ({
 }) => {
 	if (!chats || !chats.length) {
 		return (
-			<section className="grid place-items-center h-full font-bold text-lg text-gray-400">
+			<section className="grid place-items-center h-full font-medium text-neutral-600">
 				{EN_US['chat.ChatEmpty']}
 			</section>
 		);
@@ -224,28 +223,30 @@ export const GroupItem = ({
 		<button
 			onClick={() => onClick(data._id)}
 			className={
-				'dark:text-gray-100 p-3 rounded-md transition-colors flex text-left items-center gap-3 ' +
+				' whitespace-nowrap dark:text-gray-100 p-3 rounded-md transition-colors flex text-left items-center gap-3 ' +
 				(isActive
 					? 'bg-primary dark:bg-primary-light bg-opacity-20'
 					: 'text-gray-700 bg-white dark:bg-dark-gray hover:bg-primary hover:bg-opacity-10 hover:dark:bg-opacity-10 hover:dark:bg-primary-light ')
 			}
 		>
-			<ListAvatar username={data.name} />
-			<section className="flex-1">
-				<h5 className="font-medium whitespace-nowrap flex justify-between items-center">
-					<span>{data.name}</span>
+			<Avatar username={data.name} />
+			<section className="flex-grow">
+				<h5 className="font-medium flex justify-between items-center">
+					{data.name}
 					{!isSearch && (
 						<span className={'text-xs text-neutral-500'}>{time}</span>
 					)}
 				</h5>
 				<section className="text-sm flex gap-3 items-center opacity-70">
-					<p className="flex-grow whitespace-nowrap">
-						<span className="font-bold">
+					<p className="flex-grow w-1 flex gap-1">
+						<span className="font-bold flex items-center">
 							{data?.lastMessage?.sender._id === uid
 								? 'You'
 								: data?.lastMessage?.sender.name}
-						</span>{' '}
-						{shortenString(data?.lastMessage?.content ?? '', 18)}
+						</span>
+						<span className="w-full overflow-hidden truncate">
+							{data?.lastMessage?.content}
+						</span>
 					</p>
 					{data.unseen > 0 && (
 						<span className="text-white text-center leading-3 bg-primary bg-opacity-50 px-1 py-0.5 text-xs rounded-md">
@@ -279,28 +280,30 @@ export const ConversationItem = ({
 		<button
 			onClick={() => onClick(data._id)}
 			className={
-				'dark:text-gray-100 p-3 rounded-md transition-colors flex text-left items-center gap-3 ' +
+				'whitespace-nowrap dark:text-gray-100 p-3 rounded-md transition-colors flex text-left items-center gap-3 ' +
 				(isActive
 					? 'bg-primary dark:bg-primary-light bg-opacity-20'
 					: 'text-gray-700 bg-white dark:bg-dark-gray hover:bg-primary hover:bg-opacity-10 hover:dark:bg-opacity-10 hover:dark:bg-primary-light ')
 			}
 		>
-			<ListAvatar username={user?.username} />
+			<Avatar username={user?.username} />
 			<section className="flex-1">
-				<h5 className="font-medium whitespace-nowrap flex justify-between items-center">
+				<h5 className="font-medium flex justify-between items-center">
 					<span>{user.name}</span>
 					{!isSearch && (
 						<span className={'text-xs text-neutral-500'}>{time}</span>
 					)}
 				</h5>
 				<section className="text-sm flex gap-3 items-center opacity-70">
-					<p className="flex-grow whitespace-nowrap">
-						<span className="font-bold">
+					<p className="flex-grow w-1 flex gap-1">
+						<span className="font-bold flex items-center">
 							{data?.lastMessage?.sender._id === uid
 								? 'You'
 								: data?.lastMessage?.sender.name}
-						</span>{' '}
-						{shortenString(data?.lastMessage?.content ?? '', 15)}
+						</span>
+						<span className="w-full overflow-hidden truncate">
+							{data?.lastMessage?.content}
+						</span>
 					</p>
 					{data.unseen > 0 && (
 						<span className="text-white text-center leading-3 bg-primary bg-opacity-50 px-1 py-0.5 text-xs rounded-md">

@@ -14,7 +14,7 @@ const qc = new QueryClient({
 	defaultOptions: {
 		queries: {
 			retry: false,
-		}
+		},
 	},
 	queryCache: new QueryCache({
 		onError: async (error, query) => {
@@ -23,9 +23,17 @@ const qc = new QueryClient({
 			const refresh = getRefreshToken();
 
 			if (response.status === 401) {
+				console.log('run1');
 				if (refresh) {
 					const { token, refresh: newRefresh } = await postRefreshToken({
 						refresh,
+					}).catch((err) => {
+						if (err.response.status === 401) {
+							clearAuthStorage();
+							window.location.replace(
+								new URL('/login', window.location.origin)
+							);
+						}
 					});
 					if (token && newRefresh) {
 						setToken(token, newRefresh);
@@ -33,6 +41,7 @@ const qc = new QueryClient({
 						return;
 					}
 				}
+				console.log('run');
 				clearAuthStorage();
 				window.location.replace(new URL('/login', window.location.origin));
 			}

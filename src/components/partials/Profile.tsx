@@ -5,7 +5,7 @@ import { useDeleteAccount, useEditProfile, useGetUserProfile } from 'hooks';
 import { EditUserProfile, ModalCardProps } from 'interfaces';
 import { EN_US } from 'languages';
 import { formatDate } from 'utils/time';
-import { ListAvatar } from './Avatar';
+import { Avatar } from './Avatar';
 
 interface EditUserProfileModalProps extends ModalCardProps {
 	openModal: (id: string) => void;
@@ -61,7 +61,7 @@ export const EditUserProfileModal = ({
 					{({ dirty }) => (
 						<Form>
 							<header className="border-b border-b-gray-100 p-3 flex items-center">
-								<ListAvatar size="w-16" username={user.name} />
+								<Avatar size="w-16" username={user.name} />
 								<div className="flex flex-grow flex-col ml-3 gap-1">
 									<section className="flex items-center">
 										<Field
@@ -143,8 +143,8 @@ export const InfoItem = ({
 }) => {
 	return (
 		<p className=" flex justify-between items-center">
-			<span className="text-gray-800">{name}:</span>{' '}
-			<span className={'text-gray-500 ' + (vstyle ?? '')}>{value}</span>
+			<span className="text-gray-800 dark:text-neutral-200">{name}:</span>{' '}
+			<span className={'text-gray-500 dark:text-neutral-300 ' + (vstyle ?? '')}>{value}</span>
 		</p>
 	);
 };

@@ -8,7 +8,7 @@ export const Card = ({
 	return (
 		<section
 			className={
-				'bg-white min-w-[100px] min-h-[100px] rounded-lg shadow-xl ' +
+				'bg-white dark:bg-dark-gray min-w-[100px] min-h-[100px] rounded-lg shadow-xl ' +
 				(className ?? '')
 			}
       {...others}

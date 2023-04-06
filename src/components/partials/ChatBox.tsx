@@ -17,23 +17,23 @@ const MessageBoxComponent = (
 			className={'flex flex-col gap-0.5' + (isMe ? ' self-end items-end' : '')}
 			ref={ref}
 		>
-			{!isMe && <h6 className="font-bold capitalize text-sm text-gray-700 dark:text-neutral-100">
-				{sender.name}
-			</h6>}
+			{!isMe && (
+				<h6 className="font-medium capitalize text-sm text-gray-700 dark:text-neutral-200">
+					{sender.name}
+				</h6>
+			)}
 			<p
 				className={
-					'whitespace-pre-line max-w-xl w-fit p-3 rounded-lg' +
+					'w-fit whitespace-pre-line break-all py-1.5 px-2 rounded-lg ' +
 					(isMe
-						? ' rounded-br-sm bg-primary text-white self-end'
-						: ' bg-gray-200 dark:bg-dark-lighter-gray dark:text-neutral-200 rounded-tl-sm text-gray-800')
+						? 'rounded-br-sm bg-primary text-white self-end'
+						: 'bg-gray-200 dark:bg-dark-lighter-gray dark:text-neutral-200 rounded-tl-sm text-gray-800')
 				}
 			>
 				{content}
 			</p>
 			<span
-				className={
-					'text-xs text-gray-400 font-medium' + (isMe ? ' self-end' : '')
-				}
+				className='text-xs text-gray-400'
 			>
 				{time}
 			</span>
@@ -48,13 +48,12 @@ const DateTagComponent = (
 	ref: LegacyRef<HTMLElement>
 ) => {
 	return (
-		<section ref={ref} className="flex justify-between items-center gap-4">
-			<span className="border-b dark:border-dark-lighter-gray border-gray-200 flex-grow"></span>
-			<span className="bg-gray-200 dark:bg-dark-lighter-gray dark:text-gray-400 text-gray-500 text-xs px-2 py-0.5 rounded-full">
-				{date}
-			</span>
-			<span className="border-b dark:border-dark-lighter-gray border-gray-200 flex-grow"></span>
-		</section>
+		<span
+			ref={ref}
+			className="mx-auto my-1 bg-gray-200 dark:bg-dark-lighter-gray dark:text-gray-400 text-gray-500 text-xs px-2 py-0.5 rounded-full"
+		>
+			{date}
+		</span>
 	);
 };
 
