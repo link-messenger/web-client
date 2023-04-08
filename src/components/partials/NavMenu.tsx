@@ -21,7 +21,7 @@ export const NavMenu = () => {
 			{NAV_MENU.map(({ icon, path, title }, index) => (
 				<NavLink
 					key={`MENU_ITEM_${index}`}
-					className="nav-menu-active max-lg:h-[75px] grid place-items-center lg:w-full text-3xl max-[430px]:text-2xl text-neutral-500"
+					className="cursor-pointer nav-menu-active max-lg:h-[75px] grid place-items-center lg:w-full text-3xl max-[430px]:text-2xl text-neutral-500"
 					to={path}
 				>
 					<Tooltip dir={isMobile ? 'top' : 'right'} content={title}>

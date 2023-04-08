@@ -12,11 +12,11 @@ import { setApiHeader } from 'api';
 
 import Login from 'views/auth/login';
 import Register from 'views/auth/register';
-import Chat from 'views/app/chat';
+import Chat from 'views/app/chatList';
 import Verify from 'views/auth/verify';
 import ForgetPassword from 'views/auth/forgetPassword';
 import ResetPassword from 'views/auth/resetPassword';
-import Loading from 'views/app/loading';
+import Profile from 'views/app/profile';
 
 const App = () => {
 	const token = useAuthStore((state) => state.token);
@@ -41,7 +41,7 @@ const App = () => {
 				<Route element={<AppLayout />}>
 					<Route element={<ChatLayout />}>
 						<Route path="/chat" element={<Chat />} />
-						<Route path='/profile' element={<>wtf</>} />
+						<Route path='/profile' element={<Profile />} />
 					</Route>
 				</Route>
 				<Route element={<AuthLayout />}>

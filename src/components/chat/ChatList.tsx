@@ -40,7 +40,7 @@ export const ChatList = ({ uid }: { uid: string }) => {
 	const onChatClick = (id: string) => setCurrentChat(id);
 	const searchIsActive = search.length > 2;
 	return (
-		<>
+		<section className='space-y-5'>
 			<SearchInput
 				name="search"
 				id="search"
@@ -66,7 +66,7 @@ export const ChatList = ({ uid }: { uid: string }) => {
 					uid={uid}
 				/>
 			)}
-		</>
+		</section>
 	);
 };
 

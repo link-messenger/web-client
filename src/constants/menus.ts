@@ -15,20 +15,15 @@ export const NAV_MENU = [
 		path: '/explore',
 	},
 	{
-		title: 'Directs',
-		icon: 'uil uil-users-alt',
-		path: '/direct',
+		title: 'Events',
+		icon: 'uil uil-history-alt',
+		path: '/event',
 	},
-	// {
-	// 	title: 'Events',
-	// 	icon: 'uil uil-history-alt',
-	// 	path: '/event',
-	// },
-	// {
-	// 	title: 'Bookmarks',
-	// 	icon: 'uil uil-bookmark',
-	// 	path: '/bookmark',
-	// },
+	{
+		title: 'Bookmarks',
+		icon: 'uil uil-bookmark',
+		path: '/bookmark',
+	},
 	{
 		title: 'Settings',
 		icon: 'uil uil-setting',

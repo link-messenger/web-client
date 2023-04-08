@@ -67,6 +67,7 @@ export const EN_US = {
 	'settings.Id': 'Id',
 	'settings.CreateAccDate': 'Create Account Date',
 	'settings.AccLastUpdate': 'Last Profile Update',
+	'profile.Title': 'My Profile',
 	'profile.Info': 'Info',
 	'profile.GroupDesc': 'Group Description',
 	'profile.Link': 'Group Link (share to join)',
