@@ -1,4 +1,4 @@
-# React-Typescript-Tailwind Boilerplate 
+# Link Messenger Web Client
 
 ## 1. Install
 after cloning this repository, run `npm install` or `yarn install` to install all dependencies.
@@ -13,19 +13,20 @@ run `npm build` or `yarn build` to build the project.
 
 ## TODO
  
-1. conversation profile and online status
-2. adding deleted accounts status and bugfix (add status to user -- deleted - verified - unverified)
-3. verify upon registeration
-4. avatar
-5. emojis
-6. sound effects
-7. voice message
-8. image message
-9. file message
-10. dark theme and ability to change background pattern
-11. change logo and icons to new ones
-12. landing page
-13. dockerizing and up on server
+1. add new icons and remove old ones
+2. conversation profile and online status
+3. adding deleted accounts status and bugfix (add status to user -- deleted - verified - unverified)
+4. verify upon registeration
+5. avatar
+6. emojis
+7. sound effects
+8. voice message
+9. image message
+10. file message
+11. dark theme and ability to change background pattern
+12. change logo and icons to new ones
+13. landing page
+14. dockerizing and up on server
 ------------------ v0.1 ---------------------
 1.  **android-app** / bugfix -- user delete group then clear current group and remove from list - error handling and showing -- and hope :)
 2.  going for v1 ---- (add seprate by dating tags - showing online members - (reply - edit - delete message) - bg for chat and customizing it - location features - api for bots - in app calls with webrtc - Intl8 - edit user info + app settings)
