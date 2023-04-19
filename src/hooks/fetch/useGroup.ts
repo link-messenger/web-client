@@ -22,7 +22,7 @@ export const useGetUserGroup = () => {
 
 export const useGetUserGroupDetail = (id: string, type?: Categories) => {
 	const removeGroup = useChatListStore(state => state.removeGroup);
-	const setCurrentChat = useChatStore(state => state.setCurrentChat);
+	const setCurrentChat = useChatStore(state => state.setCurrentChatId);
 	return useQuery<IGroupDetail, AxiosError>(
 		['USER-GROUP-Detail', id],
 		() => getUserGroupDetail(id),

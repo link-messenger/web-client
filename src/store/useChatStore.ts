@@ -8,7 +8,6 @@ import {
 	editChat,
 	getChatList,
 	getCurrentChat,
-	iterateToGetCurrentChat,
 	removeGroup,
 	setCurrentChat,
 } from './useChatListStore';
@@ -75,7 +74,7 @@ interface IChatState {
 	messageConfirmListener: () => (() => void) | undefined;
 	clearChat: () => void;
 	getSocket: () => Socket | null;
-	setCurrentChat: (id: string) => void;
+	setCurrentChatId: (id: string) => void;
 	getCurrentChatId: () => string;
 }
 
@@ -120,13 +119,12 @@ export const useChatStore = create<IChatState>((set, get) => ({
 		set({ currentMessages: [] });
 	},
 	addMessage: (msg) => {
-	const chatList = getChatList();
-	const cid = getCurrentChatId();
-	if (chatList) {
-		const target = chatList.find((chat) => chat._id === msg.to);
-		if (target) {
-			editChat({
-				_id: target._id,
+		const chatList = getChatList();
+		const cid = getCurrentChatId();
+		if (chatList) {
+			const target = chatList.get(msg.to);
+			if (!target) return;
+			editChat(msg.to, {
 				lastMessage: {
 					content: msg.content,
 					createdAt: msg.createdAt,
@@ -138,10 +136,9 @@ export const useChatStore = create<IChatState>((set, get) => ({
 					},
 					to: msg.to,
 				},
-				unseen: target._id !== cid ? target.unseen + 1 : target.unseen,
-			});
+				unseen: msg.to !== cid ? target.unseen + 1 : target.unseen,
+			}, true);
 		}
-	}
 		set({
 			currentMessages: [
 				{
@@ -199,10 +196,9 @@ export const useChatStore = create<IChatState>((set, get) => ({
 		const chatList = getChatList();
 		const cid = getCurrentChatId();
 		if (chatList) {
-			const target = chatList.find((chat) => chat._id === msg.to);
+			const target = chatList.get(msg.to);
 			if (target) {
-				editChat({
-					_id: target._id,
+				editChat(msg.to,{
 					lastMessage: {
 						content: msg.content,
 						createdAt: msg.createdAt,
@@ -214,21 +210,21 @@ export const useChatStore = create<IChatState>((set, get) => ({
 						},
 						to: msg.to,
 					},
-					unseen: target._id !== cid ? target.unseen + 1 : target.unseen,
-				});
+					unseen: msg.to !== cid ? target.unseen + 1 : target.unseen,
+				}, true);
 			}
 		}
 		set({ recieved: [msg, ...get().recieved] });
 	},
-	setCurrentChat: (id) => {
+	setCurrentChatId: (id) => {
 		if (!id) {
 			setCurrentChat(null);
 			set({ currentChat: '' });
 			return;
 		}
-		const current = iterateToGetCurrentChat(id);
+		const current = getChatList()?.get(id);
 		if (current) {
-			setCurrentChat(current);
+			setCurrentChat({_id: id, ...current});
 			set({ currentChat: id });
 		}
 	},
@@ -238,10 +234,11 @@ export const useChatStore = create<IChatState>((set, get) => ({
 		const addMessage = get().addMessage;
 		const addRecievedMessage = get().addRecievedMessage;
 		socket.on('recieve-message', (msg: IMessage) => {
-			const currentChat = getCurrentChat() as any;
+			const currentChat = getCurrentChat();
 			if (currentChat && currentChat._id === msg.to) {
 				addMessage(msg);
 			} else {
+				console.log('ran');
 				addRecievedMessage(msg);
 			}
 		});
@@ -254,7 +251,6 @@ export const useChatStore = create<IChatState>((set, get) => ({
 		if (!socket) return;
 		const addMessage = get().addMessage;
 		socket.on('message-sent', (msg: IMessage) => {
-			console.log('called');
 			addMessage(msg);
 		});
 		return () => {
@@ -265,5 +261,5 @@ export const useChatStore = create<IChatState>((set, get) => ({
 }));
 
 export const getSocket = useChatStore.getState().getSocket;
-export const setCurrentChatId = useChatStore.getState().setCurrentChat;
+export const setCurrentChatId = useChatStore.getState().setCurrentChatId;
 export const getCurrentChatId = useChatStore.getState().getCurrentChatId;

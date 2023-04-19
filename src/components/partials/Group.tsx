@@ -257,7 +257,7 @@ export const GroupProfileEditModal = ({
 
 	const { mutateAsync: editGroup } = useEditGroup(groupDetail._id);
 	const { mutateAsync: deleteGroup } = useDeleteGroup(groupDetail._id);
-	const setCurrentChatId = useChatStore((state) => state.setCurrentChat);
+	const setCurrentChatId = useChatStore((state) => state.setCurrentChatId);
 	const removeGroup = useChatListStore((state) => state.removeGroup);
 
 	const onDeleteGroup = () => {

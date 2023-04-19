@@ -14,7 +14,7 @@ import { Avatar } from '../partials';
 import { formatTime } from 'utils/time';
 
 export const ChatList = ({ uid }: { uid: string }) => {
-	const chatList = useChatListStore((state) => state.chats);
+	const chatList = useChatListStore((state) => state.getIterableChatList());
 	const [search, setSearch] = useState('');
 	const debouncedSearch = useDebounce(search, 500);
 	const { data: searchedResult } = useSearchChat(debouncedSearch);
@@ -35,12 +35,12 @@ export const ChatList = ({ uid }: { uid: string }) => {
 		}
 	}, [isChatsLoading, reloadChat]);
 
-	const setCurrentChat = useChatStore((state) => state.setCurrentChat);
+	const setCurrentChat = useChatStore((state) => state.setCurrentChatId);
 
 	const onChatClick = (id: string) => setCurrentChat(id);
 	const searchIsActive = search.length > 2;
 	return (
-		<section className='space-y-5'>
+		<section className="space-y-5">
 			<SearchInput
 				name="search"
 				id="search"
@@ -53,7 +53,7 @@ export const ChatList = ({ uid }: { uid: string }) => {
 				<section className="space-y-3">
 					<ItemHeader
 						icon="uil uil-comment-alt-lines"
-						message={EN_US['chat.AllMessages']}
+						message={EN_US['Recent.Messages']}
 					/>
 					<ChatListItem onClick={onChatClick} chats={chatList} uid={uid} />
 				</section>
@@ -82,7 +82,7 @@ const ItemHeader = ({ icon, message }: { icon: string; message: string }) => {
 const SearchList = ({ setSearch, searchedResult, uid }: any) => {
 	const joinGroup = useChatListStore((state) => state.joinGroup);
 	const addConv = useChatListStore((state) => state.addConv);
-	const setCurrentChat = useChatStore((state) => state.setCurrentChat);
+	const setCurrentChat = useChatStore((state) => state.setCurrentChatId);
 	const { mutateAsync: createConv } = useCreateUserConversation();
 	const onGroupClick = (id: string) => {
 		if (!id) return;

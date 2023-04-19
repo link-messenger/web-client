@@ -1,17 +1,20 @@
+import { calcLength } from 'framer-motion';
 import { IChat, IConversation, IGroup, IUser, UserStatus } from 'interfaces';
 import { create } from 'zustand';
 import { getCurrentChatId, getSocket, setCurrentChatId } from './useChatStore';
 
+type IChatState = Omit<IChat, '_id'>;
+
 interface IChatListState {
-	chats: IChat[] | null;
+	chats: Map<string, IChatState> | null;
 	currentChat: IChat | null;
 	reloadChat: boolean;
 	setReloadChat: (reload: boolean) => void;
-	getChatList: () => IChat[] | null;
+	getChatList: () => Map<string, IChatState> | null;
 	setChats: (chats: IChat[]) => void;
 	clearChats: () => void;
 	addGroup: (grp: IGroup) => void;
-	editChat: (chat: Partial<IChat>, ordered?: boolean) => void;
+	editChat: (id: string,chat: Partial<IChatState>, ordered?: boolean) => void;
 	removeGroup: (gip: string) => void;
 	addConv: (conv: IConversation) => void;
 	removeConv: (cid: string) => void;
@@ -24,7 +27,7 @@ interface IChatListState {
 	setStatusListener: () => (() => void) | undefined;
 	getCurrentChat: () => IChat | null;
 	setCurrentChat: (chat: IChat | null) => void;
-	iterateToGetChat: (cid: string) => IChat | null;
+	getIterableChatList: () => IChat[];
 }
 
 export const useChatListStore = create<IChatListState>((set, get) => ({
@@ -34,17 +37,20 @@ export const useChatListStore = create<IChatListState>((set, get) => ({
 	setReloadChat: (reload) => set({ reloadChat: reload }),
 	getChatList: () => get().chats,
 	setChats: (chats) => {
+		const map = new Map<string, IChatState>();
+		for (const {_id,...chat} of chats) {
+			map.set(_id, chat);	
+		}
 		set({
-			chats,
-		});
+			chats: map,
+		})
 	},
 	clearChats: () => {
-		set({ chats: [] });
+		set({ chats: new Map() });
 	},
 	addConv: (conv) => {
 		const chats = get().chats;
-		const trimmed: IChat = {
-			_id: conv._id,
+		const trimmed: IChatState = {
 			type: 'user',
 			unseen: 0,
 			createdAt: conv.createdAt,
@@ -58,22 +64,18 @@ export const useChatListStore = create<IChatListState>((set, get) => ({
 		};
 		if (!chats) {
 			set({
-				chats: [trimmed],
+				chats: new Map([[conv._id, trimmed]]),
 			});
 			return;
 		}
-		const find = chats.find(({ _id }) => _id === conv._id);
+		const find = chats.has(conv._id);
 		if (!!find) return;
-		set({
-			chats: [trimmed, ...chats],
-		});
+		chats.set(conv._id, trimmed);
 	},
 	removeConv: (cid) => {},
 	addGroup: (grp) => {
-		console.log(grp);
 		const pre = get().chats;
-		const trimmed: IChat = {
-			_id: grp._id,
+		const trimmed: IChatState = {
 			type: 'group',
 			unseen: 0,
 			createdAt: grp.createdAt,
@@ -84,49 +86,58 @@ export const useChatListStore = create<IChatListState>((set, get) => ({
 		};
 		if (!pre) {
 			set({
-				chats: [trimmed],
+				chats: new Map([[grp._id, trimmed]]),
 			});
 		} else {
-			set({ chats: [trimmed, ...pre] });
+			pre.set(grp._id, trimmed);
+			set({ chats: pre });
 		}
 		setCurrentChatId(grp._id);
 	},
-	iterateToGetChat: (cid: string) => {
-		const current = get().chats?.find((c) => c._id === cid);
-		return current ? current : null;
-	},
 	getCurrentChat: () => get().currentChat,
 	setCurrentChat: (chat) => {
+		if (!chat) {
+			return set({ currentChat: chat });
+		}
 		get().editChat(
+			chat._id,
 			{
-				_id: chat?._id,
 				unseen: 0,
 			},
-			true
 		);
+		console.log(chat._id)
 		set({ currentChat: chat });
 	},
-	editChat: (chat, ordered = false) => {
+	editChat: (id,chat, ordered = false) => {
 		const chats = get().chats;
 		if (!chats) return;
-		const target: IChat[] = chats.reduce((acc, curr) => {
-			if (curr._id === chat._id) {
-				if (ordered) {
-					return [...acc, { ...curr, ...chat }];
-				}
-				return [{ ...curr, ...chat }, ...acc];
-			}
-			return [...acc, curr];
-		}, [] as IChat[]);
+		const target = chats.get(id);
+		if (!target) return;
+		const changed = {
+			...target,
+			...chat,
+		};
 
-		set({ chats: target });
+		console.log(changed, target, chat)
+
+		if (ordered) {
+			chats.delete(id);
+			chats.set(id, changed);
+			console.log(chats.get(id));
+			set({ chats, });
+			return;
+		}
+		chats.set(id, changed);
+		set({ chats, });
 	},
 
 	removeGroup: (gip) => {
 		const chats = get().chats;
 		if (!chats) return;
-		const currentChats = chats.filter((grp) => grp._id !== gip);
-		set({ chats: currentChats });
+		chats.delete(gip);
+		set({
+			chats,
+		})
 	},
 	joinGroup: (gid) => {
 		const socket = getSocket();
@@ -145,18 +156,11 @@ export const useChatListStore = create<IChatListState>((set, get) => ({
 		socket.on('user-joined', ({ group, user }) => {
 			const chats = get().chats;
 			if (!chats) return;
-			const cid = getCurrentChatId();
-			const currentChats = chats.map((data) => {
-				if (data._id === group._id) {
-					return {
-						...data,
-						members: [...group.members],
-					} as IChat;
-				}
-				return data;
-			});
-			const chat = currentChats.find(({ _id }) => _id === cid);
-			set({ currentChat: chat, chats: currentChats });
+			const chat = chats.get(group._id);
+			if (!chat) return;
+			chat?.members?.push(user);
+			chats.set(group._id, chat);
+			set({ chats });
 		});
 
 		return () => {
@@ -183,22 +187,13 @@ export const useChatListStore = create<IChatListState>((set, get) => ({
 			'user-left',
 			({ group, user }: { group: IGroup; user: IUser }) => {
 				const chats = get().chats;
-				const cid = getCurrentChatId();
 				if (!chats) return;
-				const currentChats = chats.map((data) => {
-					if (data._id === group._id) {
-						return {
-							...data,
-							members: data.members?.filter(({ user: u }) => u !== user._id),
-						};
-					}
-					return data;
-				});
-				const currentChat = currentChats.find(({ _id }) => _id === cid);
-				set({
-					currentChat: currentChat,
-					chats: currentChats,
-				});
+				const chat = chats.get(group._id);
+				if (!chat) return;
+				const members = chat?.members?.filter(({user: u}) => user._id === u);
+				chat.members = members;
+				chats.set(group._id, chat);
+				set({ chats });
 			}
 		);
 
@@ -221,11 +216,11 @@ export const useChatListStore = create<IChatListState>((set, get) => ({
 	setStatusListener: () => {
 		const socket = getSocket();
 		if (!socket) return;
+		
 		socket.on('user-status', (conv: { _id: string; status: UserStatus }) => {
 			const currentChat = get().currentChat;
-			const chat: IChat | undefined = get()
-				.getChatList()
-				?.find((c) => c._id === conv._id);
+			const chat = get().chats?.get(conv._id);
+			if (!chat) return;
 			if (currentChat?._id === conv._id) {
 				get().setCurrentChat({
 					...currentChat,
@@ -233,24 +228,26 @@ export const useChatListStore = create<IChatListState>((set, get) => ({
 				});
 			}
 			get().editChat(
+				conv._id,
 				{
 					...chat,
 					status: conv.status,
-				},
-				true
+				}
 			);
 		});
 		return () => {
 			socket.off('user-status');
 		};
 	},
+	getIterableChatList: () => {
+		const chats = get().chats?.entries();
+		if (!chats) return [];
+		return [...chats].map(([id, chat]) => ({ _id:id , ...chat })).reverse();
+	}
 }));
 
 export const getCurrentChat = useChatListStore.getState().getCurrentChat;
 export const setCurrentChat = useChatListStore.getState().setCurrentChat;
-export const iterateToGetCurrentChat =
-	useChatListStore.getState().iterateToGetChat;
-
 export const getChatList = useChatListStore.getState().getChatList;
 export const editChat = useChatListStore.getState().editChat;
 export const removeGroup = useChatListStore.getState().removeGroup;

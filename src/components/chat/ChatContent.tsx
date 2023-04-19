@@ -179,7 +179,7 @@ const ChatContentHeader = ({
 	groupDetail,
 }: ChatContentHeaderProps) => {
 	const currentChat = useChatListStore((state) => state.currentChat);
-	const setCurrentChat = useChatStore((state) => state.setCurrentChat);
+	const setCurrentChat = useChatStore((state) => state.setCurrentChatId);
 	if (!currentChat)
 		return (
 			<section className="backdrop-blur-xl bg-opacity-60 border border-gray-200 border-b dark:text-neutral-200 bg-light-light-back-gray dark:bg-dark-light-gray dark:border-b-dark-content-gray border-b-gray-100 flex items-center justify-between p-3">
